@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
+    "build": "node --check server.js",
+    "lint": "node --check server.js",
     "start": "node server.js"
   },
   "dependencies": {}
