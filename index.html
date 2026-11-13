@@ -155,6 +155,10 @@
 
             <!-- Header Utility Actions -->
             <div class="flex items-center gap-2">
+                <button id="auth-status-btn" onclick="handleAuthClick()" title="تسجيل الدخول للمزامنة السحابية" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-200 flex items-center gap-1.5 transition active:scale-95">
+                    <i class="fa-brands fa-google text-pl-mint"></i>
+                    <span class="hidden sm:inline">دخول قوقل</span>
+                </button>
                 <button onclick="confirmResetCurrentGwPredictions()" title="تصفير توقعات الجولة الحالية" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-300 hover:text-pl-magenta flex items-center gap-1.5 transition active:scale-95">
                     <i class="fa-solid fa-eraser text-pl-magenta"></i>
                     <span class="hidden sm:inline">تصفير الجولة</span>
@@ -180,35 +184,70 @@
             </button>
         </section>
 
-        <!-- GAMEWEEK DEADLINE BANNER -->
-        <section id="deadline-card" class="rounded-2xl bg-ios-card border border-ios-border p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
+        <!-- LIVE CLOCK & GAMEWEEK DEADLINE BANNER -->
+        <section id="deadline-card" class="rounded-2xl bg-ios-card border border-ios-border p-3.5 space-y-3 relative overflow-hidden">
             <div class="absolute inset-y-0 right-0 w-1 bg-pl-mint" id="deadline-accent-bar"></div>
+
+            <!-- Live Current Time Row -->
+            <div class="flex items-center justify-between gap-2 border-b border-ios-border/70 pb-2.5 pr-1">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-ios-bg border border-ios-border flex items-center justify-center text-pl-cyan shrink-0">
+                        <i class="fa-regular fa-clock text-xs"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-ios-subtle">الساعة الآن:</span>
+                        <span id="live-clock-text" class="text-xs sm:text-sm font-bold text-white mr-1">--:--:--</span>
+                    </div>
+                </div>
+                <div id="deadline-status-badge" class="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30">
+                    مفتوحة للتوقع
+                </div>
+            </div>
+
+            <!-- Deadline Info Row -->
             <div class="flex items-center gap-3 pr-1">
                 <div class="w-9 h-9 rounded-xl bg-pl-purple/60 border border-pl-magenta/30 flex items-center justify-center text-pl-mint shrink-0">
-                    <i class="fa-regular fa-clock text-base"></i>
+                    <i class="fa-solid fa-hourglass-half text-base"></i>
                 </div>
-                <div>
-                    <div class="text-[11px] text-ios-subtle font-medium">الموعد النهائي للتوقعات (قبل أول مباراة بـ 90 دقيقة)</div>
+                <div class="min-w-0 flex-1">
+                    <div class="text-[11px] text-ios-subtle font-medium">الديدلاين للتوقعات (قبل أول مباراة بساعة ونص)</div>
                     <div id="deadline-display-text" class="text-xs sm:text-sm font-bold text-white mt-0.5">
                         السبت، ٢١ نوفمبر | ٢:٠٠ مساءً
                     </div>
                 </div>
             </div>
-            <div id="deadline-status-badge" class="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30">
-                مفتوحة للتوقع
+
+            <!-- Live Countdown Timer -->
+            <div id="deadline-countdown-box" class="grid grid-cols-4 gap-2 pt-0.5 pr-1">
+                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
+                    <div id="cd-days" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
+                    <div class="text-[10px] text-ios-subtle mt-1">يوم</div>
+                </div>
+                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
+                    <div id="cd-hours" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
+                    <div class="text-[10px] text-ios-subtle mt-1">ساعة</div>
+                </div>
+                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
+                    <div id="cd-mins" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
+                    <div class="text-[10px] text-ios-subtle mt-1">دقيقة</div>
+                </div>
+                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
+                    <div id="cd-secs" class="text-sm sm:text-base font-extrabold text-pl-cyan leading-none">٠٠</div>
+                    <div class="text-[10px] text-ios-subtle mt-1">ثانية</div>
+                </div>
             </div>
         </section>
 
         <!-- ==================== TAB 1: MATCHES & PREDICTIONS ==================== -->
         <section id="tab-matches" class="space-y-3.5">
-            <!-- Predictor Filter & Quick Add Bar -->
+            <!-- Predictor Filter & Add New Predictor Bar -->
             <div class="flex items-center justify-between gap-2">
                 <div id="predictor-filter-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                     <!-- Predictor pills injected by JS -->
                 </div>
-                <button onclick="openPredictionModal(null, null)" class="shrink-0 px-3.5 py-2 rounded-xl pl-accent-gradient text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-pl-magenta/20 active:scale-95 transition">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <span>إضافة توقع</span>
+                <button onclick="openNewPredictorModal()" class="shrink-0 px-3.5 py-2 rounded-xl pl-accent-gradient text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-pl-magenta/20 active:scale-95 transition">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>إضافة متوقع يديد</span>
                 </button>
             </div>
 
@@ -458,6 +497,40 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL 3.5: ADD NEW PREDICTOR ==================== -->
+    <div id="modal-new-predictor" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-pl-mint"></i>
+                    <span>إضافة متوقع يديد</span>
+                </h3>
+                <button onclick="closeModal('modal-new-predictor')" class="w-8 h-8 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveNewPredictorForm(event)" class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-medium text-gray-300">اسم المتوقع الجديد</label>
+                    <input id="new-predictor-name-input" type="text" required placeholder="اكتب اسم المتوقع (مثال: عمر)" class="w-full rounded-xl bg-ios-bg border border-ios-border px-3.5 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-mint">
+                </div>
+
+                <div class="space-y-2">
+                    <div class="text-[11px] text-ios-subtle font-medium">المتوقعون الحاليون:</div>
+                    <div id="current-predictors-list" class="flex flex-wrap gap-1.5">
+                        <!-- Current predictors injected by JS -->
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl pl-accent-gradient text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>إضافة المتوقع</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- ==================== MODAL 4: CUSTOM iOS CONFIRMATION OVERLAY ==================== -->
     <div id="modal-confirm" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="animate-sheet w-full max-w-xs bg-ios-card border border-ios-border rounded-3xl p-5 text-center space-y-4 shadow-2xl">
@@ -485,10 +558,72 @@
         <span id="ios-toast-text">تم الحفظ بنجاح</span>
     </div>
 
-    <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
-    <script>
-        // Storage Key v8 to ensure clean migration and zero stale cache
-        const STORAGE_KEY = 'aj_league_v8';
+    <!-- ==================== APPLICATION JAVASCRIPT (FIREBASE CLOUD FIRESTORE) ==================== -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signOut,
+            onAuthStateChanged
+        } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+        import {
+            getFirestore,
+            doc,
+            collection,
+            query,
+            where,
+            getDocFromServer,
+            setDoc,
+            updateDoc,
+            deleteDoc,
+            writeBatch,
+            onSnapshot,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+        const LEAGUE_ID = 'aj_league_26_27';
+
+        const OperationType = {
+            CREATE: 'create',
+            UPDATE: 'update',
+            DELETE: 'delete',
+            LIST: 'list',
+            GET: 'get',
+            WRITE: 'write'
+        };
+
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let cloudLeague = null;
+        const cloudGameweeks = new Map();
+        const cloudFixtures = new Map();
+        const cloudPredictions = new Map();
+        let seedingPromise = null;
+        let localSelectedGwId = null;
+
+        function handleFirestoreError(error, operationType, path) {
+            const errInfo = {
+                error: error instanceof Error ? error.message : String(error),
+                authInfo: {
+                    userId: auth?.currentUser?.uid || null,
+                    email: auth?.currentUser?.email || null,
+                    emailVerified: auth?.currentUser?.emailVerified ?? null,
+                    isAnonymous: auth?.currentUser?.isAnonymous ?? null,
+                    tenantId: auth?.currentUser?.tenantId || null,
+                    providerInfo: auth?.currentUser?.providerData?.map(provider => ({
+                        providerId: provider.providerId,
+                        email: provider.email
+                    })) || []
+                },
+                operationType,
+                path
+            };
+            console.error('Firestore Error: ', JSON.stringify(errInfo));
+            throw new Error(JSON.stringify(errInfo));
+        }
 
         // English -> Arabic Premier League Club Names Dictionary
         const TEAM_ARABIC_MAP = {
@@ -683,45 +818,351 @@
         };
 
         // App Runtime State
-        let state = null;
+        let state = JSON.parse(JSON.stringify(INITIAL_STATE));
         let currentTab = 'matches'; // 'matches' | 'leaderboard' | 'whatsapp'
         let filterPredictor = 'all';
         let leaderboardScope = 'gw'; // 'gw' | 'all'
         let editingContext = { matchId: null, predictorName: null };
 
-        // ==================== INITIALIZATION ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            populateNewGwSelect();
-            renderAll();
-        });
+        // ==================== INITIALIZATION & FIREBASE BOOTSTRAP ====================
+        let clockInterval = null;
 
-        function loadState() {
+        function makePredictionDocId(fixtureId, predictorName) {
+            const bytes = new TextEncoder().encode(predictorName);
+            let hex = '';
+            for (const b of bytes) {
+                hex += b.toString(16).padStart(2, '0');
+            }
+            const raw = `${fixtureId}__${hex}`;
+            return raw.length <= 128 ? raw : raw.slice(0, 128);
+        }
+
+        async function testConnection() {
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && parsed.gameweeks && parsed.fixturesByGw) {
-                        state = parsed;
-                        ensureChronologicalSorting();
-                        return;
+                await getDocFromServer(doc(db, 'test', 'connection'));
+            } catch (error) {
+                if (error instanceof Error && error.message.includes('the client is offline')) {
+                    console.error('Please check your Firebase configuration.');
+                    showToast('تعذر الاتصال بـ Firestore');
+                }
+            }
+        }
+
+        function updateAuthButtonUI() {
+            const btn = document.getElementById('auth-status-btn');
+            if (!btn) return;
+            if (currentUser && currentUser.emailVerified) {
+                const label = currentUser.displayName || currentUser.email || 'متصل';
+                btn.innerHTML = `<i class="fa-solid fa-circle text-[7px] text-pl-mint"></i><span class="truncate max-w-[80px]">${escapeHtml(label)}</span>`;
+                btn.title = `مسجل الدخول: ${currentUser.email || ''} (اضغط لتسجيل الخروج)`;
+            } else {
+                btn.innerHTML = `<i class="fa-brands fa-google text-pl-mint"></i><span class="hidden sm:inline">دخول قوقل</span>`;
+                btn.title = 'تسجيل الدخول بحساب قوقل للحفظ والمزامنة';
+            }
+        }
+
+        async function signInWithGoogle() {
+            if (!auth) return null;
+            try {
+                const provider = new GoogleAuthProvider();
+                const res = await signInWithPopup(auth, provider);
+                currentUser = res.user;
+                updateAuthButtonUI();
+                showToast('تم تسجيل الدخول والمزامنة السحابية');
+                return res.user;
+            } catch (err) {
+                console.error('Google Sign-In error:', err);
+                showToast('يرجى السماح بتسجيل الدخول عبر قوقل للحفظ في السحابة');
+                return null;
+            }
+        }
+
+        async function handleAuthClick() {
+            if (currentUser && currentUser.emailVerified) {
+                openConfirmDialog(
+                    'تسجيل الخروج',
+                    `هل تريد تسجيل الخروج من حساب (${currentUser.email || currentUser.displayName})؟`,
+                    async () => {
+                        await signOut(auth);
+                        currentUser = null;
+                        updateAuthButtonUI();
+                        showToast('تم تسجيل الخروج');
+                    }
+                );
+            } else {
+                await signInWithGoogle();
+            }
+        }
+
+        async function ensureSignedInForWrite() {
+            if (currentUser && currentUser.emailVerified) {
+                if (!cloudLeague) {
+                    await seedCloudFromInitialState();
+                }
+                return true;
+            }
+            const user = await signInWithGoogle();
+            if (!user || !user.emailVerified) {
+                return false;
+            }
+            if (!cloudLeague) {
+                await seedCloudFromInitialState();
+            }
+            return true;
+        }
+
+        function rebuildStateFromCloud() {
+            if (!cloudLeague) {
+                // Cloud league not seeded yet; keep INITIAL_STATE in memory for preview
+                ensureChronologicalSorting();
+                renderAll();
+                return;
+            }
+
+            const predsByFixture = new Map();
+            cloudPredictions.forEach((p) => {
+                if (!predsByFixture.has(p.fixtureId)) {
+                    predsByFixture.set(p.fixtureId, {});
+                }
+                predsByFixture.get(p.fixtureId)[p.predictorName] = {
+                    scoreA: p.scoreA,
+                    scoreB: p.scoreB,
+                    winnerLabel: p.winnerLabel,
+                    note: p.note || ''
+                };
+            });
+
+            const gameweeks = [];
+            cloudGameweeks.forEach((gwData, gwId) => {
+                gameweeks.push({
+                    id: gwId,
+                    number: gwData.number,
+                    name: gwData.name
+                });
+            });
+
+            const fixturesByGw = {};
+            gameweeks.forEach(gw => {
+                fixturesByGw[gw.id] = [];
+            });
+
+            cloudFixtures.forEach((fData, fId) => {
+                if (!fixturesByGw[fData.gwId]) {
+                    fixturesByGw[fData.gwId] = [];
+                }
+                fixturesByGw[fData.gwId].push({
+                    id: fId,
+                    kickoffISO: fData.kickoffISO,
+                    orderIndex: fData.orderIndex,
+                    teamA: fData.teamA,
+                    teamB: fData.teamB,
+                    actualA: fData.actualA ?? null,
+                    actualB: fData.actualB ?? null,
+                    predictions: predsByFixture.get(fId) || {}
+                });
+            });
+
+            const gwIds = new Set(gameweeks.map(g => g.id));
+            let resolvedActiveGw = localSelectedGwId && gwIds.has(localSelectedGwId)
+                ? localSelectedGwId
+                : (gwIds.has(cloudLeague.activeGwId) ? cloudLeague.activeGwId : (gameweeks[0]?.id || 'gw11'));
+
+            state = {
+                activeGwId: resolvedActiveGw,
+                predictors: Array.isArray(cloudLeague.predictors) && cloudLeague.predictors.length > 0
+                    ? [...cloudLeague.predictors]
+                    : ['عيلان', 'بونبيل'],
+                whatsappUseArabicDigits: cloudLeague.whatsappUseArabicDigits ?? true,
+                whatsappIncludeDates: cloudLeague.whatsappIncludeDates ?? false,
+                gameweeks,
+                fixturesByGw
+            };
+
+            ensureChronologicalSorting();
+            renderAll();
+        }
+
+        async function seedCloudFromInitialState() {
+            if (seedingPromise) return seedingPromise;
+            seedingPromise = (async () => {
+                if (!currentUser || !currentUser.emailVerified) return;
+                const uid = currentUser.uid;
+                const leaguePath = `leagues/${LEAGUE_ID}`;
+                const leagueRef = doc(db, 'leagues', LEAGUE_ID);
+
+                try {
+                    await setDoc(leagueRef, {
+                        name: 'Aj League',
+                        season: 'PL 26/27',
+                        activeGwId: INITIAL_STATE.activeGwId,
+                        predictors: [...INITIAL_STATE.predictors].slice(0, 30),
+                        whatsappUseArabicDigits: Boolean(INITIAL_STATE.whatsappUseArabicDigits),
+                        whatsappIncludeDates: Boolean(INITIAL_STATE.whatsappIncludeDates),
+                        isPublicLeague: true,
+                        ownerUid: uid,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                } catch (err) {
+                    handleFirestoreError(err, OperationType.CREATE, leaguePath);
+                }
+
+                const batch = writeBatch(db);
+                for (const gw of INITIAL_STATE.gameweeks) {
+                    const gwRef = doc(db, 'leagues', LEAGUE_ID, 'gameweeks', gw.id);
+                    batch.set(gwRef, {
+                        number: gw.number,
+                        name: gw.name.slice(0, 60),
+                        isPublicLeague: true,
+                        createdByUid: uid,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    const gwFixtures = INITIAL_STATE.fixturesByGw[gw.id] || [];
+                    for (const f of gwFixtures) {
+                        const fRef = doc(db, 'leagues', LEAGUE_ID, 'fixtures', f.id);
+                        batch.set(fRef, {
+                            gwId: gw.id,
+                            kickoffISO: f.kickoffISO.slice(0, 40),
+                            orderIndex: f.orderIndex,
+                            teamA: f.teamA.slice(0, 60),
+                            teamB: f.teamB.slice(0, 60),
+                            actualA: f.actualA ?? null,
+                            actualB: f.actualB ?? null,
+                            isPublicLeague: true,
+                            updatedByUid: uid,
+                            createdAt: serverTimestamp(),
+                            updatedAt: serverTimestamp()
+                        });
+
+                        const preds = f.predictions || {};
+                        for (const pName of Object.keys(preds)) {
+                            const p = preds[pName];
+                            const predId = makePredictionDocId(f.id, pName);
+                            const pRef = doc(db, 'leagues', LEAGUE_ID, 'predictions', predId);
+                            batch.set(pRef, {
+                                gwId: gw.id,
+                                fixtureId: f.id,
+                                predictorName: pName.slice(0, 60),
+                                scoreA: Math.max(0, Math.min(20, Number(p.scoreA) || 0)),
+                                scoreB: Math.max(0, Math.min(20, Number(p.scoreB) || 0)),
+                                winnerLabel: (p.winnerLabel || computeWinnerLabel(p.scoreA, p.scoreB, f.teamA, f.teamB)).slice(0, 60),
+                                note: (p.note || '').slice(0, 500),
+                                isPublicLeague: true,
+                                authorUid: uid,
+                                createdAt: serverTimestamp(),
+                                updatedAt: serverTimestamp()
+                            });
+                        }
                     }
                 }
-            } catch (err) {
-                console.warn('Resetting corrupted state to defaults');
-            }
-            state = JSON.parse(JSON.stringify(INITIAL_STATE));
-            ensureChronologicalSorting();
-            saveState();
+
+                try {
+                    await batch.commit();
+                } catch (err) {
+                    handleFirestoreError(err, OperationType.WRITE, `${leaguePath}/seed`);
+                }
+            })().finally(() => {
+                seedingPromise = null;
+            });
+            return seedingPromise;
         }
 
-        function saveState() {
+        function attachFirestoreListeners() {
+            const leaguePath = `leagues/${LEAGUE_ID}`;
+            onSnapshot(
+                doc(db, 'leagues', LEAGUE_ID),
+                (snap) => {
+                    if (snap.exists()) {
+                        cloudLeague = snap.data();
+                    } else {
+                        cloudLeague = null;
+                        if (currentUser && currentUser.emailVerified) {
+                            seedCloudFromInitialState().catch(console.error);
+                        }
+                    }
+                    rebuildStateFromCloud();
+                },
+                (error) => {
+                    handleFirestoreError(error, OperationType.GET, leaguePath);
+                }
+            );
+
+            const gwPath = `leagues/${LEAGUE_ID}/gameweeks`;
+            onSnapshot(
+                query(collection(db, 'leagues', LEAGUE_ID, 'gameweeks'), where('isPublicLeague', '==', true)),
+                (snap) => {
+                    cloudGameweeks.clear();
+                    snap.forEach((d) => cloudGameweeks.set(d.id, d.data()));
+                    rebuildStateFromCloud();
+                },
+                (error) => {
+                    handleFirestoreError(error, OperationType.LIST, gwPath);
+                }
+            );
+
+            const fixturesPath = `leagues/${LEAGUE_ID}/fixtures`;
+            onSnapshot(
+                query(collection(db, 'leagues', LEAGUE_ID, 'fixtures'), where('isPublicLeague', '==', true)),
+                (snap) => {
+                    cloudFixtures.clear();
+                    snap.forEach((d) => cloudFixtures.set(d.id, d.data()));
+                    rebuildStateFromCloud();
+                },
+                (error) => {
+                    handleFirestoreError(error, OperationType.LIST, fixturesPath);
+                }
+            );
+
+            const predsPath = `leagues/${LEAGUE_ID}/predictions`;
+            onSnapshot(
+                query(collection(db, 'leagues', LEAGUE_ID, 'predictions'), where('isPublicLeague', '==', true)),
+                (snap) => {
+                    cloudPredictions.clear();
+                    snap.forEach((d) => cloudPredictions.set(d.id, d.data()));
+                    rebuildStateFromCloud();
+                },
+                (error) => {
+                    handleFirestoreError(error, OperationType.LIST, predsPath);
+                }
+            );
+        }
+
+        async function initFirebase() {
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                const res = await fetch('/firebase-applet-config.json');
+                if (!res.ok) throw new Error('Failed to load firebase-applet-config.json');
+                const firebaseConfig = await res.json();
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+                auth = getAuth(app);
+
+                await testConnection();
+
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    updateAuthButtonUI();
+                    if (user && user.emailVerified && !cloudLeague) {
+                        seedCloudFromInitialState().catch(console.error);
+                    }
+                });
+
+                attachFirestoreListeners();
             } catch (err) {
-                showToast('تعذر الحفظ في ذاكرة المتصفح');
+                console.error('Firebase initialization failed:', err);
+                showToast('تعذر تهيئة الاتصال السحابي');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureChronologicalSorting();
+            populateNewGwSelect();
+            renderAll();
+            startLiveClockAndCountdown();
+            initFirebase();
+        });
 
         // Guarantee every Gameweek's fixtures are strictly sorted from earliest kickoff to latest
         function ensureChronologicalSorting() {
@@ -773,7 +1214,7 @@
         function getGameweekDeadlineInfo(gwId) {
             const fixtures = state.fixturesByGw[gwId] || [];
             if (fixtures.length === 0) {
-                return { text: 'لم تحدد مباريات الجولة بعد', isOpen: true };
+                return { text: 'لم تحدد مباريات الجولة بعد', isOpen: true, deadlineMs: null };
             }
             const firstKickoff = new Date(fixtures[0].kickoffISO);
             const deadlineDate = new Date(firstKickoff.getTime() - (90 * 60 * 1000));
@@ -784,8 +1225,88 @@
             const isOpen = now.getTime() < deadlineDate.getTime();
             return {
                 text: formatted.deadlineText,
-                isOpen: isOpen
+                isOpen: isOpen,
+                deadlineMs: deadlineDate.getTime()
             };
+        }
+
+        function formatLiveAstClock(nowDate) {
+            const utcMs = nowDate.getTime() + (nowDate.getTimezoneOffset() * 60000);
+            const astDate = new Date(utcMs + (3 * 3600000));
+
+            let hours = astDate.getHours();
+            const mins = astDate.getMinutes();
+            const secs = astDate.getSeconds();
+            const period = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12;
+            if (hours === 0) hours = 12;
+
+            const pad = (n) => (n < 10 ? '0' + n : String(n));
+            return `${toArabicDigits(pad(hours))}:${toArabicDigits(pad(mins))}:${toArabicDigits(pad(secs))} ${period}`;
+        }
+
+        function startLiveClockAndCountdown() {
+            updateLiveClockAndCountdown();
+            if (clockInterval) clearInterval(clockInterval);
+            clockInterval = setInterval(updateLiveClockAndCountdown, 1000);
+        }
+
+        function updateLiveClockAndCountdown() {
+            const now = new Date();
+            const clockEl = document.getElementById('live-clock-text');
+            if (clockEl) {
+                clockEl.textContent = formatLiveAstClock(now);
+            }
+
+            if (!state) return;
+            const info = getGameweekDeadlineInfo(state.activeGwId);
+            const cdDays = document.getElementById('cd-days');
+            const cdHours = document.getElementById('cd-hours');
+            const cdMins = document.getElementById('cd-mins');
+            const cdSecs = document.getElementById('cd-secs');
+            const badge = document.getElementById('deadline-status-badge');
+            const bar = document.getElementById('deadline-accent-bar');
+
+            const pad2 = (n) => toArabicDigits(n < 10 ? '0' + n : String(n));
+
+            if (!info.deadlineMs) {
+                if (cdDays) cdDays.textContent = pad2(0);
+                if (cdHours) cdHours.textContent = pad2(0);
+                if (cdMins) cdMins.textContent = pad2(0);
+                if (cdSecs) cdSecs.textContent = pad2(0);
+                return;
+            }
+
+            const diffMs = info.deadlineMs - now.getTime();
+            if (diffMs > 0) {
+                const totalSecs = Math.floor(diffMs / 1000);
+                const days = Math.floor(totalSecs / 86400);
+                const hours = Math.floor((totalSecs % 86400) / 3600);
+                const mins = Math.floor((totalSecs % 3600) / 60);
+                const secs = totalSecs % 60;
+
+                if (cdDays) cdDays.textContent = pad2(days);
+                if (cdHours) cdHours.textContent = pad2(hours);
+                if (cdMins) cdMins.textContent = pad2(mins);
+                if (cdSecs) cdSecs.textContent = pad2(secs);
+
+                if (badge) {
+                    badge.textContent = 'مفتوحة للتوقع';
+                    badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30';
+                }
+                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1 bg-pl-mint';
+            } else {
+                if (cdDays) cdDays.textContent = pad2(0);
+                if (cdHours) cdHours.textContent = pad2(0);
+                if (cdMins) cdMins.textContent = pad2(0);
+                if (cdSecs) cdSecs.textContent = pad2(0);
+
+                if (badge) {
+                    badge.textContent = 'انتهى الموعد';
+                    badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30';
+                }
+                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1 bg-rose-500';
+            }
         }
 
         // ==================== MASTER RENDER PIPELINE ====================
@@ -841,8 +1362,8 @@
         }
 
         function selectGameweek(gwId) {
+            localSelectedGwId = gwId;
             state.activeGwId = gwId;
-            saveState();
             renderAll();
         }
 
@@ -850,19 +1371,7 @@
         function renderDeadlineBanner() {
             const info = getGameweekDeadlineInfo(state.activeGwId);
             document.getElementById('deadline-display-text').textContent = info.text;
-
-            const badge = document.getElementById('deadline-status-badge');
-            const bar = document.getElementById('deadline-accent-bar');
-
-            if (info.isOpen) {
-                badge.textContent = 'مفتوحة للتوقع';
-                badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30';
-                bar.className = 'absolute inset-y-0 right-0 w-1 bg-pl-mint';
-            } else {
-                badge.textContent = 'انتهى الموعد';
-                badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30';
-                bar.className = 'absolute inset-y-0 right-0 w-1 bg-rose-500';
-            }
+            updateLiveClockAndCountdown();
         }
 
         // 3. Render Predictor Filter Pills
@@ -1018,6 +1527,85 @@
             }).join('');
         }
 
+        // ==================== ADD NEW PREDICTOR MODAL LOGIC ====================
+        function openNewPredictorModal() {
+            const input = document.getElementById('new-predictor-name-input');
+            input.value = '';
+            renderCurrentPredictorsList();
+            openModal('modal-new-predictor');
+            setTimeout(() => input.focus(), 120);
+        }
+
+        function renderCurrentPredictorsList() {
+            const container = document.getElementById('current-predictors-list');
+            if (!container) return;
+            container.innerHTML = state.predictors.map(p => {
+                const isCore = p === 'عيلان' || p === 'بونبيل';
+                return `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-ios-bg border border-ios-border text-pl-cyan">
+                        <span>${escapeHtml(p)}</span>
+                        ${!isCore ? `<button type="button" data-predictor="${escapeHtml(p)}" onclick="removePredictor(this.dataset.predictor)" title="حذف المتوقع" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-xmark text-[10px]"></i></button>` : ''}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        async function saveNewPredictorForm(e) {
+            e.preventDefault();
+            if (!(await ensureSignedInForWrite())) return;
+
+            const input = document.getElementById('new-predictor-name-input');
+            const name = input.value.trim().slice(0, 60);
+            if (!name) {
+                showToast('يرجى إدخال اسم المتوقع');
+                return;
+            }
+            if (state.predictors.includes(name)) {
+                showToast(`المتوقع "${name}" موجود مسبقاً`);
+                return;
+            }
+            if (state.predictors.length >= 30) {
+                showToast('الحد الأقصى للمتوقعين هو ٣٠');
+                return;
+            }
+
+            const nextPredictors = [...state.predictors, name];
+            const leaguePath = `leagues/${LEAGUE_ID}`;
+            try {
+                await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                    predictors: nextPredictors,
+                    updatedAt: serverTimestamp()
+                });
+                closeModal('modal-new-predictor');
+                showToast(`تمت إضافة المتوقع ${name}`);
+            } catch (err) {
+                handleFirestoreError(err, OperationType.UPDATE, leaguePath);
+            }
+        }
+
+        async function removePredictor(name) {
+            if (!(await ensureSignedInForWrite())) return;
+            const nextPredictors = state.predictors.filter(p => p !== name);
+            if (nextPredictors.length === 0) {
+                showToast('يجب بقاء متوقع واحد على الأقل');
+                return;
+            }
+            if (filterPredictor === name) filterPredictor = 'all';
+
+            const leaguePath = `leagues/${LEAGUE_ID}`;
+            try {
+                await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                    predictors: nextPredictors,
+                    updatedAt: serverTimestamp()
+                });
+                state.predictors = nextPredictors;
+                renderCurrentPredictorsList();
+                showToast(`تم حذف المتوقع ${name}`);
+            } catch (err) {
+                handleFirestoreError(err, OperationType.UPDATE, leaguePath);
+            }
+        }
+
         // ==================== PREDICTION MODAL LOGIC ====================
         function openPredictionModal(matchId, predictorName) {
             const fixtures = state.fixturesByGw[state.activeGwId] || [];
@@ -1100,52 +1688,100 @@
             }
         }
 
-        function savePredictionForm(e) {
+        async function savePredictionForm(e) {
             e.preventDefault();
+            if (!(await ensureSignedInForWrite())) return;
+
             const matchId = document.getElementById('form-pred-match').value;
             let predictor = document.getElementById('form-pred-user').value;
+            let addedNewPredictor = false;
 
             if (predictor === '__NEW__') {
-                predictor = document.getElementById('form-pred-custom-user').value.trim();
+                predictor = document.getElementById('form-pred-custom-user').value.trim().slice(0, 60);
                 if (!predictor) {
                     showToast('يرجى إدخال اسم المتوقع');
                     return;
                 }
                 if (!state.predictors.includes(predictor)) {
-                    state.predictors.push(predictor);
+                    if (state.predictors.length >= 30) {
+                        showToast('الحد الأقصى للمتوقعين هو ٣٠');
+                        return;
+                    }
+                    addedNewPredictor = true;
                 }
+            } else {
+                predictor = predictor.trim().slice(0, 60);
             }
 
-            const scoreA = Math.max(0, parseInt(document.getElementById('form-score-a').value, 10) || 0);
-            const scoreB = Math.max(0, parseInt(document.getElementById('form-score-b').value, 10) || 0);
-            const note = document.getElementById('form-pred-note').value.trim();
+            const scoreA = Math.max(0, Math.min(20, parseInt(document.getElementById('form-score-a').value, 10) || 0));
+            const scoreB = Math.max(0, Math.min(20, parseInt(document.getElementById('form-score-b').value, 10) || 0));
+            const note = document.getElementById('form-pred-note').value.trim().slice(0, 500);
 
             const fixtures = state.fixturesByGw[state.activeGwId] || [];
             const match = fixtures.find(m => m.id === matchId);
             if (!match) return;
 
-            if (!match.predictions) match.predictions = {};
-            const winnerLabel = computeWinnerLabel(scoreA, scoreB, match.teamA, match.teamB);
-            match.predictions[predictor] = { scoreA, scoreB, winnerLabel, note };
+            const winnerLabel = computeWinnerLabel(scoreA, scoreB, match.teamA, match.teamB).slice(0, 60);
+            const predId = makePredictionDocId(match.id, predictor);
+            const predPath = `leagues/${LEAGUE_ID}/predictions/${predId}`;
+            const predRef = doc(db, 'leagues', LEAGUE_ID, 'predictions', predId);
 
-            saveState();
-            closeModal('modal-prediction');
-            renderAll();
-            showToast(`تم حفظ توقع ${predictor}`);
+            try {
+                if (addedNewPredictor) {
+                    await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                        predictors: [...state.predictors, predictor],
+                        updatedAt: serverTimestamp()
+                    });
+                }
+
+                if (cloudPredictions.has(predId)) {
+                    await updateDoc(predRef, {
+                        scoreA,
+                        scoreB,
+                        winnerLabel,
+                        note,
+                        authorUid: currentUser.uid,
+                        updatedAt: serverTimestamp()
+                    });
+                } else {
+                    await setDoc(predRef, {
+                        gwId: state.activeGwId,
+                        fixtureId: match.id,
+                        predictorName: predictor,
+                        scoreA,
+                        scoreB,
+                        winnerLabel,
+                        note,
+                        isPublicLeague: true,
+                        authorUid: currentUser.uid,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                }
+
+                closeModal('modal-prediction');
+                showToast(`تم حفظ توقع ${predictor}`);
+            } catch (err) {
+                handleFirestoreError(err, cloudPredictions.has(predId) ? OperationType.UPDATE : OperationType.CREATE, predPath);
+            }
         }
 
-        function deleteCurrentPrediction() {
+        async function deleteCurrentPrediction() {
+            if (!(await ensureSignedInForWrite())) return;
+
             const matchId = document.getElementById('form-pred-match').value;
             const predictor = document.getElementById('form-pred-user').value;
-            const fixtures = state.fixturesByGw[state.activeGwId] || [];
-            const match = fixtures.find(m => m.id === matchId);
+            if (!predictor || predictor === '__NEW__') return;
 
-            if (match && match.predictions && match.predictions[predictor]) {
-                delete match.predictions[predictor];
-                saveState();
+            const predId = makePredictionDocId(matchId, predictor);
+            const predPath = `leagues/${LEAGUE_ID}/predictions/${predId}`;
+
+            try {
+                await deleteDoc(doc(db, 'leagues', LEAGUE_ID, 'predictions', predId));
                 closeModal('modal-prediction');
-                renderAll();
                 showToast(`تم حذف توقع ${predictor}`);
+            } catch (err) {
+                handleFirestoreError(err, OperationType.DELETE, predPath);
             }
         }
 
@@ -1171,38 +1807,46 @@
             openModal('modal-result');
         }
 
-        function saveActualResultForm(e) {
+        async function saveActualResultForm(e) {
             e.preventDefault();
+            if (!(await ensureSignedInForWrite())) return;
+
             const matchId = document.getElementById('result-match-id').value;
-            const scoreA = Math.max(0, parseInt(document.getElementById('result-score-a').value, 10) || 0);
-            const scoreB = Math.max(0, parseInt(document.getElementById('result-score-b').value, 10) || 0);
+            const scoreA = Math.max(0, Math.min(20, parseInt(document.getElementById('result-score-a').value, 10) || 0));
+            const scoreB = Math.max(0, Math.min(20, parseInt(document.getElementById('result-score-b').value, 10) || 0));
 
-            const fixtures = state.fixturesByGw[state.activeGwId] || [];
-            const match = fixtures.find(m => m.id === matchId);
-            if (!match) return;
-
-            match.actualA = scoreA;
-            match.actualB = scoreB;
-
-            saveState();
-            closeModal('modal-result');
-            renderAll();
-            showToast('تم اعتماد النتيجة وتحديث الترتيب');
+            const fixturePath = `leagues/${LEAGUE_ID}/fixtures/${matchId}`;
+            try {
+                await updateDoc(doc(db, 'leagues', LEAGUE_ID, 'fixtures', matchId), {
+                    actualA: scoreA,
+                    actualB: scoreB,
+                    updatedByUid: currentUser.uid,
+                    updatedAt: serverTimestamp()
+                });
+                closeModal('modal-result');
+                showToast('تم اعتماد النتيجة وتحديث الترتيب');
+            } catch (err) {
+                handleFirestoreError(err, OperationType.UPDATE, fixturePath);
+            }
         }
 
-        function clearActualResult() {
+        async function clearActualResult() {
+            if (!(await ensureSignedInForWrite())) return;
+
             const matchId = document.getElementById('result-match-id').value;
-            const fixtures = state.fixturesByGw[state.activeGwId] || [];
-            const match = fixtures.find(m => m.id === matchId);
-            if (!match) return;
-
-            match.actualA = null;
-            match.actualB = null;
-
-            saveState();
-            closeModal('modal-result');
-            renderAll();
-            showToast('تم مسح النتيجة النهائية');
+            const fixturePath = `leagues/${LEAGUE_ID}/fixtures/${matchId}`;
+            try {
+                await updateDoc(doc(db, 'leagues', LEAGUE_ID, 'fixtures', matchId), {
+                    actualA: null,
+                    actualB: null,
+                    updatedByUid: currentUser.uid,
+                    updatedAt: serverTimestamp()
+                });
+                closeModal('modal-result');
+                showToast('تم مسح النتيجة النهائية');
+            } catch (err) {
+                handleFirestoreError(err, OperationType.UPDATE, fixturePath);
+            }
         }
 
         // ==================== LEADERBOARD LOGIC ====================
@@ -1300,16 +1944,34 @@
         }
 
         // ==================== WHATSAPP EXPORT LOGIC ====================
-        function toggleWhatsappArabicDigits() {
+        async function toggleWhatsappArabicDigits() {
             state.whatsappUseArabicDigits = !state.whatsappUseArabicDigits;
-            saveState();
             renderWhatsappExport();
+            if (currentUser && currentUser.emailVerified && cloudLeague) {
+                try {
+                    await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                        whatsappUseArabicDigits: Boolean(state.whatsappUseArabicDigits),
+                        updatedAt: serverTimestamp()
+                    });
+                } catch (err) {
+                    handleFirestoreError(err, OperationType.UPDATE, `leagues/${LEAGUE_ID}`);
+                }
+            }
         }
 
-        function toggleWhatsappDates() {
+        async function toggleWhatsappDates() {
             state.whatsappIncludeDates = !state.whatsappIncludeDates;
-            saveState();
             renderWhatsappExport();
+            if (currentUser && currentUser.emailVerified && cloudLeague) {
+                try {
+                    await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                        whatsappIncludeDates: Boolean(state.whatsappIncludeDates),
+                        updatedAt: serverTimestamp()
+                    });
+                } catch (err) {
+                    handleFirestoreError(err, OperationType.UPDATE, `leagues/${LEAGUE_ID}`);
+                }
+            }
         }
 
         function renderWhatsappExport() {
@@ -1386,6 +2048,8 @@
         }
 
         async function fetchOrCreateGameweek() {
+            if (!(await ensureSignedInForWrite())) return;
+
             const gwNum = parseInt(document.getElementById('new-gw-number-select').value, 10);
             const gwId = `gw${gwNum}`;
             const btn = document.getElementById('btn-fetch-gw');
@@ -1421,21 +2085,21 @@
 
                 const mappedFixtures = rawFixtures.map((f, idx) => ({
                     id: `${gwId}_m${idx + 1}`,
-                    kickoffISO: f.kickoff_time || new Date(Date.now() + (idx + 1) * 3600000).toISOString(),
-                    orderIndex: idx + 1,
-                    teamA: teamIdToArabic[f.team_h] || `فريق ${f.team_h}`,
-                    teamB: teamIdToArabic[f.team_a] || `فريق ${f.team_a}`,
-                    actualA: f.finished ? f.team_h_score : null,
-                    actualB: f.finished ? f.team_a_score : null,
+                    kickoffISO: (f.kickoff_time || new Date(Date.now() + (idx + 1) * 3600000).toISOString()).slice(0, 40),
+                    orderIndex: Math.max(1, Math.min(20, idx + 1)),
+                    teamA: (teamIdToArabic[f.team_h] || `فريق ${f.team_h}`).slice(0, 60),
+                    teamB: (teamIdToArabic[f.team_a] || `فريق ${f.team_a}`).slice(0, 60),
+                    actualA: f.finished && f.team_h_score !== null ? Math.max(0, Math.min(20, Number(f.team_h_score))) : null,
+                    actualB: f.finished && f.team_a_score !== null ? Math.max(0, Math.min(20, Number(f.team_a_score))) : null,
                     predictions: {}
                 }));
 
-                upsertGameweek(gwId, gwNum, mappedFixtures);
+                await upsertGameweek(gwId, gwNum, mappedFixtures);
                 showToast(`تم جلب ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
             } catch (err) {
                 // Reliable Offline Fallback Fixture Generator
                 const fallbackFixtures = generateFallbackFixturesForGw(gwNum);
-                upsertGameweek(gwId, gwNum, fallbackFixtures);
+                await upsertGameweek(gwId, gwNum, fallbackFixtures);
                 showToast(`تم إنشاء ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
             } finally {
                 btn.disabled = false;
@@ -1444,19 +2108,70 @@
             }
         }
 
-        function upsertGameweek(gwId, gwNum, fixturesList) {
-            if (!state.gameweeks.some(g => g.id === gwId)) {
-                state.gameweeks.push({
-                    id: gwId,
+        async function upsertGameweek(gwId, gwNum, fixturesList) {
+            const batch = writeBatch(db);
+            const gwName = (GW_ARABIC_NAMES[gwNum] || `الجولة ال${toArabicDigits(gwNum)}`).slice(0, 60);
+            const gwRef = doc(db, 'leagues', LEAGUE_ID, 'gameweeks', gwId);
+
+            if (cloudGameweeks.has(gwId)) {
+                batch.update(gwRef, {
                     number: gwNum,
-                    name: GW_ARABIC_NAMES[gwNum] || `الجولة ال${toArabicDigits(gwNum)}`
+                    name: gwName,
+                    updatedAt: serverTimestamp()
+                });
+            } else {
+                batch.set(gwRef, {
+                    number: gwNum,
+                    name: gwName,
+                    isPublicLeague: true,
+                    createdByUid: currentUser.uid,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
                 });
             }
-            state.fixturesByGw[gwId] = fixturesList;
-            state.activeGwId = gwId;
-            ensureChronologicalSorting();
-            saveState();
-            renderAll();
+
+            fixturesList.slice(0, 20).forEach((f, i) => {
+                const fRef = doc(db, 'leagues', LEAGUE_ID, 'fixtures', f.id);
+                const orderIdx = Math.max(1, Math.min(20, f.orderIndex || (i + 1)));
+                if (cloudFixtures.has(f.id)) {
+                    batch.update(fRef, {
+                        kickoffISO: f.kickoffISO.slice(0, 40),
+                        orderIndex: orderIdx,
+                        teamA: f.teamA.slice(0, 60),
+                        teamB: f.teamB.slice(0, 60),
+                        actualA: f.actualA ?? null,
+                        actualB: f.actualB ?? null,
+                        updatedByUid: currentUser.uid,
+                        updatedAt: serverTimestamp()
+                    });
+                } else {
+                    batch.set(fRef, {
+                        gwId,
+                        kickoffISO: f.kickoffISO.slice(0, 40),
+                        orderIndex: orderIdx,
+                        teamA: f.teamA.slice(0, 60),
+                        teamB: f.teamB.slice(0, 60),
+                        actualA: f.actualA ?? null,
+                        actualB: f.actualB ?? null,
+                        isPublicLeague: true,
+                        updatedByUid: currentUser.uid,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                }
+            });
+
+            batch.update(doc(db, 'leagues', LEAGUE_ID), {
+                activeGwId: gwId,
+                updatedAt: serverTimestamp()
+            });
+
+            localSelectedGwId = gwId;
+            try {
+                await batch.commit();
+            } catch (err) {
+                handleFirestoreError(err, OperationType.WRITE, `leagues/${LEAGUE_ID}/gameweeks/${gwId}`);
+            }
         }
 
         function generateFallbackFixturesForGw(gwNum) {
@@ -1500,19 +2215,34 @@
         function confirmResetCurrentGwPredictions() {
             const gwObj = state.gameweeks.find(g => g.id === state.activeGwId);
             const title = gwObj ? gwObj.name : 'الجولة الحالية';
+            const targetGwId = state.activeGwId;
             openConfirmDialog(
                 `تصفير توقعات ${title}`,
                 'سيتم مسح جميع التوقعات المسجلة في هذه الجولة فقط مع الإبقاء على جدول المباريات.',
-                () => {
-                    const fixtures = state.fixturesByGw[state.activeGwId] || [];
-                    fixtures.forEach(m => {
-                        m.predictions = {};
-                        m.actualA = null;
-                        m.actualB = null;
+                async () => {
+                    if (!(await ensureSignedInForWrite())) return;
+                    const batch = writeBatch(db);
+                    cloudPredictions.forEach((pData, predId) => {
+                        if (pData.gwId === targetGwId) {
+                            batch.delete(doc(db, 'leagues', LEAGUE_ID, 'predictions', predId));
+                        }
                     });
-                    saveState();
-                    renderAll();
-                    showToast(`تم تصفير توقعات ${title}`);
+                    cloudFixtures.forEach((fData, fId) => {
+                        if (fData.gwId === targetGwId) {
+                            batch.update(doc(db, 'leagues', LEAGUE_ID, 'fixtures', fId), {
+                                actualA: null,
+                                actualB: null,
+                                updatedByUid: currentUser.uid,
+                                updatedAt: serverTimestamp()
+                            });
+                        }
+                    });
+                    try {
+                        await batch.commit();
+                        showToast(`تم تصفير توقعات ${title}`);
+                    } catch (err) {
+                        handleFirestoreError(err, OperationType.WRITE, `leagues/${LEAGUE_ID}/reset/${targetGwId}`);
+                    }
                 }
             );
         }
@@ -1521,13 +2251,124 @@
             openConfirmDialog(
                 'إعادة ضبط البيانات الافتراضية',
                 'سيتم استعادة جميع الجولات الافتراضية (الجولة ٩، ١٠، ١١، ١٢) وتوقعات الجولة ٩ الأساسية.',
-                () => {
-                    localStorage.removeItem(STORAGE_KEY);
-                    state = JSON.parse(JSON.stringify(INITIAL_STATE));
-                    ensureChronologicalSorting();
-                    saveState();
-                    renderAll();
-                    showToast('تمت استعادة البيانات الافتراضية');
+                async () => {
+                    if (!(await ensureSignedInForWrite())) return;
+                    const batch = writeBatch(db);
+
+                    batch.update(doc(db, 'leagues', LEAGUE_ID), {
+                        activeGwId: INITIAL_STATE.activeGwId,
+                        predictors: [...INITIAL_STATE.predictors],
+                        whatsappUseArabicDigits: Boolean(INITIAL_STATE.whatsappUseArabicDigits),
+                        whatsappIncludeDates: Boolean(INITIAL_STATE.whatsappIncludeDates),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    const defaultPredIds = new Set();
+                    for (const gw of INITIAL_STATE.gameweeks) {
+                        const gwFixtures = INITIAL_STATE.fixturesByGw[gw.id] || [];
+                        for (const f of gwFixtures) {
+                            const preds = f.predictions || {};
+                            for (const pName of Object.keys(preds)) {
+                                defaultPredIds.add(makePredictionDocId(f.id, pName));
+                            }
+                        }
+                    }
+
+                    cloudPredictions.forEach((_, predId) => {
+                        if (!defaultPredIds.has(predId)) {
+                            batch.delete(doc(db, 'leagues', LEAGUE_ID, 'predictions', predId));
+                        }
+                    });
+
+                    for (const gw of INITIAL_STATE.gameweeks) {
+                        const gwRef = doc(db, 'leagues', LEAGUE_ID, 'gameweeks', gw.id);
+                        if (cloudGameweeks.has(gw.id)) {
+                            batch.update(gwRef, {
+                                number: gw.number,
+                                name: gw.name,
+                                updatedAt: serverTimestamp()
+                            });
+                        } else {
+                            batch.set(gwRef, {
+                                number: gw.number,
+                                name: gw.name,
+                                isPublicLeague: true,
+                                createdByUid: currentUser.uid,
+                                createdAt: serverTimestamp(),
+                                updatedAt: serverTimestamp()
+                            });
+                        }
+
+                        const gwFixtures = INITIAL_STATE.fixturesByGw[gw.id] || [];
+                        for (const f of gwFixtures) {
+                            const fRef = doc(db, 'leagues', LEAGUE_ID, 'fixtures', f.id);
+                            if (cloudFixtures.has(f.id)) {
+                                batch.update(fRef, {
+                                    kickoffISO: f.kickoffISO,
+                                    orderIndex: f.orderIndex,
+                                    teamA: f.teamA,
+                                    teamB: f.teamB,
+                                    actualA: f.actualA ?? null,
+                                    actualB: f.actualB ?? null,
+                                    updatedByUid: currentUser.uid,
+                                    updatedAt: serverTimestamp()
+                                });
+                            } else {
+                                batch.set(fRef, {
+                                    gwId: gw.id,
+                                    kickoffISO: f.kickoffISO,
+                                    orderIndex: f.orderIndex,
+                                    teamA: f.teamA,
+                                    teamB: f.teamB,
+                                    actualA: f.actualA ?? null,
+                                    actualB: f.actualB ?? null,
+                                    isPublicLeague: true,
+                                    updatedByUid: currentUser.uid,
+                                    createdAt: serverTimestamp(),
+                                    updatedAt: serverTimestamp()
+                                });
+                            }
+
+                            const preds = f.predictions || {};
+                            for (const pName of Object.keys(preds)) {
+                                const p = preds[pName];
+                                const predId = makePredictionDocId(f.id, pName);
+                                const pRef = doc(db, 'leagues', LEAGUE_ID, 'predictions', predId);
+                                if (cloudPredictions.has(predId)) {
+                                    batch.update(pRef, {
+                                        scoreA: p.scoreA,
+                                        scoreB: p.scoreB,
+                                        winnerLabel: p.winnerLabel,
+                                        note: p.note || '',
+                                        authorUid: currentUser.uid,
+                                        updatedAt: serverTimestamp()
+                                    });
+                                } else {
+                                    batch.set(pRef, {
+                                        gwId: gw.id,
+                                        fixtureId: f.id,
+                                        predictorName: pName,
+                                        scoreA: p.scoreA,
+                                        scoreB: p.scoreB,
+                                        winnerLabel: p.winnerLabel,
+                                        note: p.note || '',
+                                        isPublicLeague: true,
+                                        authorUid: currentUser.uid,
+                                        createdAt: serverTimestamp(),
+                                        updatedAt: serverTimestamp()
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    localSelectedGwId = INITIAL_STATE.activeGwId;
+                    try {
+                        await batch.commit();
+                        showToast('تمت استعادة البيانات الافتراضية');
+                    } catch (err) {
+                        handleFirestoreError(err, OperationType.WRITE, `leagues/${LEAGUE_ID}/restore`);
+                    }
                 }
             );
         }
@@ -1583,6 +2424,35 @@
                 toast.classList.add('opacity-0', 'pointer-events-none');
             }, 2400);
         }
+
+        // Expose handlers globally for inline HTML attributes
+        Object.assign(window, {
+            handleAuthClick,
+            confirmResetCurrentGwPredictions,
+            confirmRestoreDefaults,
+            openNewGameweekModal,
+            openNewPredictorModal,
+            setLeaderboardScope,
+            toggleWhatsappArabicDigits,
+            toggleWhatsappDates,
+            copyWhatsappOutput,
+            switchTab,
+            closeModal,
+            savePredictionForm,
+            onPredictionMatchChange,
+            onPredictorSelectChange,
+            stepNumber,
+            deleteCurrentPrediction,
+            saveActualResultForm,
+            clearActualResult,
+            fetchOrCreateGameweek,
+            saveNewPredictorForm,
+            removePredictor,
+            selectGameweek,
+            setPredictorFilter,
+            openPredictionModal,
+            openResultModal
+        });
     </script>
 </body>
 </html>

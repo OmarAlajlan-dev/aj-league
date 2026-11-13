@@ -1,0 +1,301 @@
+{
+  "entities": {
+    "League": {
+      "title": "League",
+      "description": "Shared Aj League state including active gameweek, bounded predictors list, and WhatsApp export preferences.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Display name of the league."
+        },
+        "season": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Season label (e.g. PL 26/27)."
+        },
+        "activeGwId": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 10,
+          "pattern": "^gw([1-9]|[12][0-9]|3[0-8])$",
+          "description": "Currently selected gameweek document ID."
+        },
+        "predictors": {
+          "type": "array",
+          "description": "Bounded list of predictor names (max 30)."
+        },
+        "whatsappUseArabicDigits": {
+          "type": "boolean",
+          "description": "Whether WhatsApp export formats scores with Arabic numerals."
+        },
+        "whatsappIncludeDates": {
+          "type": "boolean",
+          "description": "Whether WhatsApp export includes match kickoff dates/times."
+        },
+        "isPublicLeague": {
+          "type": "boolean",
+          "description": "Indicates the shared league is readable across participants' devices."
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the user who initialized the league."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last-updated timestamp."
+        }
+      },
+      "required": [
+        "name",
+        "season",
+        "activeGwId",
+        "predictors",
+        "whatsappUseArabicDigits",
+        "whatsappIncludeDates",
+        "isPublicLeague",
+        "ownerUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Gameweek": {
+      "title": "Gameweek",
+      "description": "A Premier League gameweek (1-38) belonging to a league.",
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "description": "Gameweek number from 1 to 38."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Arabic gameweek title."
+        },
+        "isPublicLeague": {
+          "type": "boolean",
+          "description": "Shared visibility flag matching parent league."
+        },
+        "createdByUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the user who added the gameweek."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last-updated timestamp."
+        }
+      },
+      "required": [
+        "number",
+        "name",
+        "isPublicLeague",
+        "createdByUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Fixture": {
+      "title": "Fixture",
+      "description": "A match fixture inside a gameweek with kickoff timestamp and optional official scores.",
+      "type": "object",
+      "properties": {
+        "gwId": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 10,
+          "pattern": "^gw([1-9]|[12][0-9]|3[0-8])$",
+          "description": "Parent gameweek ID."
+        },
+        "kickoffISO": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 40,
+          "description": "ISO-8601 kickoff timestamp."
+        },
+        "orderIndex": {
+          "type": "integer",
+          "description": "Sort tiebreaker index within the gameweek."
+        },
+        "teamA": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Home team Arabic name."
+        },
+        "teamB": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Away team Arabic name."
+        },
+        "actualA": {
+          "type": "integer",
+          "description": "Official home team goals or null if not yet played."
+        },
+        "actualB": {
+          "type": "integer",
+          "description": "Official away team goals or null if not yet played."
+        },
+        "isPublicLeague": {
+          "type": "boolean",
+          "description": "Shared visibility flag matching parent league."
+        },
+        "updatedByUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the user who created or last updated the fixture."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last-updated timestamp."
+        }
+      },
+      "required": [
+        "gwId",
+        "kickoffISO",
+        "orderIndex",
+        "teamA",
+        "teamB",
+        "actualA",
+        "actualB",
+        "isPublicLeague",
+        "updatedByUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Prediction": {
+      "title": "Prediction",
+      "description": "A predictor's scoreline prediction and player notes for a specific match fixture.",
+      "type": "object",
+      "properties": {
+        "gwId": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 10,
+          "pattern": "^gw([1-9]|[12][0-9]|3[0-8])$",
+          "description": "Gameweek ID."
+        },
+        "fixtureId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Target fixture document ID."
+        },
+        "predictorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Display name of the predictor."
+        },
+        "scoreA": {
+          "type": "integer",
+          "description": "Predicted home team goals (0-20)."
+        },
+        "scoreB": {
+          "type": "integer",
+          "description": "Predicted away team goals (0-20)."
+        },
+        "winnerLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Computed Arabic winner or draw label."
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional multi-line player/scorer notes."
+        },
+        "isPublicLeague": {
+          "type": "boolean",
+          "description": "Shared visibility flag matching parent league."
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID of the user who last saved this prediction."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last-updated timestamp."
+        }
+      },
+      "required": [
+        "gwId",
+        "fixtureId",
+        "predictorName",
+        "scoreA",
+        "scoreB",
+        "winnerLabel",
+        "note",
+        "isPublicLeague",
+        "authorUid",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/leagues/{leagueId}": {
+      "schema": {
+        "$ref": "#/entities/League"
+      },
+      "description": "Primary shared league document holding active gameweek, predictors list, and export settings."
+    },
+    "/leagues/{leagueId}/gameweeks/{gwId}": {
+      "schema": {
+        "$ref": "#/entities/Gameweek"
+      },
+      "description": "Gameweek documents (GW 1-38) synced across all devices."
+    },
+    "/leagues/{leagueId}/fixtures/{fixtureId}": {
+      "schema": {
+        "$ref": "#/entities/Fixture"
+      },
+      "description": "Match fixture documents with kickoff time and official final scoreline."
+    },
+    "/leagues/{leagueId}/predictions/{predictionId}": {
+      "schema": {
+        "$ref": "#/entities/Prediction"
+      },
+      "description": "Individual predictor scoreline predictions and player notes per fixture."
+    }
+  }
+}

@@ -1,0 +1,286 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ==================== GLOBAL HARDENED HELPERS ====================
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'ajlanomar.9@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isLeaguePublic(leagueId) {
+      return exists(/databases/$(database)/documents/leagues/$(leagueId)) &&
+        get(/databases/$(database)/documents/leagues/$(leagueId)).data.isPublicLeague == true;
+    }
+
+    function isLeagueOwner(leagueId) {
+      return exists(/databases/$(database)/documents/leagues/$(leagueId)) &&
+        get(/databases/$(database)/documents/leagues/$(leagueId)).data.ownerUid == request.auth.uid;
+    }
+
+    function isValidGwId(gwId) {
+      return gwId is string && gwId.size() >= 3 && gwId.size() <= 10 && gwId.matches('^gw([1-9]|[12][0-9]|3[0-8])$');
+    }
+
+    function isNullableScore(val) {
+      return val == null || (val is int && val >= 0 && val <= 20);
+    }
+
+    // ==================== ENTITY VALIDATION BLUEPRINTS ====================
+    function isValidLeague(data) {
+      return data.keys().hasAll([
+          'name', 'season', 'activeGwId', 'predictors',
+          'whatsappUseArabicDigits', 'whatsappIncludeDates',
+          'isPublicLeague', 'ownerUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'name', 'season', 'activeGwId', 'predictors',
+          'whatsappUseArabicDigits', 'whatsappIncludeDates',
+          'isPublicLeague', 'ownerUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 80 &&
+        data.season is string && data.season.size() >= 1 && data.season.size() <= 40 &&
+        isValidGwId(data.activeGwId) &&
+        data.predictors is list && data.predictors.size() >= 1 && data.predictors.size() <= 30 &&
+        data.predictors[0] is string && data.predictors[0].size() >= 1 && data.predictors[0].size() <= 60 &&
+        data.whatsappUseArabicDigits is bool &&
+        data.whatsappIncludeDates is bool &&
+        data.isPublicLeague is bool &&
+        data.ownerUid is string && data.ownerUid.size() >= 1 && data.ownerUid.size() <= 128 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidGameweek(data) {
+      return data.keys().hasAll([
+          'number', 'name', 'isPublicLeague', 'createdByUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'number', 'name', 'isPublicLeague', 'createdByUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.number is int && data.number >= 1 && data.number <= 38 &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 60 &&
+        data.isPublicLeague is bool &&
+        data.createdByUid is string && data.createdByUid.size() >= 1 && data.createdByUid.size() <= 128 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidFixture(data) {
+      return data.keys().hasAll([
+          'gwId', 'kickoffISO', 'orderIndex', 'teamA', 'teamB',
+          'actualA', 'actualB', 'isPublicLeague', 'updatedByUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'gwId', 'kickoffISO', 'orderIndex', 'teamA', 'teamB',
+          'actualA', 'actualB', 'isPublicLeague', 'updatedByUid', 'createdAt', 'updatedAt'
+        ]) &&
+        isValidGwId(data.gwId) &&
+        data.kickoffISO is string && data.kickoffISO.size() >= 10 && data.kickoffISO.size() <= 40 &&
+        data.orderIndex is int && data.orderIndex >= 1 && data.orderIndex <= 20 &&
+        data.teamA is string && data.teamA.size() >= 1 && data.teamA.size() <= 60 &&
+        data.teamB is string && data.teamB.size() >= 1 && data.teamB.size() <= 60 &&
+        isNullableScore(data.actualA) &&
+        isNullableScore(data.actualB) &&
+        data.isPublicLeague is bool &&
+        data.updatedByUid is string && data.updatedByUid.size() >= 1 && data.updatedByUid.size() <= 128 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidPrediction(data) {
+      return data.keys().hasAll([
+          'gwId', 'fixtureId', 'predictorName', 'scoreA', 'scoreB',
+          'winnerLabel', 'note', 'isPublicLeague', 'authorUid', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'gwId', 'fixtureId', 'predictorName', 'scoreA', 'scoreB',
+          'winnerLabel', 'note', 'isPublicLeague', 'authorUid', 'createdAt', 'updatedAt'
+        ]) &&
+        isValidGwId(data.gwId) &&
+        isValidId(data.fixtureId) &&
+        data.predictorName is string && data.predictorName.size() >= 1 && data.predictorName.size() <= 60 &&
+        data.scoreA is int && data.scoreA >= 0 && data.scoreA <= 20 &&
+        data.scoreB is int && data.scoreB >= 0 && data.scoreB <= 20 &&
+        data.winnerLabel is string && data.winnerLabel.size() >= 1 && data.winnerLabel.size() <= 60 &&
+        data.note is string && data.note.size() <= 500 &&
+        data.isPublicLeague is bool &&
+        data.authorUid is string && data.authorUid == request.auth.uid &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    // ==================== CONNECTION HEALTH CHECK ====================
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // ==================== ADMINS ====================
+    match /admins/{adminId} {
+      allow get: if isVerifiedUser() && request.auth.uid == adminId;
+    }
+
+    // ==================== LEAGUES ====================
+    match /leagues/{leagueId} {
+      allow get: if isValidId(leagueId) && (resource == null || existing().isPublicLeague == true || (isVerifiedUser() && existing().ownerUid == request.auth.uid) || isAdmin());
+      allow list: if existing().isPublicLeague == true;
+
+      allow create: if isVerifiedUser() &&
+        isValidId(leagueId) &&
+        isValidLeague(incoming()) &&
+        incoming().ownerUid == request.auth.uid &&
+        incoming().isPublicLeague == true &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isVerifiedUser() &&
+        isValidId(leagueId) &&
+        isValidLeague(incoming()) &&
+        incoming().ownerUid == existing().ownerUid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().isPublicLeague == existing().isPublicLeague && (
+          isAdmin() ||
+          (existing().ownerUid == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly([
+            'name', 'season', 'activeGwId', 'predictors', 'whatsappUseArabicDigits', 'whatsappIncludeDates', 'updatedAt'
+          ])) ||
+          (existing().isPublicLeague == true && incoming().diff(existing()).affectedKeys().hasOnly([
+            'activeGwId', 'predictors', 'whatsappUseArabicDigits', 'whatsappIncludeDates', 'updatedAt'
+          ]))
+        );
+
+      allow delete: if isVerifiedUser() && isValidId(leagueId) && (existing().ownerUid == request.auth.uid || isAdmin());
+
+      // ==================== GAMEWEEKS ====================
+      match /gameweeks/{gwId} {
+        allow get: if isValidId(leagueId) && isValidId(gwId) && (resource == null || existing().isPublicLeague == true);
+        allow list: if existing().isPublicLeague == true;
+
+        allow create: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidGwId(gwId) &&
+          isValidGameweek(incoming()) &&
+          incoming().createdByUid == request.auth.uid &&
+          incoming().isPublicLeague == true &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          isLeaguePublic(leagueId);
+
+        allow update: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidGwId(gwId) &&
+          isValidGameweek(incoming()) &&
+          incoming().createdByUid == existing().createdByUid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().isPublicLeague == existing().isPublicLeague &&
+          isLeaguePublic(leagueId) && (
+            isAdmin() ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['number', 'name', 'updatedAt'])
+          );
+
+        allow delete: if isVerifiedUser() && isValidId(leagueId) && isValidGwId(gwId) && (
+          isAdmin() || isLeagueOwner(leagueId) || existing().createdByUid == request.auth.uid
+        );
+      }
+
+      // ==================== FIXTURES ====================
+      match /fixtures/{fixtureId} {
+        allow get: if isValidId(leagueId) && isValidId(fixtureId) && (resource == null || existing().isPublicLeague == true);
+        allow list: if existing().isPublicLeague == true;
+
+        allow create: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidId(fixtureId) &&
+          isValidFixture(incoming()) &&
+          incoming().updatedByUid == request.auth.uid &&
+          incoming().isPublicLeague == true &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          isLeaguePublic(leagueId) &&
+          existsAfter(/databases/$(database)/documents/leagues/$(leagueId)/gameweeks/$(incoming().gwId));
+
+        allow update: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidId(fixtureId) &&
+          isValidFixture(incoming()) &&
+          incoming().gwId == existing().gwId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().isPublicLeague == existing().isPublicLeague &&
+          incoming().updatedByUid == request.auth.uid &&
+          isLeaguePublic(leagueId) && (
+            isAdmin() ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['actualA', 'actualB', 'updatedByUid', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['kickoffISO', 'orderIndex', 'teamA', 'teamB', 'actualA', 'actualB', 'updatedByUid', 'updatedAt'])
+          );
+
+        allow delete: if isVerifiedUser() && isValidId(leagueId) && isValidId(fixtureId) && (
+          isAdmin() || isLeagueOwner(leagueId)
+        );
+      }
+
+      // ==================== PREDICTIONS ====================
+      match /predictions/{predictionId} {
+        allow get: if isValidId(leagueId) && isValidId(predictionId) && (resource == null || existing().isPublicLeague == true);
+        allow list: if existing().isPublicLeague == true;
+
+        allow create: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidId(predictionId) &&
+          isValidPrediction(incoming()) &&
+          incoming().isPublicLeague == true &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          isLeaguePublic(leagueId) &&
+          existsAfter(/databases/$(database)/documents/leagues/$(leagueId)/fixtures/$(incoming().fixtureId));
+
+        allow update: if isVerifiedUser() &&
+          isValidId(leagueId) &&
+          isValidId(predictionId) &&
+          isValidPrediction(incoming()) &&
+          incoming().gwId == existing().gwId &&
+          incoming().fixtureId == existing().fixtureId &&
+          incoming().predictorName == existing().predictorName &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().isPublicLeague == existing().isPublicLeague &&
+          isLeaguePublic(leagueId) && (
+            isAdmin() ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['scoreA', 'scoreB', 'winnerLabel', 'note', 'authorUid', 'updatedAt'])
+          );
+
+        allow delete: if isVerifiedUser() && isValidId(leagueId) && isValidId(predictionId) && (
+          isAdmin() || isLeagueOwner(leagueId) || existing().authorUid == request.auth.uid || existing().isPublicLeague == true
+        );
+      }
+    }
+  }
+}

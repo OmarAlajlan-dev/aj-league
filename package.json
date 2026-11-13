@@ -8,5 +8,9 @@
     "lint": "node --check server.js",
     "start": "node server.js"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "@firebase/eslint-plugin-security-rules": "^0.0.2",
+    "eslint": "^10.15.0"
+  }
 }
