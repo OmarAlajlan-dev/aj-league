@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- iOS PWA / Add to Home Screen Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aj League">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0b0e14">
+
+    <title>Aj League Prediction | أج ليغ لتوقعات الدوري الإنجليزي</title>
+
+    <!-- Google Font: Readex Pro (Arabic Modern Typography) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ios: {
+                            bg: '#0b0e14',
+                            card: '#151a23',
+                            cardHover: '#1b222e',
+                            border: '#232b3a',
+                            subtle: '#8b95a5'
+                        },
+                        pl: {
+                            purple: '#38003c',
+                            magenta: '#e90052',
+                            mint: '#00ff85',
+                            cyan: '#04f5ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Readex Pro', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            font-family: 'Readex Pro', sans-serif;
+            background-color: #0b0e14;
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-top: var(--safe-top);
+            padding-bottom: calc(82px + var(--safe-bottom));
+        }
+
+        /* Hide scrollbars on horizontal pill bars while keeping smooth touch scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* iOS Glassmorphism Surfaces */
+        .ios-header {
+            background: rgba(11, 14, 20, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding-top: max(12px, var(--safe-top));
+        }
+
+        .ios-tabbar {
+            background: rgba(21, 26, 35, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding-bottom: max(10px, var(--safe-bottom));
+        }
+
+        .match-card {
+            background-color: #151a23;
+            border: 1px solid #232b3a;
+            transition: transform 0.15s ease, border-color 0.2s ease;
+        }
+
+        .pl-badge-gradient {
+            background: linear-gradient(135deg, #38003c 0%, #58005e 100%);
+        }
+
+        .pl-accent-gradient {
+            background: linear-gradient(135deg, #e90052 0%, #9b0047 100%);
+        }
+
+        /* Smooth modal slide-up on mobile */
+        @keyframes sheetUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-sheet {
+            animation: sheetUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pl-magenta selection:text-white">
+
+    <!-- ==================== TOP STICKY HEADER ==================== -->
+    <header class="ios-header sticky top-0 z-40 border-b border-ios-border px-4 pb-3">
+        <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
+            <!-- Brand Identity -->
+            <div class="flex items-center gap-3">
+                <!-- Inline SVG Premier League Crown/Lion Emblem -->
+                <div class="w-10 h-10 rounded-2xl pl-badge-gradient border border-pl-magenta/40 flex items-center justify-center shadow-lg shadow-pl-purple/40 shrink-0">
+                    <svg class="w-6 h-6 text-pl-mint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                        <path d="M4 22h16"/>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">Aj League</h1>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-pl-mint/15 text-pl-mint border border-pl-mint/30">PL 26/27</span>
+                    </div>
+                    <p class="text-[11px] text-ios-subtle">أج ليغ لتوقعات الدوري الإنجليزي</p>
+                </div>
+            </div>
+
+            <!-- Header Utility Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="confirmResetCurrentGwPredictions()" title="تصفير توقعات الجولة الحالية" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-300 hover:text-pl-magenta flex items-center gap-1.5 transition active:scale-95">
+                    <i class="fa-solid fa-eraser text-pl-magenta"></i>
+                    <span class="hidden sm:inline">تصفير الجولة</span>
+                </button>
+                <button onclick="confirmRestoreDefaults()" title="إعادة ضبط البيانات الافتراضية" class="p-2.5 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-400 hover:text-pl-mint transition active:scale-95">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="max-w-2xl mx-auto px-3.5 pt-3.5 space-y-4">
+
+        <!-- HORIZONTAL GAMEWEEK SELECTOR BAR -->
+        <section aria-label="اختيار الجولة" class="flex items-center gap-2">
+            <div id="gw-pills-container" class="flex-1 flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                <!-- Gameweek Pills injected by JS -->
+            </div>
+            <button onclick="openNewGameweekModal()" class="shrink-0 px-3 py-2 rounded-xl pl-badge-gradient hover:opacity-95 border border-pl-magenta/50 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md active:scale-95 transition">
+                <i class="fa-solid fa-plus text-pl-mint"></i>
+                <span>جولة جديدة</span>
+            </button>
+        </section>
+
+        <!-- GAMEWEEK DEADLINE BANNER -->
+        <section id="deadline-card" class="rounded-2xl bg-ios-card border border-ios-border p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
+            <div class="absolute inset-y-0 right-0 w-1 bg-pl-mint" id="deadline-accent-bar"></div>
+            <div class="flex items-center gap-3 pr-1">
+                <div class="w-9 h-9 rounded-xl bg-pl-purple/60 border border-pl-magenta/30 flex items-center justify-center text-pl-mint shrink-0">
+                    <i class="fa-regular fa-clock text-base"></i>
+                </div>
+                <div>
+                    <div class="text-[11px] text-ios-subtle font-medium">الموعد النهائي للتوقعات (قبل أول مباراة بـ 90 دقيقة)</div>
+                    <div id="deadline-display-text" class="text-xs sm:text-sm font-bold text-white mt-0.5">
+                        السبت، ٢١ نوفمبر | ٢:٠٠ مساءً
+                    </div>
+                </div>
+            </div>
+            <div id="deadline-status-badge" class="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30">
+                مفتوحة للتوقع
+            </div>
+        </section>
+
+        <!-- ==================== TAB 1: MATCHES & PREDICTIONS ==================== -->
+        <section id="tab-matches" class="space-y-3.5">
+            <!-- Predictor Filter & Quick Add Bar -->
+            <div class="flex items-center justify-between gap-2">
+                <div id="predictor-filter-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                    <!-- Predictor pills injected by JS -->
+                </div>
+                <button onclick="openPredictionModal(null, null)" class="shrink-0 px-3.5 py-2 rounded-xl pl-accent-gradient text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-pl-magenta/20 active:scale-95 transition">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>إضافة توقع</span>
+                </button>
+            </div>
+
+            <!-- Chronological Fixtures Container -->
+            <div id="fixtures-list" class="space-y-3">
+                <!-- Match Cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: LEADERBOARD ==================== -->
+        <section id="tab-leaderboard" class="hidden space-y-3.5">
+            <div class="rounded-2xl bg-ios-card border border-ios-border p-4 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-ios-border pb-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-ranking-star text-pl-mint"></i>
+                            <span>جدول ترتيب المتوقعين</span>
+                        </h2>
+                        <p class="text-[11px] text-ios-subtle mt-0.5">
+                            ٣ نقاط للنتيجة الدقيقة • ١ نقطة لتوقع الفائز أو التعادل
+                        </p>
+                    </div>
+
+                    <!-- Leaderboard Scope Toggle -->
+                    <div class="inline-flex p-1 rounded-xl bg-ios-bg border border-ios-border text-xs">
+                        <button id="lb-scope-gw" onclick="setLeaderboardScope('gw')" class="px-3 py-1.5 rounded-lg font-semibold transition bg-pl-purple text-white border border-pl-magenta/40">
+                            الجولة الحالية
+                        </button>
+                        <button id="lb-scope-all" onclick="setLeaderboardScope('all')" class="px-3 py-1.5 rounded-lg font-medium transition text-ios-subtle hover:text-white">
+                            الترتيب العام
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Standings List / Table -->
+                <div id="leaderboard-content" class="space-y-2.5">
+                    <!-- Leaderboard rows injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: WHATSAPP EXPORT ==================== -->
+        <section id="tab-whatsapp" class="hidden space-y-3.5">
+            <div class="rounded-2xl bg-ios-card border border-ios-border p-4 space-y-4">
+                <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-pl-mint text-lg"></i>
+                            <span>تصدير التوقعات للواتساب</span>
+                        </h2>
+                        <p class="text-[11px] text-ios-subtle mt-0.5">جاهز للنسخ واللصق مباشرة في قروب الواتساب</p>
+                    </div>
+                </div>
+
+                <!-- Formatting Toggles -->
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <button id="toggle-arabic-digits" onclick="toggleWhatsappArabicDigits()" class="px-3 py-1.5 rounded-xl bg-pl-purple/60 border border-pl-magenta/40 text-white font-medium flex items-center gap-1.5 active:scale-95 transition">
+                        <i class="fa-solid fa-language text-pl-mint"></i>
+                        <span id="arabic-digits-label">الأرقام: عربية (٣-٢)</span>
+                    </button>
+                    <button id="toggle-whatsapp-times" onclick="toggleWhatsappDates()" class="px-3 py-1.5 rounded-xl bg-ios-bg border border-ios-border text-gray-300 font-medium flex items-center gap-1.5 active:scale-95 transition">
+                        <i class="fa-regular fa-clock text-pl-cyan"></i>
+                        <span id="whatsapp-dates-label">بدون أوقات المباريات</span>
+                    </button>
+                </div>
+
+                <!-- Formatted Output Preview -->
+                <div class="relative">
+                    <textarea id="whatsapp-output" readonly rows="15" class="w-full rounded-xl bg-ios-bg border border-ios-border p-3.5 text-xs sm:text-sm text-gray-100 leading-relaxed focus:outline-none focus:border-pl-mint resize-none"></textarea>
+                </div>
+
+                <!-- Copy CTA -->
+                <button onclick="copyWhatsappOutput()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 active:scale-[0.99] transition">
+                    <i class="fa-regular fa-copy text-base"></i>
+                    <span>نسخ النص للواتساب</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== BOTTOM iOS TAB BAR ==================== -->
+    <nav aria-label="التنقل الرئيسي" class="ios-tabbar fixed bottom-0 inset-x-0 z-40 border-t border-ios-border px-2 pt-2">
+        <div class="max-w-2xl mx-auto grid grid-cols-3 gap-1">
+            <button id="nav-btn-matches" onclick="switchTab('matches')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-pl-mint font-bold transition">
+                <i class="fa-solid fa-futbol text-lg mb-0.5"></i>
+                <span class="text-[11px]">المباريات والتوقعات</span>
+            </button>
+            <button id="nav-btn-leaderboard" onclick="switchTab('leaderboard')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition">
+                <i class="fa-solid fa-trophy text-lg mb-0.5"></i>
+                <span class="text-[11px]">جدول الترتيب</span>
+            </button>
+            <button id="nav-btn-whatsapp" onclick="switchTab('whatsapp')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition">
+                <i class="fa-brands fa-whatsapp text-lg mb-0.5"></i>
+                <span class="text-[11px]">تصدير الواتساب</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== MODAL 1: ADD / EDIT PREDICTION ==================== -->
+    <div id="modal-prediction" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <h3 id="modal-pred-heading" class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-pl-magenta"></i>
+                    <span>إضافة / تعديل توقع</span>
+                </h3>
+                <button onclick="closeModal('modal-prediction')" class="w-8 h-8 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="savePredictionForm(event)" class="space-y-4">
+                <!-- Match Selector -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-medium text-gray-300">المباراة</label>
+                    <select id="form-pred-match" onchange="onPredictionMatchChange()" class="w-full rounded-xl bg-ios-bg border border-ios-border px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-magenta">
+                    </select>
+                </div>
+
+                <!-- Predictor Selector -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-medium text-gray-300">المتوقع</label>
+                    <select id="form-pred-user" onchange="onPredictorSelectChange()" class="w-full rounded-xl bg-ios-bg border border-ios-border px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-magenta">
+                    </select>
+                    <input id="form-pred-custom-user" type="text" placeholder="اكتب اسم المتوقع الجديد (مثال: عمر)" class="hidden w-full mt-2 rounded-xl bg-ios-bg border border-ios-border px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-mint">
+                </div>
+
+                <!-- Scoreline Steppers -->
+                <div class="grid grid-cols-2 gap-3 bg-ios-bg p-3.5 rounded-2xl border border-ios-border">
+                    <div class="text-center space-y-2">
+                        <div id="label-team-a" class="text-xs font-bold text-white truncate px-1">الفريق الأول</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" onclick="stepNumber('form-score-a', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">-</button>
+                            <input id="form-score-a" type="number" min="0" max="20" value="2" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
+                            <button type="button" onclick="stepNumber('form-score-a', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">+</button>
+                        </div>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div id="label-team-b" class="text-xs font-bold text-white truncate px-1">الفريق الثاني</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" onclick="stepNumber('form-score-b', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">-</button>
+                            <input id="form-score-b" type="number" min="0" max="20" value="1" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
+                            <button type="button" onclick="stepNumber('form-score-b', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-line Player Notes -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-medium text-gray-300">ملاحظات اللاعبين / المسجلين (اختياري)</label>
+                    <textarea id="form-pred-note" rows="3" placeholder="مثال:&#10;مبيمو قولين&#10;تياغو بيسجل" class="w-full rounded-xl bg-ios-bg border border-ios-border p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-mint resize-none"></textarea>
+                </div>
+
+                <!-- Submit & Delete Buttons -->
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="submit" class="flex-1 py-3 rounded-xl pl-accent-gradient text-white font-bold text-xs sm:text-sm shadow-lg active:scale-[0.99] transition">
+                        حفظ التوقع
+                    </button>
+                    <button type="button" id="btn-delete-pred" onclick="deleteCurrentPrediction()" class="hidden px-4 py-3 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/30 font-semibold text-xs active:scale-95 transition">
+                        حذف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: OFFICIAL MATCH RESULT ==================== -->
+    <div id="modal-result" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-square-check text-pl-mint"></i>
+                    <span>النتيجة النهائية للمباراة</span>
+                </h3>
+                <button onclick="closeModal('modal-result')" class="w-8 h-8 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveActualResultForm(event)" class="space-y-4">
+                <input type="hidden" id="result-match-id">
+                <div id="result-fixture-subtitle" class="text-center text-xs text-ios-subtle font-medium"></div>
+
+                <div class="grid grid-cols-2 gap-3 bg-ios-bg p-4 rounded-2xl border border-ios-border">
+                    <div class="text-center space-y-2">
+                        <div id="result-label-a" class="text-xs font-bold text-white truncate">الفريق الأول</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" onclick="stepNumber('result-score-a', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold">-</button>
+                            <input id="result-score-a" type="number" min="0" max="20" value="0" required class="w-12 h-10 rounded-xl bg-pl-mint/15 border border-pl-mint text-center font-bold text-pl-mint text-base focus:outline-none">
+                            <button type="button" onclick="stepNumber('result-score-a', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold">+</button>
+                        </div>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div id="result-label-b" class="text-xs font-bold text-white truncate">الفريق الثاني</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" onclick="stepNumber('result-score-b', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold">-</button>
+                            <input id="result-score-b" type="number" min="0" max="20" value="0" required class="w-12 h-10 rounded-xl bg-pl-mint/15 border border-pl-mint text-center font-bold text-pl-mint text-base focus:outline-none">
+                            <button type="button" onclick="stepNumber('result-score-b', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="flex-1 py-3 rounded-xl bg-pl-mint text-ios-bg font-bold text-xs sm:text-sm shadow-lg active:scale-95 transition">
+                        اعتماد النتيجة وحساب النقاط
+                    </button>
+                    <button type="button" onclick="clearActualResult()" class="px-4 py-3 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/30 font-semibold text-xs">
+                        مسح النتيجة
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: NEW GAMEWEEK (AUTO API OR CUSTOM) ==================== -->
+    <div id="modal-new-gw" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-pl-mint"></i>
+                    <span>إضافة أو جلب جولة (GW 1 - 38)</span>
+                </h3>
+                <button onclick="closeModal('modal-new-gw')" class="w-8 h-8 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-medium text-gray-300">اختر رقم الجولة (من 1 إلى 38)</label>
+                    <select id="new-gw-number-select" class="w-full rounded-xl bg-ios-bg border border-ios-border px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-pl-mint">
+                        <!-- Options 1..38 populated by JS -->
+                    </select>
+                </div>
+
+                <div class="p-3 rounded-xl bg-ios-bg border border-ios-border text-[11px] text-ios-subtle leading-relaxed">
+                    <i class="fa-solid fa-wand-magic-sparkles text-pl-mint ml-1"></i>
+                    سيتم جلب مباريات الجولة تلقائياً من جدول الدوري الإنجليزي وترجمة أسماء الأندية للعربية، مع ترتيب المباريات زمنياً وحساب الموعد النهائي للتوقع (قبل أول مباراة بـ ٩٠ دقيقة).
+                </div>
+
+                <button id="btn-fetch-gw" onclick="fetchOrCreateGameweek()" class="w-full py-3.5 rounded-xl pl-accent-gradient text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <span>جلب مباريات الجولة الآن</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 4: CUSTOM iOS CONFIRMATION OVERLAY ==================== -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="animate-sheet w-full max-w-xs bg-ios-card border border-ios-border rounded-3xl p-5 text-center space-y-4 shadow-2xl">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-400 border border-rose-500/30 flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <div class="space-y-1">
+                <h4 id="confirm-modal-title" class="text-sm font-bold text-white">تأكيد الإجراء</h4>
+                <p id="confirm-modal-body" class="text-xs text-ios-subtle leading-relaxed">هل أنت متأكد؟</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <button onclick="closeModal('modal-confirm')" class="py-2.5 rounded-xl bg-ios-bg border border-ios-border text-gray-300 font-semibold text-xs">
+                    إلغاء
+                </button>
+                <button id="confirm-modal-action" class="py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md">
+                    تأكيد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== iOS TOAST NOTIFICATION ==================== -->
+    <div id="ios-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-ios-card border border-pl-mint/50 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-pl-mint text-sm"></i>
+        <span id="ios-toast-text">تم الحفظ بنجاح</span>
+    </div>
+
+    <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+    <script>
+        // Storage Key v8 to ensure clean migration and zero stale cache
+        const STORAGE_KEY = 'aj_league_v8';
+
+        // English -> Arabic Premier League Club Names Dictionary
+        const TEAM_ARABIC_MAP = {
+            'Arsenal': 'آرسنال',
+            'Aston Villa': 'أستون فيلا',
+            'Bournemouth': 'بورنموث',
+            'Brentford': 'برينتفورد',
+            'Brighton': 'برايتون',
+            'Burnley': 'بيرنلي',
+            'Chelsea': 'تشيلسي',
+            'Coventry': 'كوفنتري سيتي',
+            'Coventry City': 'كوفنتري سيتي',
+            'Crystal Palace': 'كريستال بالاس',
+            'Everton': 'إيفرتون',
+            'Fulham': 'فولهام',
+            'Hull': 'هال سيتي',
+            'Hull City': 'هال سيتي',
+            'Ipswich': 'إيبسويتش تاون',
+            'Ipswich Town': 'إيبسويتش تاون',
+            'Leeds': 'ليدز يونايتد',
+            'Leeds United': 'ليدز يونايتد',
+            'Leicester': 'ليستر سيتي',
+            'Liverpool': 'ليفربول',
+            'Man City': 'مانشستر سيتي',
+            'Manchester City': 'مانشستر سيتي',
+            'Man Utd': 'مانشستر يونايتد',
+            'Manchester United': 'مانشستر يونايتد',
+            'Newcastle': 'نيوكاسل',
+            'Newcastle United': 'نيوكاسل',
+            "Nott'm Forest": 'نوتنغهام فورست',
+            'Nottingham Forest': 'نوتنغهام فورست',
+            'Southampton': 'ساوثهامبتون',
+            'Sunderland': 'سندرلاند',
+            'Spurs': 'توتنهام',
+            'Tottenham': 'توتنهام',
+            'Tottenham Hotspur': 'توتنهام',
+            'West Ham': 'وست هام',
+            'Wolves': 'وولفرهامبتون'
+        };
+
+        // Arabic ordinal names for Gameweeks 1 to 38
+        const GW_ARABIC_NAMES = {
+            1: 'الجولة ال١', 2: 'الجولة ال٢', 3: 'الجولة ال٣', 4: 'الجولة ال٤', 5: 'الجولة ال٥',
+            6: 'الجولة ال٦', 7: 'الجولة ال٧', 8: 'الجولة ال٨', 9: 'الجولة ال٩', 10: 'الجولة ال١٠',
+            11: 'الجولة ال١١', 12: 'الجولة ال١٢', 13: 'الجولة ال١٣', 14: 'الجولة ال١٤', 15: 'الجولة ال١٥',
+            16: 'الجولة ال١٦', 17: 'الجولة ال١٧', 18: 'الجولة ال١٨', 19: 'الجولة ال١٩', 20: 'الجولة ال٢٠',
+            21: 'الجولة ال٢١', 22: 'الجولة ال٢٢', 23: 'الجولة ال٢٣', 24: 'الجولة ال٢٤', 25: 'الجولة ال٢٥',
+            26: 'الجولة ال٢٦', 27: 'الجولة ال٢٧', 28: 'الجولة ال٢٨', 29: 'الجولة ال٢٩', 30: 'الجولة ال٣٠',
+            31: 'الجولة ال٣١', 32: 'الجولة ال٣٢', 33: 'الجولة ال٣٣', 34: 'الجولة ال٣٤', 35: 'الجولة ال٣٥',
+            36: 'الجولة ال٣٦', 37: 'الجولة ال٣٧', 38: 'الجولة ال٣٨'
+        };
+
+        // Pre-loaded 2026/27 Season Data (GW9, GW10, GW11, GW12) strictly sorted chronologically
+        const INITIAL_STATE = {
+            activeGwId: 'gw11',
+            predictors: ['عيلان', 'بونبيل'],
+            whatsappUseArabicDigits: true,
+            whatsappIncludeDates: false,
+            gameweeks: [
+                { id: 'gw9', number: 9, name: 'الجولة ال٩' },
+                { id: 'gw10', number: 10, name: 'الجولة ال١٠' },
+                { id: 'gw11', number: 11, name: 'الجولة ال١١' },
+                { id: 'gw12', number: 12, name: 'الجولة ال١٢' }
+            ],
+            fixturesByGw: {
+                // ==================== GAMEWEEK 9 (Pre-loaded with Predictions & Notes) ====================
+                gw9: [
+                    {
+                        id: 'gw9_m1', kickoffISO: '2026-10-31T15:30:00+03:00', orderIndex: 1,
+                        teamA: 'تشيلسي', teamB: 'يونايتد', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 3, scoreB: 2, winnerLabel: 'تشيلسي', note: 'مبيمو قولين' },
+                            'بونبيل': { scoreA: 4, scoreB: 1, winnerLabel: 'تشيلسي', note: '' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m2', kickoffISO: '2026-10-31T18:00:00+03:00', orderIndex: 2,
+                        teamA: 'بورنموث', teamB: 'ليدز', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 2, scoreB: 1, winnerLabel: 'بورنموث', note: '' },
+                            'بونبيل': { scoreA: 3, scoreB: 1, winnerLabel: 'بورنموث', note: '' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m3', kickoffISO: '2026-10-31T18:00:00+03:00', orderIndex: 3,
+                        teamA: 'برينتفورد', teamB: 'نوتنغهام', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 2, scoreB: 0, winnerLabel: 'برينتفورد', note: 'تياغو بيسجل' },
+                            'بونبيل': { scoreA: 2, scoreB: 1, winnerLabel: 'نوتنغهام', note: 'قيبس وايت بيسجل' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m4', kickoffISO: '2026-10-31T18:00:00+03:00', orderIndex: 4,
+                        teamA: 'كوفنتري', teamB: 'سندرلاند', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 1, scoreB: 1, winnerLabel: 'تعادل', note: '' },
+                            'بونبيل': { scoreA: 3, scoreB: 2, winnerLabel: 'كوفنتري', note: 'إيفي بيسجل' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m5', kickoffISO: '2026-10-31T18:00:00+03:00', orderIndex: 5,
+                        teamA: 'هال سيتي', teamB: 'إيبسويتش', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 3, scoreB: 1, winnerLabel: 'هال سيتي', note: 'مكبيرني بيساهم' },
+                            'بونبيل': { scoreA: 3, scoreB: 2, winnerLabel: 'إيبسويتش', note: 'المهاجم قولين' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m6', kickoffISO: '2026-10-31T18:00:00+03:00', orderIndex: 6,
+                        teamA: 'السيتي', teamB: 'برايتون', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 3, scoreB: 3, winnerLabel: 'تعادل', note: '' },
+                            'بونبيل': { scoreA: 4, scoreB: 0, winnerLabel: 'برايتون', note: '' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m7', kickoffISO: '2026-10-31T20:30:00+03:00', orderIndex: 7,
+                        teamA: 'توتنهام', teamB: 'البالاس', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 2, scoreB: 1, winnerLabel: 'توتنهام', note: 'قدوس وماديسون قول\nنيكيتياه قول' },
+                            'بونبيل': { scoreA: 3, scoreB: 2, winnerLabel: 'توتنهام', note: 'كامادا بيساهم' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m8', kickoffISO: '2026-10-31T23:00:00+03:00', orderIndex: 8,
+                        teamA: 'أستون فيلا', teamB: 'فولهام', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 2, scoreB: 0, winnerLabel: 'الفيلا', note: 'جاكسون مابيساهم' },
+                            'بونبيل': { scoreA: 3, scoreB: 1, winnerLabel: 'الفيلا', note: 'قولين جاكسون\nقول مانزامبي' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m9', kickoffISO: '2026-11-01T19:30:00+03:00', orderIndex: 9,
+                        teamA: 'ليفربول', teamB: 'آرسنال', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 1, scoreB: 1, winnerLabel: 'تعادل', note: '' },
+                            'بونبيل': { scoreA: 3, scoreB: 1, winnerLabel: 'ليفربول', note: '' }
+                        }
+                    },
+                    {
+                        id: 'gw9_m10', kickoffISO: '2026-11-02T23:00:00+03:00', orderIndex: 10,
+                        teamA: 'نيوكاسل', teamB: 'إيفرتون', actualA: null, actualB: null,
+                        predictions: {
+                            'عيلان': { scoreA: 2, scoreB: 1, winnerLabel: 'إيفرتون', note: '' },
+                            'بونبيل': { scoreA: 2, scoreB: 0, winnerLabel: 'إيفرتون', note: '' }
+                        }
+                    }
+                ],
+
+                // ==================== GAMEWEEK 10 (Chronological, Clean Predictions) ====================
+                gw10: [
+                    { id: 'gw10_m1', kickoffISO: '2026-11-06T23:00:00+03:00', orderIndex: 1, teamA: 'إيفرتون', teamB: 'كوفنتري سيتي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m2', kickoffISO: '2026-11-07T15:30:00+03:00', orderIndex: 2, teamA: 'ليدز يونايتد', teamB: 'توتنهام', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m3', kickoffISO: '2026-11-07T18:00:00+03:00', orderIndex: 3, teamA: 'فولهام', teamB: 'نيوكاسل', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m4', kickoffISO: '2026-11-07T18:00:00+03:00', orderIndex: 4, teamA: 'آرسنال', teamB: 'هال سيتي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m5', kickoffISO: '2026-11-07T20:30:00+03:00', orderIndex: 5, teamA: 'نوتنغهام فورست', teamB: 'مانشستر سيتي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m6', kickoffISO: '2026-11-08T17:00:00+03:00', orderIndex: 6, teamA: 'إيبسويتش تاون', teamB: 'بورنموث', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m7', kickoffISO: '2026-11-08T17:00:00+03:00', orderIndex: 7, teamA: 'سندرلاند', teamB: 'تشيلسي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m8', kickoffISO: '2026-11-08T17:00:00+03:00', orderIndex: 8, teamA: 'برايتون', teamB: 'برينتفورد', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m9', kickoffISO: '2026-11-08T17:00:00+03:00', orderIndex: 9, teamA: 'كريستال بالاس', teamB: 'ليفربول', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw10_m10', kickoffISO: '2026-11-08T19:30:00+03:00', orderIndex: 10, teamA: 'مانشستر يونايتد', teamB: 'أستون فيلا', actualA: null, actualB: null, predictions: {} }
+                ],
+
+                // ==================== GAMEWEEK 11 (Upcoming Active Default) ====================
+                gw11: [
+                    { id: 'gw11_m1', kickoffISO: '2026-11-21T15:30:00+03:00', orderIndex: 1, teamA: 'مانشستر سيتي', teamB: 'فولهام', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m2', kickoffISO: '2026-11-21T18:00:00+03:00', orderIndex: 2, teamA: 'بورنموث', teamB: 'نوتنغهام فورست', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m3', kickoffISO: '2026-11-21T18:00:00+03:00', orderIndex: 3, teamA: 'كوفنتري سيتي', teamB: 'كريستال بالاس', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m4', kickoffISO: '2026-11-21T18:00:00+03:00', orderIndex: 4, teamA: 'توتنهام', teamB: 'إيبسويتش تاون', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m5', kickoffISO: '2026-11-21T18:00:00+03:00', orderIndex: 5, teamA: 'تشيلسي', teamB: 'ليدز يونايتد', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m6', kickoffISO: '2026-11-21T18:00:00+03:00', orderIndex: 6, teamA: 'أستون فيلا', teamB: 'سندرلاند', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m7', kickoffISO: '2026-11-21T20:30:00+03:00', orderIndex: 7, teamA: 'نيوكاسل', teamB: 'آرسنال', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m8', kickoffISO: '2026-11-22T17:00:00+03:00', orderIndex: 8, teamA: 'هال سيتي', teamB: 'برايتون', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m9', kickoffISO: '2026-11-22T19:30:00+03:00', orderIndex: 9, teamA: 'ليفربول', teamB: 'مانشستر يونايتد', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw11_m10', kickoffISO: '2026-11-23T23:00:00+03:00', orderIndex: 10, teamA: 'برينتفورد', teamB: 'إيفرتون', actualA: null, actualB: null, predictions: {} }
+                ],
+
+                // ==================== GAMEWEEK 12 (Chronological, Clean Predictions) ====================
+                gw12: [
+                    { id: 'gw12_m1', kickoffISO: '2026-11-27T23:00:00+03:00', orderIndex: 1, teamA: 'نوتنغهام فورست', teamB: 'تشيلسي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m2', kickoffISO: '2026-11-28T18:00:00+03:00', orderIndex: 2, teamA: 'مانشستر يونايتد', teamB: 'برينتفورد', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m3', kickoffISO: '2026-11-28T18:00:00+03:00', orderIndex: 3, teamA: 'ليدز يونايتد', teamB: 'كوفنتري سيتي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m4', kickoffISO: '2026-11-28T20:30:00+03:00', orderIndex: 4, teamA: 'إيبسويتش تاون', teamB: 'أستون فيلا', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m5', kickoffISO: '2026-11-29T15:00:00+03:00', orderIndex: 5, teamA: 'إيفرتون', teamB: 'ليفربول', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m6', kickoffISO: '2026-11-29T17:05:00+03:00', orderIndex: 6, teamA: 'برايتون', teamB: 'نيوكاسل', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m7', kickoffISO: '2026-11-29T17:05:00+03:00', orderIndex: 7, teamA: 'فولهام', teamB: 'بورنموث', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m8', kickoffISO: '2026-11-29T17:05:00+03:00', orderIndex: 8, teamA: 'سندرلاند', teamB: 'توتنهام', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m9', kickoffISO: '2026-11-29T17:05:00+03:00', orderIndex: 9, teamA: 'كريستال بالاس', teamB: 'هال سيتي', actualA: null, actualB: null, predictions: {} },
+                    { id: 'gw12_m10', kickoffISO: '2026-11-29T19:30:00+03:00', orderIndex: 10, teamA: 'آرسنال', teamB: 'مانشستر سيتي', actualA: null, actualB: null, predictions: {} }
+                ]
+            }
+        };
+
+        // App Runtime State
+        let state = null;
+        let currentTab = 'matches'; // 'matches' | 'leaderboard' | 'whatsapp'
+        let filterPredictor = 'all';
+        let leaderboardScope = 'gw'; // 'gw' | 'all'
+        let editingContext = { matchId: null, predictorName: null };
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            populateNewGwSelect();
+            renderAll();
+        });
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.gameweeks && parsed.fixturesByGw) {
+                        state = parsed;
+                        ensureChronologicalSorting();
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('Resetting corrupted state to defaults');
+            }
+            state = JSON.parse(JSON.stringify(INITIAL_STATE));
+            ensureChronologicalSorting();
+            saveState();
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (err) {
+                showToast('تعذر الحفظ في ذاكرة المتصفح');
+            }
+        }
+
+        // Guarantee every Gameweek's fixtures are strictly sorted from earliest kickoff to latest
+        function ensureChronologicalSorting() {
+            Object.keys(state.fixturesByGw).forEach(gwId => {
+                state.fixturesByGw[gwId].sort((a, b) => {
+                    const diff = new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime();
+                    if (diff !== 0) return diff;
+                    return (a.orderIndex || 0) - (b.orderIndex || 0);
+                });
+            });
+            state.gameweeks.sort((a, b) => a.number - b.number);
+        }
+
+        // ==================== DATE & TIME FORMATTING (BAHRAIN / AST UTC+3) ====================
+        function formatArabicFixtureDateTime(isoString) {
+            const date = new Date(isoString);
+            const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+            // Convert to UTC+3 (Bahrain / AST)
+            const utcMs = date.getTime() + (date.getTimezoneOffset() * 60000);
+            const astDate = new Date(utcMs + (3 * 3600000));
+
+            const dayName = days[astDate.getDay()];
+            const dayNum = toArabicDigits(astDate.getDate());
+            const monthName = months[astDate.getMonth()];
+
+            let hours = astDate.getHours();
+            const mins = astDate.getMinutes();
+            const period = hours >= 12 ? 'مساءً' : 'صباحاً';
+            const periodShort = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12;
+            if (hours === 0) hours = 12;
+
+            const minStr = mins < 10 ? '0' + mins : String(mins);
+            const timeFormatted = `${toArabicDigits(hours)}:${toArabicDigits(minStr)} ${periodShort}`;
+            const timeFull = `${toArabicDigits(hours)}:${toArabicDigits(minStr)} ${period}`;
+
+            return {
+                dateOnly: `${dayName} ${dayNum} ${monthName}`,
+                timeShort: timeFormatted,
+                timeFull: timeFull,
+                fullBadge: `${dayName} ${dayNum} ${monthName} | ${timeFormatted}`,
+                deadlineText: `${dayName}، ${dayNum} ${monthName} | ${timeFull}`
+            };
+        }
+
+        // Calculate Gameweek Deadline: 90 minutes prior to earliest match kickoff
+        function getGameweekDeadlineInfo(gwId) {
+            const fixtures = state.fixturesByGw[gwId] || [];
+            if (fixtures.length === 0) {
+                return { text: 'لم تحدد مباريات الجولة بعد', isOpen: true };
+            }
+            const firstKickoff = new Date(fixtures[0].kickoffISO);
+            const deadlineDate = new Date(firstKickoff.getTime() - (90 * 60 * 1000));
+            const formatted = formatArabicFixtureDateTime(deadlineDate.toISOString());
+
+            // Check against real-world current clock
+            const now = new Date();
+            const isOpen = now.getTime() < deadlineDate.getTime();
+            return {
+                text: formatted.deadlineText,
+                isOpen: isOpen
+            };
+        }
+
+        // ==================== MASTER RENDER PIPELINE ====================
+        function renderAll() {
+            renderGameweekPills();
+            renderDeadlineBanner();
+            renderPredictorFilterPills();
+            renderFixturesList();
+            renderLeaderboard();
+            renderWhatsappExport();
+            updateTabVisibility();
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            updateTabVisibility();
+            if (tabName === 'leaderboard') renderLeaderboard();
+            if (tabName === 'whatsapp') renderWhatsappExport();
+        }
+
+        function updateTabVisibility() {
+            const tabs = ['matches', 'leaderboard', 'whatsapp'];
+            tabs.forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`nav-btn-${t}`);
+                if (t === currentTab) {
+                    section.classList.remove('hidden');
+                    btn.className = 'flex flex-col items-center justify-center py-1.5 rounded-xl text-pl-mint font-bold bg-pl-purple/40 border border-pl-magenta/30 transition';
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = 'flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition';
+                }
+            });
+        }
+
+        // 1. Render Gameweek Selector Pills
+        function renderGameweekPills() {
+            const container = document.getElementById('gw-pills-container');
+            container.innerHTML = state.gameweeks.map(gw => {
+                const isActive = gw.id === state.activeGwId;
+                const isUpcoming = gw.id === 'gw11';
+                const label = isUpcoming ? `${gw.name} • القادمة` : gw.name;
+                return `
+                    <button onclick="selectGameweek('${gw.id}')" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold transition active:scale-95 ${
+                        isActive
+                            ? 'pl-accent-gradient text-white shadow-md shadow-pl-magenta/25 border border-pl-magenta'
+                            : 'bg-ios-card text-gray-300 border border-ios-border hover:border-gray-600'
+                    }">
+                        ${label}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectGameweek(gwId) {
+            state.activeGwId = gwId;
+            saveState();
+            renderAll();
+        }
+
+        // 2. Render Gameweek Deadline Banner
+        function renderDeadlineBanner() {
+            const info = getGameweekDeadlineInfo(state.activeGwId);
+            document.getElementById('deadline-display-text').textContent = info.text;
+
+            const badge = document.getElementById('deadline-status-badge');
+            const bar = document.getElementById('deadline-accent-bar');
+
+            if (info.isOpen) {
+                badge.textContent = 'مفتوحة للتوقع';
+                badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30';
+                bar.className = 'absolute inset-y-0 right-0 w-1 bg-pl-mint';
+            } else {
+                badge.textContent = 'انتهى الموعد';
+                badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30';
+                bar.className = 'absolute inset-y-0 right-0 w-1 bg-rose-500';
+            }
+        }
+
+        // 3. Render Predictor Filter Pills
+        function renderPredictorFilterPills() {
+            const container = document.getElementById('predictor-filter-pills');
+            const pills = [
+                `<button onclick="setPredictorFilter('all')" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                    filterPredictor === 'all'
+                        ? 'bg-pl-mint text-ios-bg'
+                        : 'bg-ios-card text-gray-300 border border-ios-border'
+                }">الكل</button>`
+            ];
+
+            state.predictors.forEach(name => {
+                pills.push(`
+                    <button onclick="setPredictorFilter('${escapeHtml(name)}')" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                        filterPredictor === name
+                            ? 'bg-pl-mint text-ios-bg'
+                            : 'bg-ios-card text-gray-300 border border-ios-border'
+                    }">${escapeHtml(name)}</button>
+                `);
+            });
+
+            container.innerHTML = pills.join('');
+        }
+
+        function setPredictorFilter(name) {
+            filterPredictor = name;
+            renderPredictorFilterPills();
+            renderFixturesList();
+        }
+
+        // 4. Render Chronological Fixtures List for Active Gameweek
+        function renderFixturesList() {
+            const container = document.getElementById('fixtures-list');
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+
+            if (fixtures.length === 0) {
+                container.innerHTML = `
+                    <div class="rounded-2xl bg-ios-card border border-ios-border p-8 text-center space-y-2">
+                        <i class="fa-regular fa-calendar-xmark text-2xl text-ios-subtle"></i>
+                        <p class="text-xs text-ios-subtle">لا توجد مباريات مضافة في هذه الجولة.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = fixtures.map((match, idx) => {
+                const dt = formatArabicFixtureDateTime(match.kickoffISO);
+                const hasActual = match.actualA !== null && match.actualB !== null;
+                const preds = match.predictions || {};
+                const predictorKeys = Object.keys(preds).filter(
+                    p => filterPredictor === 'all' || filterPredictor === p
+                );
+
+                // Build prediction cards inside match
+                let predictionsHtml = '';
+                if (predictorKeys.length === 0) {
+                    predictionsHtml = `
+                        <div class="rounded-xl bg-ios-bg/70 border border-dashed border-ios-border py-2.5 px-3 text-center text-[11px] text-ios-subtle">
+                            لا توجد توقعات مسجلة لهذه المباراة بعد
+                        </div>
+                    `;
+                } else {
+                    predictionsHtml = predictorKeys.map(pName => {
+                        const p = preds[pName];
+                        const winnerText = p.winnerLabel || computeWinnerLabel(p.scoreA, p.scoreB, match.teamA, match.teamB);
+
+                        let ptsBadge = '';
+                        if (hasActual) {
+                            const pts = calculatePoints(p.scoreA, p.scoreB, match.actualA, match.actualB);
+                            if (pts === 3) {
+                                ptsBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pl-mint/20 text-pl-mint border border-pl-mint/40">+٣ نقاط (دقيقة)</span>`;
+                            } else if (pts === 1) {
+                                ptsBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-400 border border-sky-500/40">+١ نقطة</span>`;
+                            } else {
+                                ptsBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-500/15 text-rose-400">٠ نقطة</span>`;
+                            }
+                        }
+
+                        return `
+                            <div onclick="openPredictionModal('${match.id}', '${escapeHtml(pName)}')" class="cursor-pointer rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border p-2.5 space-y-1.5 transition active:scale-[0.99]">
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-pl-cyan">${escapeHtml(pName)}</span>
+                                        <span class="px-2 py-0.5 rounded-lg pl-badge-gradient border border-pl-magenta/40 text-xs font-bold text-white">
+                                            ${toArabicDigits(p.scoreA)}-${toArabicDigits(p.scoreB)} ${escapeHtml(winnerText)}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        ${ptsBadge}
+                                        <i class="fa-solid fa-pen text-[10px] text-ios-subtle"></i>
+                                    </div>
+                                </div>
+                                ${p.note ? `
+                                    <div class="text-[11px] text-emerald-300/95 bg-emerald-950/35 border border-emerald-800/30 rounded-lg px-2.5 py-1.5 whitespace-pre-line leading-relaxed">
+                                        ${escapeHtml(p.note)}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                return `
+                    <article class="match-card rounded-2xl p-3.5 sm:p-4 space-y-3">
+                        <!-- Top Meta: Match Order & Kickoff Date/Time -->
+                        <div class="flex items-center justify-between text-[11px] text-ios-subtle border-b border-ios-border/80 pb-2">
+                            <span class="font-semibold text-gray-400">#${toArabicDigits(idx + 1)}</span>
+                            <div class="flex items-center gap-1.5 bg-ios-bg px-2.5 py-1 rounded-lg border border-ios-border">
+                                <i class="fa-regular fa-calendar text-pl-mint"></i>
+                                <span class="text-gray-200 font-medium">${dt.fullBadge}</span>
+                            </div>
+                        </div>
+
+                        <!-- Teams & Scoreline Centerpiece -->
+                        <div class="flex items-center justify-between gap-2 py-1">
+                            <div class="flex-1 text-center">
+                                <div class="text-sm sm:text-base font-bold text-white leading-snug">${escapeHtml(match.teamA)}</div>
+                            </div>
+
+                            <button onclick="openResultModal('${match.id}')" title="تسجيل أو تعديل النتيجة الرسمية" class="shrink-0 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition active:scale-95 ${
+                                hasActual
+                                    ? 'bg-pl-mint text-ios-bg shadow-md shadow-pl-mint/20'
+                                    : 'pl-badge-gradient text-white border border-pl-magenta/40'
+                            }">
+                                ${hasActual ? `${toArabicDigits(match.actualA)} - ${toArabicDigits(match.actualB)}` : 'VS'}
+                            </button>
+
+                            <div class="flex-1 text-center">
+                                <div class="text-sm sm:text-base font-bold text-white leading-snug">${escapeHtml(match.teamB)}</div>
+                            </div>
+                        </div>
+
+                        <!-- Predictions List -->
+                        <div class="space-y-2">
+                            ${predictionsHtml}
+                        </div>
+
+                        <!-- Bottom Quick Actions -->
+                        <div class="flex items-center justify-between pt-2 border-t border-ios-border/70 text-[11px]">
+                            <button onclick="openPredictionModal('${match.id}', null)" class="text-pl-cyan hover:underline font-semibold flex items-center gap-1 py-1">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <span>إضافة / تعديل توقع</span>
+                            </button>
+                            <button onclick="openResultModal('${match.id}')" class="text-ios-subtle hover:text-pl-mint flex items-center gap-1 py-1 transition">
+                                <i class="fa-solid fa-flag-checkered"></i>
+                                <span>${hasActual ? 'تعديل النتيجة النهائية' : 'إدخال النتيجة النهائية'}</span>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // ==================== PREDICTION MODAL LOGIC ====================
+        function openPredictionModal(matchId, predictorName) {
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            if (fixtures.length === 0) {
+                showToast('لا توجد مباريات في هذه الجولة');
+                return;
+            }
+
+            const targetMatchId = matchId || fixtures[0].id;
+            const matchSelect = document.getElementById('form-pred-match');
+            matchSelect.innerHTML = fixtures.map((m, i) => `
+                <option value="${m.id}">${toArabicDigits(i + 1)}. ${escapeHtml(m.teamA)} - ${escapeHtml(m.teamB)}</option>
+            `).join('');
+            matchSelect.value = targetMatchId;
+
+            const userSelect = document.getElementById('form-pred-user');
+            userSelect.innerHTML = state.predictors.map(p => `
+                <option value="${escapeHtml(p)}">${escapeHtml(p)}</option>
+            `).join('') + `<option value="__NEW__">+ إضافة متوقع جديد...</option>`;
+
+            const customInput = document.getElementById('form-pred-custom-user');
+            customInput.classList.add('hidden');
+            customInput.value = '';
+
+            if (predictorName && state.predictors.includes(predictorName)) {
+                userSelect.value = predictorName;
+            } else if (filterPredictor !== 'all' && state.predictors.includes(filterPredictor)) {
+                userSelect.value = filterPredictor;
+            } else {
+                userSelect.value = state.predictors[0] || '__NEW__';
+                if (userSelect.value === '__NEW__') customInput.classList.remove('hidden');
+            }
+
+            editingContext = { matchId: targetMatchId, predictorName: predictorName };
+            syncPredictionModalFields();
+            openModal('modal-prediction');
+        }
+
+        function onPredictionMatchChange() {
+            editingContext.matchId = document.getElementById('form-pred-match').value;
+            syncPredictionModalFields();
+        }
+
+        function onPredictorSelectChange() {
+            const val = document.getElementById('form-pred-user').value;
+            const customInput = document.getElementById('form-pred-custom-user');
+            if (val === '__NEW__') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                editingContext.predictorName = val;
+                syncPredictionModalFields();
+            }
+        }
+
+        function syncPredictionModalFields() {
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const matchId = document.getElementById('form-pred-match').value;
+            const match = fixtures.find(m => m.id === matchId);
+            if (!match) return;
+
+            document.getElementById('label-team-a').textContent = match.teamA;
+            document.getElementById('label-team-b').textContent = match.teamB;
+
+            const userVal = document.getElementById('form-pred-user').value;
+            const existing = (match.predictions && userVal !== '__NEW__') ? match.predictions[userVal] : null;
+            const deleteBtn = document.getElementById('btn-delete-pred');
+
+            if (existing) {
+                document.getElementById('form-score-a').value = existing.scoreA;
+                document.getElementById('form-score-b').value = existing.scoreB;
+                document.getElementById('form-pred-note').value = existing.note || '';
+                deleteBtn.classList.remove('hidden');
+            } else {
+                document.getElementById('form-score-a').value = 2;
+                document.getElementById('form-score-b').value = 1;
+                document.getElementById('form-pred-note').value = '';
+                deleteBtn.classList.add('hidden');
+            }
+        }
+
+        function savePredictionForm(e) {
+            e.preventDefault();
+            const matchId = document.getElementById('form-pred-match').value;
+            let predictor = document.getElementById('form-pred-user').value;
+
+            if (predictor === '__NEW__') {
+                predictor = document.getElementById('form-pred-custom-user').value.trim();
+                if (!predictor) {
+                    showToast('يرجى إدخال اسم المتوقع');
+                    return;
+                }
+                if (!state.predictors.includes(predictor)) {
+                    state.predictors.push(predictor);
+                }
+            }
+
+            const scoreA = Math.max(0, parseInt(document.getElementById('form-score-a').value, 10) || 0);
+            const scoreB = Math.max(0, parseInt(document.getElementById('form-score-b').value, 10) || 0);
+            const note = document.getElementById('form-pred-note').value.trim();
+
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const match = fixtures.find(m => m.id === matchId);
+            if (!match) return;
+
+            if (!match.predictions) match.predictions = {};
+            const winnerLabel = computeWinnerLabel(scoreA, scoreB, match.teamA, match.teamB);
+            match.predictions[predictor] = { scoreA, scoreB, winnerLabel, note };
+
+            saveState();
+            closeModal('modal-prediction');
+            renderAll();
+            showToast(`تم حفظ توقع ${predictor}`);
+        }
+
+        function deleteCurrentPrediction() {
+            const matchId = document.getElementById('form-pred-match').value;
+            const predictor = document.getElementById('form-pred-user').value;
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const match = fixtures.find(m => m.id === matchId);
+
+            if (match && match.predictions && match.predictions[predictor]) {
+                delete match.predictions[predictor];
+                saveState();
+                closeModal('modal-prediction');
+                renderAll();
+                showToast(`تم حذف توقع ${predictor}`);
+            }
+        }
+
+        function computeWinnerLabel(scoreA, scoreB, teamA, teamB) {
+            if (scoreA > scoreB) return teamA;
+            if (scoreB > scoreA) return teamB;
+            return 'تعادل';
+        }
+
+        // ==================== OFFICIAL RESULT MODAL LOGIC ====================
+        function openResultModal(matchId) {
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const match = fixtures.find(m => m.id === matchId);
+            if (!match) return;
+
+            document.getElementById('result-match-id').value = match.id;
+            document.getElementById('result-fixture-subtitle').textContent = `${match.teamA} ضد ${match.teamB}`;
+            document.getElementById('result-label-a').textContent = match.teamA;
+            document.getElementById('result-label-b').textContent = match.teamB;
+            document.getElementById('result-score-a').value = match.actualA !== null ? match.actualA : 0;
+            document.getElementById('result-score-b').value = match.actualB !== null ? match.actualB : 0;
+
+            openModal('modal-result');
+        }
+
+        function saveActualResultForm(e) {
+            e.preventDefault();
+            const matchId = document.getElementById('result-match-id').value;
+            const scoreA = Math.max(0, parseInt(document.getElementById('result-score-a').value, 10) || 0);
+            const scoreB = Math.max(0, parseInt(document.getElementById('result-score-b').value, 10) || 0);
+
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const match = fixtures.find(m => m.id === matchId);
+            if (!match) return;
+
+            match.actualA = scoreA;
+            match.actualB = scoreB;
+
+            saveState();
+            closeModal('modal-result');
+            renderAll();
+            showToast('تم اعتماد النتيجة وتحديث الترتيب');
+        }
+
+        function clearActualResult() {
+            const matchId = document.getElementById('result-match-id').value;
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const match = fixtures.find(m => m.id === matchId);
+            if (!match) return;
+
+            match.actualA = null;
+            match.actualB = null;
+
+            saveState();
+            closeModal('modal-result');
+            renderAll();
+            showToast('تم مسح النتيجة النهائية');
+        }
+
+        // ==================== LEADERBOARD LOGIC ====================
+        function setLeaderboardScope(scope) {
+            leaderboardScope = scope;
+            const btnGw = document.getElementById('lb-scope-gw');
+            const btnAll = document.getElementById('lb-scope-all');
+
+            if (scope === 'gw') {
+                btnGw.className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-pl-purple text-white border border-pl-magenta/40';
+                btnAll.className = 'px-3 py-1.5 rounded-lg font-medium transition text-ios-subtle hover:text-white';
+            } else {
+                btnAll.className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-pl-purple text-white border border-pl-magenta/40';
+                btnGw.className = 'px-3 py-1.5 rounded-lg font-medium transition text-ios-subtle hover:text-white';
+            }
+            renderLeaderboard();
+        }
+
+        function calculatePoints(predA, predB, actualA, actualB) {
+            if (predA === actualA && predB === actualB) return 3;
+            const predOutcome = predA > predB ? 'A' : (predB > predA ? 'B' : 'D');
+            const actualOutcome = actualA > actualB ? 'A' : (actualB > actualA ? 'B' : 'D');
+            return predOutcome === actualOutcome ? 1 : 0;
+        }
+
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-content');
+            const statsMap = {};
+
+            state.predictors.forEach(p => {
+                statsMap[p] = { name: p, points: 0, exact: 0, outcome: 0, played: 0 };
+            });
+
+            const gwKeys = leaderboardScope === 'gw'
+                ? [state.activeGwId]
+                : Object.keys(state.fixturesByGw);
+
+            gwKeys.forEach(gwId => {
+                const fixtures = state.fixturesByGw[gwId] || [];
+                fixtures.forEach(m => {
+                    if (m.actualA !== null && m.actualB !== null && m.predictions) {
+                        Object.keys(m.predictions).forEach(pName => {
+                            if (!statsMap[pName]) {
+                                statsMap[pName] = { name: pName, points: 0, exact: 0, outcome: 0, played: 0 };
+                            }
+                            const pred = m.predictions[pName];
+                            const pts = calculatePoints(pred.scoreA, pred.scoreB, m.actualA, m.actualB);
+                            statsMap[pName].played += 1;
+                            statsMap[pName].points += pts;
+                            if (pts === 3) statsMap[pName].exact += 1;
+                            else if (pts === 1) statsMap[pName].outcome += 1;
+                        });
+                    }
+                });
+            });
+
+            const ranked = Object.values(statsMap).sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if (b.exact !== a.exact) return b.exact - a.exact;
+                return b.outcome - a.outcome;
+            });
+
+            if (ranked.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-ios-subtle py-4">لا يوجد مشاركون مسجلون بعد.</p>`;
+                return;
+            }
+
+            container.innerHTML = ranked.map((row, idx) => {
+                const isFirst = idx === 0 && row.points > 0;
+                return `
+                    <div class="flex items-center justify-between p-3 rounded-2xl border ${
+                        isFirst ? 'bg-pl-purple/30 border-pl-mint/40' : 'bg-ios-bg border-ios-border'
+                    }">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${
+                                isFirst ? 'bg-pl-mint text-ios-bg' : 'bg-ios-card border border-ios-border text-gray-300'
+                            }">
+                                ${isFirst ? '<i class="fa-solid fa-crown"></i>' : toArabicDigits(idx + 1)}
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-white">${escapeHtml(row.name)}</div>
+                                <div class="text-[11px] text-ios-subtle">
+                                    دقيقة: <span class="text-pl-mint font-semibold">${toArabicDigits(row.exact)}</span> • 
+                                    نتيجة: <span class="text-sky-400 font-semibold">${toArabicDigits(row.outcome)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-lg font-extrabold text-pl-mint leading-none">${toArabicDigits(row.points)}</div>
+                            <div class="text-[10px] text-ios-subtle mt-1">نقطة</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== WHATSAPP EXPORT LOGIC ====================
+        function toggleWhatsappArabicDigits() {
+            state.whatsappUseArabicDigits = !state.whatsappUseArabicDigits;
+            saveState();
+            renderWhatsappExport();
+        }
+
+        function toggleWhatsappDates() {
+            state.whatsappIncludeDates = !state.whatsappIncludeDates;
+            saveState();
+            renderWhatsappExport();
+        }
+
+        function renderWhatsappExport() {
+            const gwObj = state.gameweeks.find(g => g.id === state.activeGwId);
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+
+            document.getElementById('arabic-digits-label').textContent = state.whatsappUseArabicDigits
+                ? 'الأرقام: عربية (٣-٢)'
+                : 'الأرقام: إنجليزية (3-2)';
+
+            document.getElementById('whatsapp-dates-label').textContent = state.whatsappIncludeDates
+                ? 'إظهار أوقات المباريات: مفعّل'
+                : 'بدون أوقات المباريات';
+
+            const fmtNum = (n) => state.whatsappUseArabicDigits ? toArabicDigits(n) : String(n);
+            const gwTitle = gwObj ? gwObj.name : 'الجولة';
+
+            let lines = [`*< ${gwTitle} >*`, ''];
+
+            fixtures.forEach(m => {
+                const dt = formatArabicFixtureDateTime(m.kickoffISO);
+                if (state.whatsappIncludeDates) {
+                    lines.push(`* ${m.teamA} - ${m.teamB} (${dt.fullBadge})`);
+                } else {
+                    lines.push(`* ${m.teamA} - ${m.teamB}`);
+                }
+
+                const preds = m.predictions || {};
+                const keys = Object.keys(preds);
+                if (keys.length === 0) {
+                    lines.push(`(لم يتم إدخال توقعات)`);
+                } else {
+                    keys.forEach(pName => {
+                        const p = preds[pName];
+                        const winnerText = p.winnerLabel || computeWinnerLabel(p.scoreA, p.scoreB, m.teamA, m.teamB);
+                        lines.push(`*${pName}*:`);
+                        lines.push(`${fmtNum(p.scoreA)}-${fmtNum(p.scoreB)} ${winnerText}`);
+                        if (p.note && p.note.trim()) {
+                            lines.push(p.note.trim());
+                        }
+                    });
+                }
+                lines.push('');
+            });
+
+            document.getElementById('whatsapp-output').value = lines.join('\n').trim();
+        }
+
+        function copyWhatsappOutput() {
+            const area = document.getElementById('whatsapp-output');
+            area.select();
+            area.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast('تم نسخ التوقعات للواتساب!');
+            } catch (e) {
+                showToast('يرجى تحديد النص ونسخه يدوياً');
+            }
+        }
+
+        // ==================== ADD / AUTO-FETCH GAMEWEEK (GW 1-38) ====================
+        function openNewGameweekModal() {
+            openModal('modal-new-gw');
+        }
+
+        function populateNewGwSelect() {
+            const select = document.getElementById('new-gw-number-select');
+            let opts = '';
+            for (let i = 1; i <= 38; i++) {
+                const selected = i === 13 ? 'selected' : '';
+                opts += `<option value="${i}" ${selected}>${GW_ARABIC_NAMES[i]} (Gameweek ${i})</option>`;
+            }
+            select.innerHTML = opts;
+        }
+
+        async function fetchOrCreateGameweek() {
+            const gwNum = parseInt(document.getElementById('new-gw-number-select').value, 10);
+            const gwId = `gw${gwNum}`;
+            const btn = document.getElementById('btn-fetch-gw');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري جلب المباريات...</span>`;
+
+            try {
+                // Attempt live fetch from official FPL API via allorigins CORS proxy
+                const targetUrl = `https://fantasy.premierleague.com/api/fixtures/?event=${gwNum}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+                const [fixturesRes, bootstrapRes] = await Promise.all([
+                    fetch(proxyUrl),
+                    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://fantasy.premierleague.com/api/bootstrap-static/')}`)
+                ]);
+
+                if (!fixturesRes.ok || !bootstrapRes.ok) throw new Error('API unavailable');
+
+                const fixturesWrapped = await fixturesRes.json();
+                const bootstrapWrapped = await bootstrapRes.json();
+
+                const rawFixtures = JSON.parse(fixturesWrapped.contents);
+                const bootstrapData = JSON.parse(bootstrapWrapped.contents);
+
+                const teamIdToArabic = {};
+                (bootstrapData.teams || []).forEach(t => {
+                    teamIdToArabic[t.id] = TEAM_ARABIC_MAP[t.name] || TEAM_ARABIC_MAP[t.short_name] || t.name;
+                });
+
+                if (!Array.isArray(rawFixtures) || rawFixtures.length === 0) {
+                    throw new Error('No fixtures returned');
+                }
+
+                const mappedFixtures = rawFixtures.map((f, idx) => ({
+                    id: `${gwId}_m${idx + 1}`,
+                    kickoffISO: f.kickoff_time || new Date(Date.now() + (idx + 1) * 3600000).toISOString(),
+                    orderIndex: idx + 1,
+                    teamA: teamIdToArabic[f.team_h] || `فريق ${f.team_h}`,
+                    teamB: teamIdToArabic[f.team_a] || `فريق ${f.team_a}`,
+                    actualA: f.finished ? f.team_h_score : null,
+                    actualB: f.finished ? f.team_a_score : null,
+                    predictions: {}
+                }));
+
+                upsertGameweek(gwId, gwNum, mappedFixtures);
+                showToast(`تم جلب ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
+            } catch (err) {
+                // Reliable Offline Fallback Fixture Generator
+                const fallbackFixtures = generateFallbackFixturesForGw(gwNum);
+                upsertGameweek(gwId, gwNum, fallbackFixtures);
+                showToast(`تم إنشاء ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> <span>جلب مباريات الجولة الآن</span>`;
+                closeModal('modal-new-gw');
+            }
+        }
+
+        function upsertGameweek(gwId, gwNum, fixturesList) {
+            if (!state.gameweeks.some(g => g.id === gwId)) {
+                state.gameweeks.push({
+                    id: gwId,
+                    number: gwNum,
+                    name: GW_ARABIC_NAMES[gwNum] || `الجولة ال${toArabicDigits(gwNum)}`
+                });
+            }
+            state.fixturesByGw[gwId] = fixturesList;
+            state.activeGwId = gwId;
+            ensureChronologicalSorting();
+            saveState();
+            renderAll();
+        }
+
+        function generateFallbackFixturesForGw(gwNum) {
+            const clubs = [
+                'آرسنال', 'أستون فيلا', 'بورنموث', 'برينتفورد', 'برايتون',
+                'تشيلسي', 'كوفنتري سيتي', 'كريستال بالاس', 'إيفرتون', 'فولهام',
+                'هال سيتي', 'إيبسويتش تاون', 'ليدز يونايتد', 'ليفربول', 'مانشستر سيتي',
+                'مانشستر يونايتد', 'نيوكاسل', 'نوتنغهام فورست', 'سندرلاند', 'توتنهام'
+            ];
+            // Deterministic rotation per GW number
+            const rotated = [...clubs];
+            for (let s = 0; s < gwNum; s++) {
+                const last = rotated.pop();
+                rotated.splice(1, 0, last);
+            }
+
+            // Base Saturday date relative to 2026/27 calendar
+            const baseDate = new Date('2026-08-15T15:30:00+03:00');
+            baseDate.setDate(baseDate.getDate() + ((gwNum - 1) * 7));
+
+            const offsetsHours = [0, 2.5, 2.5, 2.5, 2.5, 2.5, 5, 25.5, 28, 55.5];
+            const fixtures = [];
+
+            for (let i = 0; i < 10; i++) {
+                const ko = new Date(baseDate.getTime() + offsetsHours[i] * 3600000);
+                fixtures.push({
+                    id: `gw${gwNum}_m${i + 1}`,
+                    kickoffISO: ko.toISOString(),
+                    orderIndex: i + 1,
+                    teamA: rotated[i],
+                    teamB: rotated[19 - i],
+                    actualA: null,
+                    actualB: null,
+                    predictions: {}
+                });
+            }
+            return fixtures;
+        }
+
+        // ==================== RESET & CONFIRMATION ACTIONS ====================
+        function confirmResetCurrentGwPredictions() {
+            const gwObj = state.gameweeks.find(g => g.id === state.activeGwId);
+            const title = gwObj ? gwObj.name : 'الجولة الحالية';
+            openConfirmDialog(
+                `تصفير توقعات ${title}`,
+                'سيتم مسح جميع التوقعات المسجلة في هذه الجولة فقط مع الإبقاء على جدول المباريات.',
+                () => {
+                    const fixtures = state.fixturesByGw[state.activeGwId] || [];
+                    fixtures.forEach(m => {
+                        m.predictions = {};
+                        m.actualA = null;
+                        m.actualB = null;
+                    });
+                    saveState();
+                    renderAll();
+                    showToast(`تم تصفير توقعات ${title}`);
+                }
+            );
+        }
+
+        function confirmRestoreDefaults() {
+            openConfirmDialog(
+                'إعادة ضبط البيانات الافتراضية',
+                'سيتم استعادة جميع الجولات الافتراضية (الجولة ٩، ١٠، ١١، ١٢) وتوقعات الجولة ٩ الأساسية.',
+                () => {
+                    localStorage.removeItem(STORAGE_KEY);
+                    state = JSON.parse(JSON.stringify(INITIAL_STATE));
+                    ensureChronologicalSorting();
+                    saveState();
+                    renderAll();
+                    showToast('تمت استعادة البيانات الافتراضية');
+                }
+            );
+        }
+
+        // ==================== UI HELPERS ====================
+        function stepNumber(inputId, delta) {
+            const el = document.getElementById(inputId);
+            const val = parseInt(el.value, 10) || 0;
+            el.value = Math.max(0, Math.min(20, val + delta));
+        }
+
+        function toArabicDigits(val) {
+            if (val === null || val === undefined) return '';
+            return String(val).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function openConfirmDialog(title, body, onConfirm) {
+            document.getElementById('confirm-modal-title').textContent = title;
+            document.getElementById('confirm-modal-body').textContent = body;
+            const btn = document.getElementById('confirm-modal-action');
+            btn.onclick = () => {
+                closeModal('modal-confirm');
+                onConfirm();
+            };
+            openModal('modal-confirm');
+        }
+
+        let toastTimer = null;
+        function showToast(message) {
+            const toast = document.getElementById('ios-toast');
+            document.getElementById('ios-toast-text').textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2400);
+        }
+    </script>
+</body>
+</html>
