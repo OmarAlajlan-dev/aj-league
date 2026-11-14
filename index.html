@@ -11,7 +11,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0b0e14">
 
-    <title>Aj League Prediction | أج ليغ لتوقعات الدوري الإنجليزي</title>
+    <title>Aj League Prediction</title>
+    <link rel="icon" type="image/jpeg" href="/assets/aistudio/Aj-League-Logo_3a033d79.jpg">
+    <link rel="apple-touch-icon" href="/assets/aistudio/Aj-League-Logo_3a033d79.jpg">
 
     <!-- Google Font: Readex Pro (Arabic Modern Typography) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -131,35 +133,33 @@
     <!-- ==================== TOP STICKY HEADER ==================== -->
     <header class="ios-header sticky top-0 z-40 border-b border-ios-border px-4 pb-3">
         <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
-            <!-- Brand Identity -->
-            <div class="flex items-center gap-3">
-                <!-- Inline SVG Premier League Crown/Lion Emblem -->
-                <div class="w-10 h-10 rounded-2xl pl-badge-gradient border border-pl-magenta/40 flex items-center justify-center shadow-lg shadow-pl-purple/40 shrink-0">
-                    <svg class="w-6 h-6 text-pl-mint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                        <path d="M4 22h16"/>
-                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-                    </svg>
+            <!-- Brand Identity + Live Clock -->
+            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <!-- Aj League Official Brand Logo -->
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#101522] border border-pl-mint/35 overflow-hidden flex items-center justify-center shadow-lg shadow-pl-purple/40 shrink-0">
+                    <img src="/assets/aistudio/Aj-League-Logo_3a033d79.jpg" alt="Aj League Logo" class="w-full h-full object-cover">
                 </div>
-                <div>
-                    <div class="flex items-center gap-1.5">
-                        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">Aj League</h1>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-pl-mint/15 text-pl-mint border border-pl-mint/30">PL 26/27</span>
+                <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white truncate">Aj League</h1>
+                        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-ios-card border border-ios-border shrink-0" title="الساعة الآن">
+                            <i class="fa-regular fa-clock text-pl-cyan text-[11px]"></i>
+                            <span id="live-clock-text" class="text-xs sm:text-sm font-extrabold text-white tracking-wide tabular-nums leading-none">--:--:--</span>
+                        </div>
                     </div>
-                    <p class="text-[11px] text-ios-subtle">أج ليغ لتوقعات الدوري الإنجليزي</p>
+                    <div class="flex items-center gap-1.5 mt-1 min-w-0">
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-pl-mint/15 text-pl-mint border border-pl-mint/30 shrink-0">PL 26/27</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Header Utility Actions -->
-            <div class="flex items-center gap-2">
-                <button id="auth-status-btn" onclick="handleAuthClick()" title="تسجيل الدخول للمزامنة السحابية" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-200 flex items-center gap-1.5 transition active:scale-95">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <button id="auth-status-btn" onclick="handleAuthClick()" title="دخول اختياري للمشرف (إضافة التوقعات متاحة للجميع بدون تسجيل)" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-200 flex items-center gap-1.5 transition active:scale-95">
                     <i class="fa-brands fa-google text-pl-mint"></i>
-                    <span class="hidden sm:inline">دخول قوقل</span>
+                    <span class="hidden sm:inline">المشرف</span>
                 </button>
-                <button onclick="confirmResetCurrentGwPredictions()" title="تصفير توقعات الجولة الحالية" class="px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-300 hover:text-pl-magenta flex items-center gap-1.5 transition active:scale-95">
+                <button id="reset-gw-btn" onclick="confirmResetCurrentGwPredictions()" title="تصفير توقعات الجولة الحالية (للمشرف فقط)" class="hidden px-2.5 py-2 rounded-xl bg-ios-card hover:bg-ios-cardHover border border-ios-border text-xs text-gray-300 hover:text-pl-magenta flex items-center gap-1.5 transition active:scale-95">
                     <i class="fa-solid fa-eraser text-pl-magenta"></i>
                     <span class="hidden sm:inline">تصفير الجولة</span>
                 </button>
@@ -184,71 +184,88 @@
             </button>
         </section>
 
-        <!-- LIVE CLOCK & GAMEWEEK DEADLINE BANNER -->
-        <section id="deadline-card" class="rounded-2xl bg-ios-card border border-ios-border p-3.5 space-y-3 relative overflow-hidden">
-            <div class="absolute inset-y-0 right-0 w-1 bg-pl-mint" id="deadline-accent-bar"></div>
+        <!-- GAMEWEEK DEADLINE BANNER -->
+        <section id="deadline-card" class="rounded-2xl bg-ios-card border border-ios-border p-4 pr-5 space-y-3.5 relative overflow-hidden">
+            <div class="absolute inset-y-0 right-0 w-1.5 bg-pl-mint" id="deadline-accent-bar"></div>
 
-            <!-- Live Current Time Row -->
-            <div class="flex items-center justify-between gap-2 border-b border-ios-border/70 pb-2.5 pr-1">
-                <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-lg bg-ios-bg border border-ios-border flex items-center justify-center text-pl-cyan shrink-0">
-                        <i class="fa-regular fa-clock text-xs"></i>
+            <!-- Deadline Info Row -->
+            <div class="flex items-start sm:items-center justify-between gap-2.5">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-10 h-10 rounded-xl bg-pl-purple/60 border border-pl-magenta/30 flex items-center justify-center text-pl-mint shrink-0">
+                        <i class="fa-solid fa-hourglass-half text-base"></i>
                     </div>
-                    <div>
-                        <span class="text-[11px] text-ios-subtle">الساعة الآن:</span>
-                        <span id="live-clock-text" class="text-xs sm:text-sm font-bold text-white mr-1">--:--:--</span>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-[11px] text-ios-subtle font-medium">الديدلاين للتوقعات (قبل أول مباراة بساعة ونص)</div>
+                        <div id="deadline-display-text" class="text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">
+                            السبت، ٢١ نوفمبر | ٢:٠٠ مساءً
+                        </div>
                     </div>
                 </div>
-                <div id="deadline-status-badge" class="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30">
+                <div id="deadline-status-badge" class="shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30">
                     مفتوحة للتوقع
                 </div>
             </div>
 
-            <!-- Deadline Info Row -->
-            <div class="flex items-center gap-3 pr-1">
-                <div class="w-9 h-9 rounded-xl bg-pl-purple/60 border border-pl-magenta/30 flex items-center justify-center text-pl-mint shrink-0">
-                    <i class="fa-solid fa-hourglass-half text-base"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="text-[11px] text-ios-subtle font-medium">الديدلاين للتوقعات (قبل أول مباراة بساعة ونص)</div>
-                    <div id="deadline-display-text" class="text-xs sm:text-sm font-bold text-white mt-0.5">
-                        السبت، ٢١ نوفمبر | ٢:٠٠ مساءً
-                    </div>
-                </div>
-            </div>
-
             <!-- Live Countdown Timer -->
-            <div id="deadline-countdown-box" class="grid grid-cols-4 gap-2 pt-0.5 pr-1">
-                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
-                    <div id="cd-days" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
-                    <div class="text-[10px] text-ios-subtle mt-1">يوم</div>
+            <div class="rounded-xl bg-ios-bg/90 border border-ios-border p-3 space-y-2.5">
+                <div id="deadline-countdown-heading" class="text-center text-base sm:text-lg font-extrabold tracking-tight text-pl-mint">
+                    الباقي على الديدلاين!
                 </div>
-                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
-                    <div id="cd-hours" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
-                    <div class="text-[10px] text-ios-subtle mt-1">ساعة</div>
-                </div>
-                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
-                    <div id="cd-mins" class="text-sm sm:text-base font-extrabold text-pl-mint leading-none">٠٠</div>
-                    <div class="text-[10px] text-ios-subtle mt-1">دقيقة</div>
-                </div>
-                <div class="rounded-xl bg-ios-bg border border-ios-border py-2 text-center">
-                    <div id="cd-secs" class="text-sm sm:text-base font-extrabold text-pl-cyan leading-none">٠٠</div>
-                    <div class="text-[10px] text-ios-subtle mt-1">ثانية</div>
+                <div id="deadline-countdown-box" class="grid grid-cols-4 gap-2">
+                    <div class="rounded-xl bg-ios-card border border-ios-border py-2.5 px-1 text-center">
+                        <div id="cd-days" class="text-lg sm:text-xl font-extrabold text-pl-mint tabular-nums leading-none">٠٠</div>
+                        <div class="text-[11px] font-medium text-ios-subtle mt-1.5">يوم</div>
+                    </div>
+                    <div class="rounded-xl bg-ios-card border border-ios-border py-2.5 px-1 text-center">
+                        <div id="cd-hours" class="text-lg sm:text-xl font-extrabold text-pl-mint tabular-nums leading-none">٠٠</div>
+                        <div class="text-[11px] font-medium text-ios-subtle mt-1.5">ساعة</div>
+                    </div>
+                    <div class="rounded-xl bg-ios-card border border-ios-border py-2.5 px-1 text-center">
+                        <div id="cd-mins" class="text-lg sm:text-xl font-extrabold text-pl-mint tabular-nums leading-none">٠٠</div>
+                        <div class="text-[11px] font-medium text-ios-subtle mt-1.5">دقيقة</div>
+                    </div>
+                    <div class="rounded-xl bg-ios-card border border-ios-border py-2.5 px-1 text-center">
+                        <div id="cd-secs" class="text-lg sm:text-xl font-extrabold text-pl-cyan tabular-nums leading-none">٠٠</div>
+                        <div class="text-[11px] font-medium text-ios-subtle mt-1.5">ثانية</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ==================== TAB 1: MATCHES & PREDICTIONS ==================== -->
-        <section id="tab-matches" class="space-y-3.5">
+        <section id="tab-matches" class="space-y-3">
             <!-- Predictor Filter & Add New Predictor Bar -->
             <div class="flex items-center justify-between gap-2">
                 <div id="predictor-filter-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                     <!-- Predictor pills injected by JS -->
                 </div>
-                <button onclick="openNewPredictorModal()" class="shrink-0 px-3.5 py-2 rounded-xl pl-accent-gradient text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-pl-magenta/20 active:scale-95 transition">
+                <button onclick="openNewPredictorModal()" class="min-h-[44px] shrink-0 px-3.5 py-2 rounded-xl pl-accent-gradient text-white text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shadow-md shadow-pl-magenta/20 active:scale-95 transition">
                     <i class="fa-solid fa-user-plus"></i>
                     <span>إضافة متوقع يديد</span>
                 </button>
+            </div>
+
+            <!-- Matches Live Sync & Smart Filters Toolbar -->
+            <div class="rounded-2xl bg-ios-card border border-ios-border p-3 space-y-2.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <p id="matches-summary-line" class="text-[11px] text-ios-subtle tabular-nums">
+                        جاري تحميل المباريات...
+                    </p>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" id="btn-sync-live-scores" onclick="syncLiveScoresFromPlApi({ manual: true })" title="تحديث نتائج المباريات مباشرة من الدوري الإنجليزي" class="min-h-[44px] px-3 py-2 rounded-xl pl-badge-gradient hover:opacity-95 border border-pl-magenta/40 text-white text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition active:scale-95">
+                            <i class="fa-solid fa-satellite-dish text-pl-mint"></i>
+                            <span>تحديث النتائج</span>
+                        </button>
+                        <button type="button" id="btn-toggle-compact-matches" onclick="toggleCompactMatchesView()" title="التبديل بين العرض المفصل والعرض المضغوط" class="min-h-[44px] px-3 py-2 rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border text-xs font-semibold text-gray-200 flex items-center gap-1.5 whitespace-nowrap shrink-0 transition active:scale-95">
+                            <i class="fa-solid fa-compress text-pl-cyan"></i>
+                            <span>عرض مضغوط</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="match-status-filters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                    <!-- Status filter buttons rendered dynamically -->
+                </div>
             </div>
 
             <!-- Chronological Fixtures Container -->
@@ -327,22 +344,102 @@
             </div>
         </section>
 
+        <!-- ==================== TAB 4: FPL STATS DASHBOARD ==================== -->
+        <section id="tab-stats" class="hidden space-y-3.5">
+            <div class="rounded-2xl bg-ios-card border border-ios-border p-4 space-y-3.5">
+                <!-- Header & Actions -->
+                <div class="flex items-center justify-between gap-2 border-b border-ios-border pb-3">
+                    <div class="min-w-0">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-pl-mint"></i>
+                            <span>إحصائيات الفانتازي (FPL)</span>
+                        </h2>
+                        <p id="stats-source-caption" class="text-[11px] text-ios-subtle mt-0.5">
+                            بيانات موسم ٢٦/٢٧ · محدثة محلياً
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="openFplGlossaryModal()" title="دليل المصطلحات (xG, xA, xGI, xGC, FDR)" class="min-h-[44px] min-w-[44px] rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border text-pl-cyan flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-circle-info text-base"></i>
+                        </button>
+                        <button type="button" id="btn-refresh-fpl" onclick="refreshFplStatsFromApi()" title="تحديث مباشر من Fantasy Premier League" class="min-h-[44px] px-3 rounded-xl pl-badge-gradient hover:opacity-95 border border-pl-magenta/40 text-white text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition active:scale-95">
+                            <i class="fa-solid fa-arrows-rotate text-pl-mint"></i>
+                            <span>تحديث</span>
+                        </button>
+                        <button type="button" onclick="resetDefaultFplStats()" title="استعادة أرقام 2026/27 الافتراضية" class="min-h-[44px] min-w-[44px] rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border text-gray-300 hover:text-pl-magenta flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-rotate-left text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category Toggles -->
+                <div id="stats-subtab-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 rounded-xl bg-ios-bg border border-ios-border">
+                    <button type="button" id="stats-subbtn-expected" onclick="setStatsSubTab('expected')" class="min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-pl-purple text-white border border-pl-magenta/40">
+                        التوقعات (xG/xA)
+                    </button>
+                    <button type="button" id="stats-subbtn-players" onclick="setStatsSubTab('players')" class="min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-ios-subtle hover:text-white">
+                        اللاعبين
+                    </button>
+                    <button type="button" id="stats-subbtn-teams" onclick="setStatsSubTab('teams')" class="min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-ios-subtle hover:text-white">
+                        الفرق
+                    </button>
+                    <button type="button" id="stats-subbtn-cleansheets" onclick="setStatsSubTab('cleansheets')" class="min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-ios-subtle hover:text-white">
+                        الكلين شيت
+                    </button>
+                </div>
+
+                <!-- Search & Sort Toolbar -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass text-ios-subtle text-xs absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input id="stats-search-input" type="text" oninput="onStatsSearchInput(this.value)" placeholder="ابحث باسم اللاعب أو النادي..." class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border pr-9 pl-9 py-2 text-xs sm:text-sm text-white placeholder:text-ios-subtle focus:outline-none focus:border-pl-mint">
+                        <button type="button" id="stats-search-clear" onclick="clearStatsSearch()" class="hidden absolute left-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-ios-subtle hover:text-white flex items-center justify-center">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <select id="stats-sort-select" onchange="setStatsSort(this.value)" class="flex-1 sm:w-44 min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white focus:outline-none focus:border-pl-mint">
+                            <!-- Populated dynamically per sub-tab -->
+                        </select>
+                        <button type="button" id="stats-sort-dir-btn" onclick="toggleStatsSortDirection()" title="عكس الترتيب" class="min-h-[44px] min-w-[44px] rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border text-pl-mint flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-arrow-down-wide-short text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Position Filters / Team Mode Toggle -->
+                <div id="stats-position-filters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                    <!-- Populated dynamically by renderStatsFilterControls() -->
+                </div>
+            </div>
+
+            <!-- Stats Results List -->
+            <div id="stats-content" class="space-y-3">
+                <!-- Cards rendered dynamically by renderStatsContent() -->
+            </div>
+        </section>
+
     </main>
 
     <!-- ==================== BOTTOM iOS TAB BAR ==================== -->
-    <nav aria-label="التنقل الرئيسي" class="ios-tabbar fixed bottom-0 inset-x-0 z-40 border-t border-ios-border px-2 pt-2">
-        <div class="max-w-2xl mx-auto grid grid-cols-3 gap-1">
-            <button id="nav-btn-matches" onclick="switchTab('matches')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-pl-mint font-bold transition">
-                <i class="fa-solid fa-futbol text-lg mb-0.5"></i>
-                <span class="text-[11px]">المباريات والتوقعات</span>
+    <nav id="nav-tabs" aria-label="التنقل الرئيسي" class="ios-tabbar fixed bottom-0 inset-x-0 z-40 border-t border-ios-border px-2 pt-1.5">
+        <div class="max-w-2xl mx-auto grid grid-cols-4 gap-1">
+            <button id="nav-btn-matches" onclick="showTab('matches')" class="min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-pl-mint font-bold transition">
+                <i class="fa-solid fa-futbol text-base sm:text-lg mb-0.5"></i>
+                <span class="text-[10px] sm:text-[11px] whitespace-nowrap">المباريات</span>
             </button>
-            <button id="nav-btn-leaderboard" onclick="switchTab('leaderboard')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition">
-                <i class="fa-solid fa-trophy text-lg mb-0.5"></i>
-                <span class="text-[11px]">جدول الترتيب</span>
+            <button id="nav-btn-leaderboard" onclick="showTab('leaderboard')" class="min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-ios-subtle hover:text-white font-medium transition">
+                <i class="fa-solid fa-trophy text-base sm:text-lg mb-0.5"></i>
+                <span class="text-[10px] sm:text-[11px] whitespace-nowrap">جدول الترتيب</span>
             </button>
-            <button id="nav-btn-whatsapp" onclick="switchTab('whatsapp')" class="flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition">
-                <i class="fa-brands fa-whatsapp text-lg mb-0.5"></i>
-                <span class="text-[11px]">تصدير الواتساب</span>
+            <button id="nav-btn-stats" onclick="showTab('stats')" class="min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-ios-subtle hover:text-white font-medium transition">
+                <i class="fa-solid fa-chart-column text-base sm:text-lg mb-0.5"></i>
+                <span class="text-[10px] sm:text-[11px] whitespace-nowrap">الإحصائيات</span>
+            </button>
+            <button id="nav-btn-whatsapp" onclick="showTab('whatsapp')" class="min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-ios-subtle hover:text-white font-medium transition">
+                <i class="fa-brands fa-whatsapp text-base sm:text-lg mb-0.5"></i>
+                <span class="text-[10px] sm:text-[11px] whitespace-nowrap">الواتساب</span>
             </button>
         </div>
     </nav>
@@ -382,7 +479,7 @@
                         <div id="label-team-a" class="text-xs font-bold text-white truncate px-1">الفريق الأول</div>
                         <div class="flex items-center justify-center gap-2">
                             <button type="button" onclick="stepNumber('form-score-a', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">-</button>
-                            <input id="form-score-a" type="number" min="0" max="20" value="2" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
+                            <input id="form-score-a" type="number" min="0" max="20" value="0" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
                             <button type="button" onclick="stepNumber('form-score-a', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">+</button>
                         </div>
                     </div>
@@ -390,7 +487,7 @@
                         <div id="label-team-b" class="text-xs font-bold text-white truncate px-1">الفريق الثاني</div>
                         <div class="flex items-center justify-center gap-2">
                             <button type="button" onclick="stepNumber('form-score-b', -1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">-</button>
-                            <input id="form-score-b" type="number" min="0" max="20" value="1" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
+                            <input id="form-score-b" type="number" min="0" max="20" value="0" required class="w-12 h-10 rounded-xl pl-badge-gradient border border-pl-magenta/50 text-center font-bold text-white text-base focus:outline-none">
                             <button type="button" onclick="stepNumber('form-score-b', 1)" class="w-9 h-9 rounded-xl bg-ios-card border border-ios-border text-white font-bold text-base active:scale-90 transition">+</button>
                         </div>
                     </div>
@@ -552,6 +649,135 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL 5: FPL METRICS GLOSSARY (INFO) ==================== -->
+    <div id="modal-fpl-glossary" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-pl-cyan"></i>
+                    <span>دليل مصطلحات الفانتازي (FPL)</span>
+                </h3>
+                <button type="button" onclick="closeModal('modal-fpl-glossary')" class="w-10 h-10 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="divide-y divide-ios-border text-xs leading-relaxed">
+                <div class="py-2.5 space-y-1">
+                    <div class="font-bold text-pl-mint">xG — الأهداف المتوقعة (Expected Goals)</div>
+                    <p class="text-gray-300">تقيس جودة الفرص التي حصل عليها اللاعب أو الفريق ومدى احتمالية تحولها لأهداف. إذا كانت الأهداف الفعلية أقل من xG، فاللاعب مرشح للتسجيل قريباً.</p>
+                </div>
+                <div class="py-2.5 space-y-1">
+                    <div class="font-bold text-pl-cyan">xA — الصناعة المتوقعة (Expected Assists)</div>
+                    <p class="text-gray-300">تقيس جودة التمريرات الحاسمة التي يصنعها اللاعب لزملائه واحتمالية تسجيلها، لتحديد أفضل صناع اللعب حتى قبل ترجمتها لأسيست فعلي.</p>
+                </div>
+                <div class="py-2.5 space-y-1">
+                    <div class="font-bold text-white">xGI — المساهمة المتوقعة (xG + xA)</div>
+                    <p class="text-gray-300">مجموع الأهداف المتوقعة والصناعة المتوقعة، وهو المؤشر الأدق لقياس خطورة اللاعب الهجومية الإجمالية.</p>
+                </div>
+                <div class="py-2.5 space-y-1">
+                    <div class="font-bold text-pl-magenta">xGC — الأهداف المستقبلة المتوقعة (Expected Goals Conceded)</div>
+                    <p class="text-gray-300">تقيس جودة الفرص التي يستقبلها الفريق أو الحارس؛ كلما انخفض الرقم دلّ على صلابة دفاعية وفرص أعلى للكلين شيت (CS).</p>
+                </div>
+                <div class="py-2.5 space-y-1">
+                    <div class="font-bold text-amber-400">FDR — صعوبة الجدول (Fixture Difficulty Rating)</div>
+                    <p class="text-gray-300">تقييم من ١ (سهل جداً) إلى ٥ (صعب جداً) لصعوبة مباريات الفريق القادمة.</p>
+                </div>
+            </div>
+
+            <button type="button" onclick="closeModal('modal-fpl-glossary')" class="w-full min-h-[44px] py-2.5 rounded-xl bg-ios-bg border border-ios-border text-white font-semibold text-xs">
+                فهمت
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 6: QUICK EDIT FPL STAT ==================== -->
+    <div id="modal-edit-stat" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="animate-sheet w-full sm:max-w-md bg-ios-card border border-ios-border rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-ios-border pb-3">
+                <div>
+                    <h3 id="edit-stat-title" class="text-sm sm:text-base font-bold text-white">تعديل الإحصائيات</h3>
+                    <p id="edit-stat-subtitle" class="text-[11px] text-ios-subtle mt-0.5"></p>
+                </div>
+                <button type="button" onclick="closeModal('modal-edit-stat')" class="w-10 h-10 rounded-full bg-ios-bg text-gray-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveStatEditForm(event)" class="space-y-3.5">
+                <input type="hidden" id="edit-stat-type">
+                <input type="hidden" id="edit-stat-id">
+
+                <div id="edit-stat-fields-player" class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">السعر (£m)</label>
+                        <input id="edit-p-price" type="number" step="0.1" min="3.5" max="20" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">النقاط</label>
+                        <input id="edit-p-points" type="number" min="0" max="500" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">الأهداف</label>
+                        <input id="edit-p-goals" type="number" min="0" max="100" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">xG (المتوقعة)</label>
+                        <input id="edit-p-xg" type="number" step="0.01" min="0" max="100" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">الصناعة (Assists)</label>
+                        <input id="edit-p-assists" type="number" min="0" max="100" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">xA (المتوقعة)</label>
+                        <input id="edit-p-xa" type="number" step="0.01" min="0" max="100" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">الكلين شيت (CS)</label>
+                        <input id="edit-p-cs" type="number" min="0" max="38" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">xGC</label>
+                        <input id="edit-p-xgc" type="number" step="0.1" min="0" max="150" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                </div>
+
+                <div id="edit-stat-fields-team" class="hidden grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">الأهداف المسجلة</label>
+                        <input id="edit-t-goals" type="number" min="0" max="150" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">xG (المتوقعة)</label>
+                        <input id="edit-t-xg" type="number" step="0.1" min="0" max="150" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">الكلين شيت (CS)</label>
+                        <input id="edit-t-cs" type="number" min="0" max="38" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">xGC (المستقبلة المتوقعة)</label>
+                        <input id="edit-t-xgc" type="number" step="0.1" min="0" max="150" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                    <div class="col-span-2 space-y-1">
+                        <label class="block text-[11px] text-ios-subtle">صعوبة الجدول (FDR 1-5)</label>
+                        <input id="edit-t-fdr" type="number" min="1" max="5" class="w-full min-h-[44px] rounded-xl bg-ios-bg border border-ios-border px-3 py-2 text-xs text-white tabular-nums focus:outline-none focus:border-pl-mint">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="submit" class="flex-1 min-h-[44px] py-2.5 rounded-xl pl-accent-gradient text-white font-bold text-xs sm:text-sm shadow-lg active:scale-[0.99] transition">
+                        حفظ التعديل
+                    </button>
+                    <button type="button" onclick="closeModal('modal-edit-stat')" class="min-h-[44px] px-4 py-2.5 rounded-xl bg-ios-bg border border-ios-border text-gray-300 font-semibold text-xs">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ==================== iOS TOAST NOTIFICATION ==================== -->
     <div id="ios-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-ios-card border border-pl-mint/50 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300">
         <i class="fa-solid fa-circle-check text-pl-mint text-sm"></i>
@@ -603,6 +829,17 @@
         const cloudPredictions = new Map();
         let seedingPromise = null;
         let localSelectedGwId = null;
+        let userManuallySelectedGw = false;
+        let autoAdvancingNextGw = false;
+        const autoAttemptedGws = new Set();
+        const guestActorId = 'guest_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now().toString(36);
+
+        function getActorUid() {
+            if (auth && auth.currentUser && auth.currentUser.uid) {
+                return auth.currentUser.uid;
+            }
+            return guestActorId;
+        }
 
         function handleFirestoreError(error, operationType, path) {
             const errInfo = {
@@ -663,6 +900,68 @@
             'West Ham': 'وست هام',
             'Wolves': 'وولفرهامبتون'
         };
+
+        // Verified Premier League & Championship Club Logos (ESPN 500px PNG CDN)
+        const TEAM_LOGO_IDS = {
+            'آرسنال': 359, 'أرسنال': 359, 'Arsenal': 359,
+            'أستون فيلا': 362, 'الفيلا': 362, 'Aston Villa': 362,
+            'بورنموث': 349, 'Bournemouth': 349, 'AFC Bournemouth': 349,
+            'برينتفورد': 337, 'Brentford': 337,
+            'برايتون': 331, 'Brighton': 331, 'Brighton & Hove Albion': 331,
+            'بيرنلي': 379, 'Burnley': 379,
+            'تشيلسي': 363, 'Chelsea': 363,
+            'كوفنتري سيتي': 388, 'كوفنتري': 388, 'Coventry': 388, 'Coventry City': 388,
+            'كريستال بالاس': 384, 'البالاس': 384, 'Crystal Palace': 384,
+            'إيفرتون': 368, 'Everton': 368,
+            'فولهام': 370, 'Fulham': 370,
+            'هال سيتي': 306, 'هال': 306, 'Hull': 306, 'Hull City': 306,
+            'إيبسويتش تاون': 373, 'إيبسويتش': 373, 'Ipswich': 373, 'Ipswich Town': 373,
+            'ليدز يونايتد': 357, 'ليدز': 357, 'Leeds': 357, 'Leeds United': 357,
+            'ليستر سيتي': 375, 'ليستر': 375, 'Leicester': 375, 'Leicester City': 375,
+            'ليفربول': 364, 'Liverpool': 364,
+            'مانشستر سيتي': 382, 'السيتي': 382, 'Man City': 382, 'Manchester City': 382,
+            'مانشستر يونايتد': 360, 'يونايتد': 360, 'اليونايتد': 360, 'Man Utd': 360, 'Manchester United': 360,
+            'نيوكاسل': 361, 'نيوكاسل يونايتد': 361, 'Newcastle': 361, 'Newcastle United': 361,
+            'نوتنغهام فورست': 393, 'نوتنغهام': 393, "Nott'm Forest": 393, 'Nottingham Forest': 393,
+            'ساوثهامبتون': 376, 'Southampton': 376,
+            'سندرلاند': 366, 'Sunderland': 366,
+            'توتنهام': 367, 'توتنهام هوتسبير': 367, 'Spurs': 367, 'Tottenham': 367, 'Tottenham Hotspur': 367,
+            'وست هام': 371, 'وست هام يونايتد': 371, 'West Ham': 371, 'West Ham United': 371,
+            'وولفرهامبتون': 380, 'الولفز': 380, 'Wolves': 380, 'Wolverhampton Wanderers': 380
+        };
+
+        function getTeamLogoUrl(teamName) {
+            if (!teamName) return null;
+            const trimmed = String(teamName).trim();
+            const directId = TEAM_LOGO_IDS[trimmed];
+            if (directId) {
+                return `https://a.espncdn.com/i/teamlogos/soccer/500/${directId}.png`;
+            }
+            const lower = trimmed.toLowerCase();
+            for (const [key, id] of Object.entries(TEAM_LOGO_IDS)) {
+                if (key.toLowerCase() === lower) {
+                    return `https://a.espncdn.com/i/teamlogos/soccer/500/${id}.png`;
+                }
+            }
+            return null;
+        }
+
+        function renderTeamLogo(teamName) {
+            const url = getTeamLogoUrl(teamName);
+            if (!url) {
+                return `
+                    <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-ios-bg border border-ios-border flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-shield-halved text-pl-mint text-xs"></i>
+                    </span>
+                `;
+            }
+            return `
+                <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/95 border border-white/20 p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                    <img src="${url}" alt="${escapeHtml(teamName)}" loading="lazy" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <i class="fa-solid fa-shield-halved text-pl-purple text-xs hidden"></i>
+                </span>
+            `;
+        }
 
         // Arabic ordinal names for Gameweeks 1 to 38
         const GW_ARABIC_NAMES = {
@@ -819,10 +1118,18 @@
 
         // App Runtime State
         let state = JSON.parse(JSON.stringify(INITIAL_STATE));
-        let currentTab = 'matches'; // 'matches' | 'leaderboard' | 'whatsapp'
+        let currentTab = 'matches'; // 'matches' | 'leaderboard' | 'stats' | 'whatsapp'
         let filterPredictor = 'all';
         let leaderboardScope = 'gw'; // 'gw' | 'all'
         let editingContext = { matchId: null, predictorName: null };
+        const liveMatchMeta = new Map(); // fixtureId -> { started, finished, minutes }
+        let cachedPlTeamsMap = null;
+        const matchesUiState = {
+            statusFilter: 'all', // 'all' | 'upcoming' | 'live' | 'finished' | 'unpredicted'
+            compactMode: false,
+            isSyncingScores: false,
+            lastSyncByGw: {}
+        };
 
         // ==================== INITIALIZATION & FIREBASE BOOTSTRAP ====================
         let clockInterval = null;
@@ -848,16 +1155,27 @@
             }
         }
 
+        const ADMIN_EMAIL = 'ajlanomar.9@gmail.com';
+
+        function isVerifiedAdmin() {
+            return Boolean(currentUser && currentUser.emailVerified && currentUser.email === ADMIN_EMAIL);
+        }
+
         function updateAuthButtonUI() {
             const btn = document.getElementById('auth-status-btn');
+            const resetBtn = document.getElementById('reset-gw-btn');
+            const adminActive = isVerifiedAdmin();
+            if (resetBtn) {
+                resetBtn.classList.toggle('hidden', !adminActive);
+            }
             if (!btn) return;
             if (currentUser && currentUser.emailVerified) {
                 const label = currentUser.displayName || currentUser.email || 'متصل';
                 btn.innerHTML = `<i class="fa-solid fa-circle text-[7px] text-pl-mint"></i><span class="truncate max-w-[80px]">${escapeHtml(label)}</span>`;
                 btn.title = `مسجل الدخول: ${currentUser.email || ''} (اضغط لتسجيل الخروج)`;
             } else {
-                btn.innerHTML = `<i class="fa-brands fa-google text-pl-mint"></i><span class="hidden sm:inline">دخول قوقل</span>`;
-                btn.title = 'تسجيل الدخول بحساب قوقل للحفظ والمزامنة';
+                btn.innerHTML = `<i class="fa-brands fa-google text-pl-mint"></i><span class="hidden sm:inline">المشرف</span>`;
+                btn.title = 'دخول اختياري للمشرف (إضافة التوقعات متاحة للجميع بدون تسجيل)';
             }
         }
 
@@ -868,11 +1186,11 @@
                 const res = await signInWithPopup(auth, provider);
                 currentUser = res.user;
                 updateAuthButtonUI();
-                showToast('تم تسجيل الدخول والمزامنة السحابية');
+                showToast('تم تسجيل دخول المشرف بنجاح');
                 return res.user;
             } catch (err) {
                 console.error('Google Sign-In error:', err);
-                showToast('يرجى السماح بتسجيل الدخول عبر قوقل للحفظ في السحابة');
+                showToast('تعذر تسجيل الدخول عبر قوقل');
                 return null;
             }
         }
@@ -894,15 +1212,9 @@
             }
         }
 
-        async function ensureSignedInForWrite() {
-            if (currentUser && currentUser.emailVerified) {
-                if (!cloudLeague) {
-                    await seedCloudFromInitialState();
-                }
-                return true;
-            }
-            const user = await signInWithGoogle();
-            if (!user || !user.emailVerified) {
+        async function ensureCloudReadyForWrite() {
+            if (!db) {
+                showToast('جاري الاتصال بقاعدة البيانات، حاول مرة أخرى');
                 return false;
             }
             if (!cloudLeague) {
@@ -962,10 +1274,20 @@
                 });
             });
 
+            Object.keys(fixturesByGw).forEach(gwId => {
+                fixturesByGw[gwId].sort((a, b) => {
+                    const diff = new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime();
+                    if (diff !== 0) return diff;
+                    return (a.orderIndex || 0) - (b.orderIndex || 0);
+                });
+            });
+            gameweeks.sort((a, b) => a.number - b.number);
+
             const gwIds = new Set(gameweeks.map(g => g.id));
-            let resolvedActiveGw = localSelectedGwId && gwIds.has(localSelectedGwId)
+            const upcomingGwId = getCurrentUpcomingGwId(Date.now(), gameweeks, fixturesByGw);
+            const resolvedActiveGw = (userManuallySelectedGw && localSelectedGwId && gwIds.has(localSelectedGwId))
                 ? localSelectedGwId
-                : (gwIds.has(cloudLeague.activeGwId) ? cloudLeague.activeGwId : (gameweeks[0]?.id || 'gw11'));
+                : (gwIds.has(upcomingGwId) ? upcomingGwId : (gwIds.has(cloudLeague.activeGwId) ? cloudLeague.activeGwId : (gameweeks[0]?.id || 'gw11')));
 
             state = {
                 activeGwId: resolvedActiveGw,
@@ -980,13 +1302,15 @@
 
             ensureChronologicalSorting();
             renderAll();
+            maybeAutoAdvanceWhenEnded(Date.now());
+            maybeAutoSyncActiveGameweekScores(Date.now());
         }
 
         async function seedCloudFromInitialState() {
             if (seedingPromise) return seedingPromise;
             seedingPromise = (async () => {
-                if (!currentUser || !currentUser.emailVerified) return;
-                const uid = currentUser.uid;
+                if (cloudLeague) return;
+                const uid = getActorUid();
                 const leaguePath = `leagues/${LEAGUE_ID}`;
                 const leagueRef = doc(db, 'leagues', LEAGUE_ID);
 
@@ -1078,9 +1402,7 @@
                         cloudLeague = snap.data();
                     } else {
                         cloudLeague = null;
-                        if (currentUser && currentUser.emailVerified) {
-                            seedCloudFromInitialState().catch(console.error);
-                        }
+                        seedCloudFromInitialState().catch(console.error);
                     }
                     rebuildStateFromCloud();
                 },
@@ -1144,9 +1466,6 @@
                 onAuthStateChanged(auth, (user) => {
                     currentUser = user;
                     updateAuthButtonUI();
-                    if (user && user.emailVerified && !cloudLeague) {
-                        seedCloudFromInitialState().catch(console.error);
-                    }
                 });
 
                 attachFirestoreListeners();
@@ -1157,7 +1476,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtonUI();
             ensureChronologicalSorting();
+            state.activeGwId = getCurrentUpcomingGwId();
             populateNewGwSelect();
             renderAll();
             startLiveClockAndCountdown();
@@ -1230,6 +1551,66 @@
             };
         }
 
+        // Determine when a gameweek ends (~2 hours after final match kickoff)
+        function getGameweekEndMs(gwId, fixturesMap = state.fixturesByGw) {
+            const fixtures = (fixturesMap && fixturesMap[gwId]) || [];
+            if (fixtures.length === 0) return null;
+            let maxKickoff = -Infinity;
+            for (const f of fixtures) {
+                const t = new Date(f.kickoffISO).getTime();
+                if (!Number.isNaN(t) && t > maxKickoff) {
+                    maxKickoff = t;
+                }
+            }
+            if (maxKickoff === -Infinity) return null;
+            return maxKickoff + (2 * 60 * 60 * 1000);
+        }
+
+        function isGameweekEnded(gwId, nowMs = Date.now(), fixturesMap = state.fixturesByGw) {
+            const endMs = getGameweekEndMs(gwId, fixturesMap);
+            if (endMs === null) return false;
+            return nowMs >= endMs;
+        }
+
+        function getCurrentUpcomingGwId(nowMs = Date.now(), gameweeksList = state.gameweeks, fixturesMap = state.fixturesByGw) {
+            const sortedGws = [...(gameweeksList || [])].sort((a, b) => a.number - b.number);
+            const nextOpen = sortedGws.find(gw => !isGameweekEnded(gw.id, nowMs, fixturesMap));
+            if (nextOpen) return nextOpen.id;
+            return sortedGws.length > 0 ? sortedGws[sortedGws.length - 1].id : 'gw11';
+        }
+
+        function maybeAutoAdvanceWhenEnded(nowMs = Date.now()) {
+            if (!state || !state.gameweeks || state.gameweeks.length === 0) return;
+
+            const sortedGws = [...state.gameweeks].sort((a, b) => a.number - b.number);
+            const upcomingId = getCurrentUpcomingGwId(nowMs, sortedGws, state.fixturesByGw);
+
+            if (!userManuallySelectedGw && state.activeGwId !== upcomingId && !isGameweekEnded(upcomingId, nowMs)) {
+                state.activeGwId = upcomingId;
+                localSelectedGwId = null;
+                renderAll();
+                const gwObj = sortedGws.find(g => g.id === upcomingId);
+                if (gwObj) {
+                    showToast(`انتهت الجولة — بدأت توقعات ${gwObj.name} الآن!`);
+                }
+                if (db && cloudLeague && cloudLeague.activeGwId !== upcomingId) {
+                    updateDoc(doc(db, 'leagues', LEAGUE_ID), {
+                        activeGwId: upcomingId,
+                        updatedAt: serverTimestamp()
+                    }).catch(() => {});
+                }
+                return;
+            }
+
+            const lastGw = sortedGws[sortedGws.length - 1];
+            if (lastGw && isGameweekEnded(lastGw.id, nowMs) && lastGw.number < 38) {
+                const nextNum = lastGw.number + 1;
+                if (db && cloudLeague && !autoAdvancingNextGw && !autoAttemptedGws.has(nextNum)) {
+                    autoCreateNextGameweek(nextNum);
+                }
+            }
+        }
+
         function formatLiveAstClock(nowDate) {
             const utcMs = nowDate.getTime() + (nowDate.getTimezoneOffset() * 60000);
             const astDate = new Date(utcMs + (3 * 3600000));
@@ -1259,6 +1640,10 @@
             }
 
             if (!state) return;
+            const nowMs = now.getTime();
+            maybeAutoAdvanceWhenEnded(nowMs);
+            maybeAutoSyncActiveGameweekScores(nowMs);
+
             const info = getGameweekDeadlineInfo(state.activeGwId);
             const cdDays = document.getElementById('cd-days');
             const cdHours = document.getElementById('cd-hours');
@@ -1266,6 +1651,7 @@
             const cdSecs = document.getElementById('cd-secs');
             const badge = document.getElementById('deadline-status-badge');
             const bar = document.getElementById('deadline-accent-bar');
+            const heading = document.getElementById('deadline-countdown-heading');
 
             const pad2 = (n) => toArabicDigits(n < 10 ? '0' + n : String(n));
 
@@ -1290,22 +1676,30 @@
                 if (cdMins) cdMins.textContent = pad2(mins);
                 if (cdSecs) cdSecs.textContent = pad2(secs);
 
+                if (heading) {
+                    heading.textContent = 'الباقي على الديدلاين!';
+                    heading.className = 'text-center text-base sm:text-lg font-extrabold tracking-tight text-pl-mint';
+                }
                 if (badge) {
                     badge.textContent = 'مفتوحة للتوقع';
-                    badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30';
+                    badge.className = 'shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold bg-pl-mint/15 text-pl-mint border border-pl-mint/30';
                 }
-                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1 bg-pl-mint';
+                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1.5 bg-pl-mint';
             } else {
                 if (cdDays) cdDays.textContent = pad2(0);
                 if (cdHours) cdHours.textContent = pad2(0);
                 if (cdMins) cdMins.textContent = pad2(0);
                 if (cdSecs) cdSecs.textContent = pad2(0);
 
+                if (heading) {
+                    heading.textContent = 'الباقي على الديدلاين!';
+                    heading.className = 'text-center text-base sm:text-lg font-extrabold tracking-tight text-rose-400';
+                }
                 if (badge) {
                     badge.textContent = 'انتهى الموعد';
-                    badge.className = 'shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30';
+                    badge.className = 'shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30';
                 }
-                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1 bg-rose-500';
+                if (bar) bar.className = 'absolute inset-y-0 right-0 w-1.5 bg-rose-500';
             }
         }
 
@@ -1314,30 +1708,38 @@
             renderGameweekPills();
             renderDeadlineBanner();
             renderPredictorFilterPills();
+            renderMatchToolbarAndFilters();
             renderFixturesList();
             renderLeaderboard();
             renderWhatsappExport();
+            renderStatsTab();
             updateTabVisibility();
         }
 
-        function switchTab(tabName) {
+        function showTab(tabName) {
             currentTab = tabName;
             updateTabVisibility();
             if (tabName === 'leaderboard') renderLeaderboard();
             if (tabName === 'whatsapp') renderWhatsappExport();
+            if (tabName === 'stats') renderStatsTab();
+        }
+
+        function switchTab(tabName) {
+            showTab(tabName);
         }
 
         function updateTabVisibility() {
-            const tabs = ['matches', 'leaderboard', 'whatsapp'];
+            const tabs = ['matches', 'leaderboard', 'stats', 'whatsapp'];
             tabs.forEach(t => {
                 const section = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`nav-btn-${t}`);
+                if (!section || !btn) return;
                 if (t === currentTab) {
                     section.classList.remove('hidden');
-                    btn.className = 'flex flex-col items-center justify-center py-1.5 rounded-xl text-pl-mint font-bold bg-pl-purple/40 border border-pl-magenta/30 transition';
+                    btn.className = 'min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-pl-mint font-bold bg-pl-purple/40 border border-pl-magenta/30 transition';
                 } else {
                     section.classList.add('hidden');
-                    btn.className = 'flex flex-col items-center justify-center py-1.5 rounded-xl text-ios-subtle hover:text-white font-medium transition';
+                    btn.className = 'min-h-[48px] flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-ios-subtle hover:text-white font-medium transition';
                 }
             });
         }
@@ -1345,12 +1747,13 @@
         // 1. Render Gameweek Selector Pills
         function renderGameweekPills() {
             const container = document.getElementById('gw-pills-container');
+            const upcomingId = getCurrentUpcomingGwId();
             container.innerHTML = state.gameweeks.map(gw => {
                 const isActive = gw.id === state.activeGwId;
-                const isUpcoming = gw.id === 'gw11';
+                const isUpcoming = gw.id === upcomingId && !isGameweekEnded(gw.id);
                 const label = isUpcoming ? `${gw.name} • القادمة` : gw.name;
                 return `
-                    <button onclick="selectGameweek('${gw.id}')" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold transition active:scale-95 ${
+                    <button onclick="selectGameweek('${gw.id}')" class="min-h-[44px] shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition active:scale-95 ${
                         isActive
                             ? 'pl-accent-gradient text-white shadow-md shadow-pl-magenta/25 border border-pl-magenta'
                             : 'bg-ios-card text-gray-300 border border-ios-border hover:border-gray-600'
@@ -1362,9 +1765,12 @@
         }
 
         function selectGameweek(gwId) {
+            const upcomingId = getCurrentUpcomingGwId();
+            userManuallySelectedGw = gwId !== upcomingId;
             localSelectedGwId = gwId;
             state.activeGwId = gwId;
             renderAll();
+            maybeAutoSyncActiveGameweekScores(Date.now());
         }
 
         // 2. Render Gameweek Deadline Banner
@@ -1378,7 +1784,7 @@
         function renderPredictorFilterPills() {
             const container = document.getElementById('predictor-filter-pills');
             const pills = [
-                `<button onclick="setPredictorFilter('all')" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                `<button onclick="setPredictorFilter('all')" class="min-h-[44px] shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition ${
                     filterPredictor === 'all'
                         ? 'bg-pl-mint text-ios-bg'
                         : 'bg-ios-card text-gray-300 border border-ios-border'
@@ -1387,7 +1793,7 @@
 
             state.predictors.forEach(name => {
                 pills.push(`
-                    <button onclick="setPredictorFilter('${escapeHtml(name)}')" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                    <button onclick="setPredictorFilter('${escapeHtml(name)}')" class="min-h-[44px] shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition ${
                         filterPredictor === name
                             ? 'bg-pl-mint text-ios-bg'
                             : 'bg-ios-card text-gray-300 border border-ios-border'
@@ -1401,6 +1807,111 @@
         function setPredictorFilter(name) {
             filterPredictor = name;
             renderPredictorFilterPills();
+            renderMatchToolbarAndFilters();
+            renderFixturesList();
+        }
+
+        function getFixtureLifecycleStatus(match, nowMs = Date.now()) {
+            const meta = liveMatchMeta.get(match.id);
+            if (meta) {
+                if (meta.finished) return 'finished';
+                if (meta.started) return 'live';
+                return 'upcoming';
+            }
+            const hasActual = match.actualA !== null && match.actualB !== null;
+            const koMs = new Date(match.kickoffISO).getTime();
+            if (hasActual) {
+                if (!Number.isNaN(koMs) && nowMs >= koMs && nowMs < koMs + (125 * 60000)) {
+                    return 'live';
+                }
+                return 'finished';
+            }
+            if (!Number.isNaN(koMs) && nowMs >= koMs && nowMs < koMs + (135 * 60000)) {
+                return 'live';
+            }
+            if (!Number.isNaN(koMs) && nowMs >= koMs + (135 * 60000)) {
+                return 'finished';
+            }
+            return 'upcoming';
+        }
+
+        function isFixtureMissingPrediction(match) {
+            const preds = match.predictions || {};
+            if (filterPredictor !== 'all') {
+                return !preds[filterPredictor];
+            }
+            return state.predictors.some(p => !preds[p]);
+        }
+
+        function renderMatchToolbarAndFilters() {
+            const fixtures = state.fixturesByGw[state.activeGwId] || [];
+            const nowMs = Date.now();
+            let liveCount = 0;
+            let finishedCount = 0;
+            let upcomingCount = 0;
+            let missingCount = 0;
+
+            fixtures.forEach(m => {
+                const st = getFixtureLifecycleStatus(m, nowMs);
+                if (st === 'live') liveCount++;
+                else if (st === 'finished') finishedCount++;
+                else upcomingCount++;
+                if (isFixtureMissingPrediction(m)) missingCount++;
+            });
+
+            const summaryEl = document.getElementById('matches-summary-line');
+            if (summaryEl) {
+                const parts = [`${toArabicDigits(fixtures.length)} مباريات`];
+                if (liveCount > 0) parts.push(`${toArabicDigits(liveCount)} مباشر`);
+                parts.push(`${toArabicDigits(finishedCount)} منتهية`);
+                parts.push(`${toArabicDigits(upcomingCount)} متبقية`);
+                summaryEl.textContent = parts.join(' · ');
+            }
+
+            const compactBtn = document.getElementById('btn-toggle-compact-matches');
+            if (compactBtn) {
+                compactBtn.innerHTML = matchesUiState.compactMode
+                    ? '<i class="fa-solid fa-expand text-pl-mint"></i><span>عرض مفصل</span>'
+                    : '<i class="fa-solid fa-compress text-pl-cyan"></i><span>عرض مضغوط</span>';
+            }
+
+            const filtersContainer = document.getElementById('match-status-filters');
+            if (!filtersContainer) return;
+
+            const filterItems = [
+                { id: 'all', label: `الكل (${toArabicDigits(fixtures.length)})` },
+                { id: 'upcoming', label: `لم تبدأ (${toArabicDigits(upcomingCount)})` },
+                { id: 'live', label: liveCount > 0 ? `مباشر (${toArabicDigits(liveCount)})` : 'مباشر' },
+                { id: 'finished', label: `منتهية (${toArabicDigits(finishedCount)})` },
+                { id: 'unpredicted', label: `تحتاج توقع (${toArabicDigits(missingCount)})` }
+            ];
+
+            filtersContainer.innerHTML = filterItems.map(item => `
+                <button type="button" onclick="setMatchStatusFilter('${item.id}')" class="min-h-[44px] shrink-0 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition active:scale-95 ${
+                    matchesUiState.statusFilter === item.id
+                        ? 'bg-pl-purple text-white border border-pl-magenta/40'
+                        : 'bg-ios-bg text-ios-subtle hover:text-white border border-ios-border'
+                }">${item.label}</button>
+            `).join('');
+        }
+
+        function setMatchStatusFilter(status) {
+            matchesUiState.statusFilter = status;
+            renderMatchToolbarAndFilters();
+            renderFixturesList();
+        }
+
+        function toggleCompactMatchesView() {
+            matchesUiState.compactMode = !matchesUiState.compactMode;
+            renderMatchToolbarAndFilters();
+            renderFixturesList();
+        }
+
+        function clearMatchFilters() {
+            matchesUiState.statusFilter = 'all';
+            filterPredictor = 'all';
+            renderPredictorFilterPills();
+            renderMatchToolbarAndFilters();
             renderFixturesList();
         }
 
@@ -1419,15 +1930,122 @@
                 return;
             }
 
-            container.innerHTML = fixtures.map((match, idx) => {
+            const nowMs = Date.now();
+            const indexedFixtures = fixtures.map((match, idx) => ({
+                match,
+                originalIndex: idx,
+                lifecycle: getFixtureLifecycleStatus(match, nowMs)
+            })).filter(({ match, lifecycle }) => {
+                if (matchesUiState.statusFilter === 'upcoming') return lifecycle === 'upcoming';
+                if (matchesUiState.statusFilter === 'live') return lifecycle === 'live';
+                if (matchesUiState.statusFilter === 'finished') return lifecycle === 'finished';
+                if (matchesUiState.statusFilter === 'unpredicted') return isFixtureMissingPrediction(match);
+                return true;
+            });
+
+            if (indexedFixtures.length === 0) {
+                container.innerHTML = `
+                    <div class="rounded-2xl bg-ios-card border border-ios-border p-8 text-center space-y-3">
+                        <i class="fa-solid fa-filter-circle-xmark text-2xl text-ios-subtle"></i>
+                        <p class="text-xs text-ios-subtle">لا توجد مباريات مطابقة للفلتر المحدد.</p>
+                        <button type="button" onclick="clearMatchFilters()" class="min-h-[44px] px-4 py-2 rounded-xl bg-ios-bg border border-ios-border text-xs font-semibold text-pl-mint hover:bg-ios-cardHover transition">
+                            إظهار كل المباريات
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = indexedFixtures.map(({ match, originalIndex, lifecycle }) => {
                 const dt = formatArabicFixtureDateTime(match.kickoffISO);
                 const hasActual = match.actualA !== null && match.actualB !== null;
+                const liveMeta = liveMatchMeta.get(match.id);
                 const preds = match.predictions || {};
                 const predictorKeys = Object.keys(preds).filter(
                     p => filterPredictor === 'all' || filterPredictor === p
                 );
 
-                // Build prediction cards inside match
+                let statusInline = `<span class="text-ios-subtle">${dt.fullBadge}</span>`;
+                if (lifecycle === 'live') {
+                    const minsLabel = liveMeta && liveMeta.minutes > 0 ? ` · ${toArabicDigits(liveMeta.minutes)}'` : '';
+                    statusInline = `<span class="inline-flex items-center gap-1.5 text-pl-mint font-bold"><span class="w-1.5 h-1.5 rounded-full bg-pl-mint animate-pulse"></span><span>مباشر${minsLabel}</span></span>`;
+                } else if (lifecycle === 'finished' && hasActual) {
+                    statusInline = `<span class="text-gray-300 font-semibold">انتهت</span><span aria-hidden="true" class="mx-1 text-ios-subtle">·</span><span class="text-ios-subtle">${dt.timeShort}</span>`;
+                }
+
+                if (matchesUiState.compactMode) {
+                    const compactPredsHtml = predictorKeys.length === 0
+                        ? `<div class="text-[11px] text-ios-subtle pt-1 border-t border-ios-border/60">لا توجد توقعات مسجلة بعد</div>`
+                        : `<div class="flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-ios-border/60">
+                            ${predictorKeys.map(pName => {
+                                const p = preds[pName];
+                                const winnerText = p.winnerLabel || computeWinnerLabel(p.scoreA, p.scoreB, match.teamA, match.teamB);
+                                let ptsTone = 'border-ios-border text-gray-200';
+                                let ptsText = '';
+                                if (hasActual) {
+                                    const pts = calculatePoints(p.scoreA, p.scoreB, match.actualA, match.actualB);
+                                    if (pts === 3) {
+                                        ptsTone = 'border-pl-mint/45 text-pl-mint';
+                                        ptsText = ' +٣';
+                                    } else if (pts === 1) {
+                                        ptsTone = 'border-sky-500/45 text-sky-400';
+                                        ptsText = ' +١';
+                                    } else {
+                                        ptsTone = 'border-rose-500/30 text-rose-400';
+                                    }
+                                }
+                                return `
+                                    <button type="button" onclick="openPredictionModal('${match.id}', '${escapeHtml(pName)}')" class="min-h-[34px] inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-ios-bg hover:bg-ios-cardHover border ${ptsTone} text-[11px] tabular-nums transition active:scale-95">
+                                        <span class="font-bold text-pl-cyan">${escapeHtml(pName)}</span>
+                                        <span class="font-bold text-white">${toArabicDigits(p.scoreA)}-${toArabicDigits(p.scoreB)}</span>
+                                        <span class="text-ios-subtle">${escapeHtml(winnerText)}</span>
+                                        ${ptsText ? `<span class="font-bold">${ptsText}</span>` : ''}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>`;
+
+                    return `
+                        <article class="match-card rounded-2xl p-3 space-y-2">
+                            <div class="flex items-center justify-between gap-2 text-[11px] tabular-nums">
+                                <div class="flex items-center gap-1.5 min-w-0 truncate">
+                                    <span class="font-semibold text-gray-400">#${toArabicDigits(originalIndex + 1)}</span>
+                                    <span aria-hidden="true" class="text-ios-subtle">·</span>
+                                    ${statusInline}
+                                </div>
+                                <span class="text-ios-subtle font-medium shrink-0">${toArabicDigits(predictorKeys.length)} توقع</span>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex-1 flex items-center justify-end gap-1.5 min-w-0">
+                                    <span class="text-xs font-bold text-white truncate text-right">${escapeHtml(match.teamA)}</span>
+                                    ${renderTeamLogo(match.teamA)}
+                                </div>
+
+                                <button onclick="openResultModal('${match.id}')" title="تسجيل أو تعديل النتيجة" class="min-h-[44px] shrink-0 px-3 py-1.5 rounded-xl font-bold text-xs tabular-nums transition active:scale-95 ${
+                                    hasActual
+                                        ? (lifecycle === 'live' ? 'bg-pl-mint text-ios-bg shadow-md shadow-pl-mint/20' : 'bg-ios-bg text-pl-mint border border-pl-mint/40')
+                                        : 'pl-badge-gradient text-white border border-pl-magenta/40'
+                                }">
+                                    ${hasActual ? `${toArabicDigits(match.actualA)} - ${toArabicDigits(match.actualB)}` : 'VS'}
+                                </button>
+
+                                <div class="flex-1 flex items-center justify-start gap-1.5 min-w-0">
+                                    ${renderTeamLogo(match.teamB)}
+                                    <span class="text-xs font-bold text-white truncate text-left">${escapeHtml(match.teamB)}</span>
+                                </div>
+
+                                <button onclick="openPredictionModal('${match.id}', ${filterPredictor !== 'all' ? `'${escapeHtml(filterPredictor)}'` : 'null'})" title="إضافة أو تعديل توقع" class="min-h-[44px] min-w-[44px] rounded-xl bg-ios-bg hover:bg-ios-cardHover border border-ios-border text-pl-cyan flex items-center justify-center shrink-0 transition active:scale-95">
+                                    <i class="fa-solid fa-pen-nib text-xs"></i>
+                                </button>
+                            </div>
+
+                            ${compactPredsHtml}
+                        </article>
+                    `;
+                }
+
+                // Detailed Card Mode: Build prediction cards inside match
                 let predictionsHtml = '';
                 if (predictorKeys.length === 0) {
                     predictionsHtml = `
@@ -1457,7 +2075,7 @@
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-bold text-pl-cyan">${escapeHtml(pName)}</span>
-                                        <span class="px-2 py-0.5 rounded-lg pl-badge-gradient border border-pl-magenta/40 text-xs font-bold text-white">
+                                        <span class="px-2 py-0.5 rounded-lg pl-badge-gradient border border-pl-magenta/40 text-xs font-bold text-white tabular-nums">
                                             ${toArabicDigits(p.scoreA)}-${toArabicDigits(p.scoreB)} ${escapeHtml(winnerText)}
                                         </span>
                                     </div>
@@ -1478,22 +2096,23 @@
 
                 return `
                     <article class="match-card rounded-2xl p-3.5 sm:p-4 space-y-3">
-                        <!-- Top Meta: Match Order & Kickoff Date/Time -->
-                        <div class="flex items-center justify-between text-[11px] text-ios-subtle border-b border-ios-border/80 pb-2">
-                            <span class="font-semibold text-gray-400">#${toArabicDigits(idx + 1)}</span>
-                            <div class="flex items-center gap-1.5 bg-ios-bg px-2.5 py-1 rounded-lg border border-ios-border">
+                        <!-- Top Meta: Match Order & Kickoff Date/Time / Live State -->
+                        <div class="flex items-center justify-between text-[11px] text-ios-subtle border-b border-ios-border/80 pb-2 tabular-nums">
+                            <span class="font-semibold text-gray-400">#${toArabicDigits(originalIndex + 1)}</span>
+                            <div class="flex items-center gap-1.5">
                                 <i class="fa-regular fa-calendar text-pl-mint"></i>
-                                <span class="text-gray-200 font-medium">${dt.fullBadge}</span>
+                                ${statusInline}
                             </div>
                         </div>
 
                         <!-- Teams & Scoreline Centerpiece -->
                         <div class="flex items-center justify-between gap-2 py-1">
-                            <div class="flex-1 text-center">
-                                <div class="text-sm sm:text-base font-bold text-white leading-snug">${escapeHtml(match.teamA)}</div>
+                            <div class="flex-1 flex items-center justify-end gap-2 min-w-0">
+                                <div class="text-xs sm:text-sm font-bold text-white leading-snug text-right">${escapeHtml(match.teamA)}</div>
+                                ${renderTeamLogo(match.teamA)}
                             </div>
 
-                            <button onclick="openResultModal('${match.id}')" title="تسجيل أو تعديل النتيجة الرسمية" class="shrink-0 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition active:scale-95 ${
+                            <button onclick="openResultModal('${match.id}')" title="تسجيل أو تعديل النتيجة الرسمية" class="min-h-[44px] shrink-0 px-3 sm:px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm tabular-nums transition active:scale-95 ${
                                 hasActual
                                     ? 'bg-pl-mint text-ios-bg shadow-md shadow-pl-mint/20'
                                     : 'pl-badge-gradient text-white border border-pl-magenta/40'
@@ -1501,8 +2120,9 @@
                                 ${hasActual ? `${toArabicDigits(match.actualA)} - ${toArabicDigits(match.actualB)}` : 'VS'}
                             </button>
 
-                            <div class="flex-1 text-center">
-                                <div class="text-sm sm:text-base font-bold text-white leading-snug">${escapeHtml(match.teamB)}</div>
+                            <div class="flex-1 flex items-center justify-start gap-2 min-w-0">
+                                ${renderTeamLogo(match.teamB)}
+                                <div class="text-xs sm:text-sm font-bold text-white leading-snug text-left">${escapeHtml(match.teamB)}</div>
                             </div>
                         </div>
 
@@ -1512,12 +2132,12 @@
                         </div>
 
                         <!-- Bottom Quick Actions -->
-                        <div class="flex items-center justify-between pt-2 border-t border-ios-border/70 text-[11px]">
-                            <button onclick="openPredictionModal('${match.id}', null)" class="text-pl-cyan hover:underline font-semibold flex items-center gap-1 py-1">
+                        <div class="flex items-center justify-between pt-1.5 border-t border-ios-border/70 text-[11px]">
+                            <button onclick="openPredictionModal('${match.id}', null)" class="min-h-[44px] px-1 text-pl-cyan hover:underline font-semibold flex items-center gap-1.5 whitespace-nowrap">
                                 <i class="fa-solid fa-plus-circle"></i>
                                 <span>إضافة / تعديل توقع</span>
                             </button>
-                            <button onclick="openResultModal('${match.id}')" class="text-ios-subtle hover:text-pl-mint flex items-center gap-1 py-1 transition">
+                            <button onclick="openResultModal('${match.id}')" class="min-h-[44px] px-1 text-ios-subtle hover:text-pl-mint flex items-center gap-1.5 whitespace-nowrap transition">
                                 <i class="fa-solid fa-flag-checkered"></i>
                                 <span>${hasActual ? 'تعديل النتيجة النهائية' : 'إدخال النتيجة النهائية'}</span>
                             </button>
@@ -1552,7 +2172,7 @@
 
         async function saveNewPredictorForm(e) {
             e.preventDefault();
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
 
             const input = document.getElementById('new-predictor-name-input');
             const name = input.value.trim().slice(0, 60);
@@ -1584,7 +2204,7 @@
         }
 
         async function removePredictor(name) {
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
             const nextPredictors = state.predictors.filter(p => p !== name);
             if (nextPredictors.length === 0) {
                 showToast('يجب بقاء متوقع واحد على الأقل');
@@ -1630,12 +2250,14 @@
             customInput.classList.add('hidden');
             customInput.value = '';
 
+            const targetMatch = fixtures.find(m => m.id === targetMatchId) || fixtures[0];
             if (predictorName && state.predictors.includes(predictorName)) {
                 userSelect.value = predictorName;
             } else if (filterPredictor !== 'all' && state.predictors.includes(filterPredictor)) {
                 userSelect.value = filterPredictor;
             } else {
-                userSelect.value = state.predictors[0] || '__NEW__';
+                const firstUnpredicted = state.predictors.find(p => !(targetMatch.predictions && targetMatch.predictions[p]));
+                userSelect.value = firstUnpredicted || state.predictors[0] || '__NEW__';
                 if (userSelect.value === '__NEW__') customInput.classList.remove('hidden');
             }
 
@@ -1654,6 +2276,8 @@
             const customInput = document.getElementById('form-pred-custom-user');
             if (val === '__NEW__') {
                 customInput.classList.remove('hidden');
+                editingContext.predictorName = null;
+                syncPredictionModalFields();
                 customInput.focus();
             } else {
                 customInput.classList.add('hidden');
@@ -1681,8 +2305,8 @@
                 document.getElementById('form-pred-note').value = existing.note || '';
                 deleteBtn.classList.remove('hidden');
             } else {
-                document.getElementById('form-score-a').value = 2;
-                document.getElementById('form-score-b').value = 1;
+                document.getElementById('form-score-a').value = 0;
+                document.getElementById('form-score-b').value = 0;
                 document.getElementById('form-pred-note').value = '';
                 deleteBtn.classList.add('hidden');
             }
@@ -1690,7 +2314,7 @@
 
         async function savePredictionForm(e) {
             e.preventDefault();
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
 
             const matchId = document.getElementById('form-pred-match').value;
             let predictor = document.getElementById('form-pred-user').value;
@@ -1725,6 +2349,7 @@
             const predId = makePredictionDocId(match.id, predictor);
             const predPath = `leagues/${LEAGUE_ID}/predictions/${predId}`;
             const predRef = doc(db, 'leagues', LEAGUE_ID, 'predictions', predId);
+            const actorUid = getActorUid();
 
             try {
                 if (addedNewPredictor) {
@@ -1740,7 +2365,7 @@
                         scoreB,
                         winnerLabel,
                         note,
-                        authorUid: currentUser.uid,
+                        authorUid: actorUid,
                         updatedAt: serverTimestamp()
                     });
                 } else {
@@ -1753,7 +2378,7 @@
                         winnerLabel,
                         note,
                         isPublicLeague: true,
-                        authorUid: currentUser.uid,
+                        authorUid: actorUid,
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
@@ -1767,7 +2392,7 @@
         }
 
         async function deleteCurrentPrediction() {
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
 
             const matchId = document.getElementById('form-pred-match').value;
             const predictor = document.getElementById('form-pred-user').value;
@@ -1809,7 +2434,7 @@
 
         async function saveActualResultForm(e) {
             e.preventDefault();
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
 
             const matchId = document.getElementById('result-match-id').value;
             const scoreA = Math.max(0, Math.min(20, parseInt(document.getElementById('result-score-a').value, 10) || 0));
@@ -1820,7 +2445,7 @@
                 await updateDoc(doc(db, 'leagues', LEAGUE_ID, 'fixtures', matchId), {
                     actualA: scoreA,
                     actualB: scoreB,
-                    updatedByUid: currentUser.uid,
+                    updatedByUid: getActorUid(),
                     updatedAt: serverTimestamp()
                 });
                 closeModal('modal-result');
@@ -1831,7 +2456,7 @@
         }
 
         async function clearActualResult() {
-            if (!(await ensureSignedInForWrite())) return;
+            if (!(await ensureCloudReadyForWrite())) return;
 
             const matchId = document.getElementById('result-match-id').value;
             const fixturePath = `leagues/${LEAGUE_ID}/fixtures/${matchId}`;
@@ -1839,7 +2464,7 @@
                 await updateDoc(doc(db, 'leagues', LEAGUE_ID, 'fixtures', matchId), {
                     actualA: null,
                     actualB: null,
-                    updatedByUid: currentUser.uid,
+                    updatedByUid: getActorUid(),
                     updatedAt: serverTimestamp()
                 });
                 closeModal('modal-result');
@@ -1947,7 +2572,7 @@
         async function toggleWhatsappArabicDigits() {
             state.whatsappUseArabicDigits = !state.whatsappUseArabicDigits;
             renderWhatsappExport();
-            if (currentUser && currentUser.emailVerified && cloudLeague) {
+            if (db && cloudLeague) {
                 try {
                     await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
                         whatsappUseArabicDigits: Boolean(state.whatsappUseArabicDigits),
@@ -1962,7 +2587,7 @@
         async function toggleWhatsappDates() {
             state.whatsappIncludeDates = !state.whatsappIncludeDates;
             renderWhatsappExport();
-            if (currentUser && currentUser.emailVerified && cloudLeague) {
+            if (db && cloudLeague) {
                 try {
                     await updateDoc(doc(db, 'leagues', LEAGUE_ID), {
                         whatsappIncludeDates: Boolean(state.whatsappIncludeDates),
@@ -2047,17 +2672,9 @@
             select.innerHTML = opts;
         }
 
-        async function fetchOrCreateGameweek() {
-            if (!(await ensureSignedInForWrite())) return;
-
-            const gwNum = parseInt(document.getElementById('new-gw-number-select').value, 10);
+        async function buildGameweekFixtures(gwNum) {
             const gwId = `gw${gwNum}`;
-            const btn = document.getElementById('btn-fetch-gw');
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري جلب المباريات...</span>`;
-
             try {
-                // Attempt live fetch from official FPL API via allorigins CORS proxy
                 const targetUrl = `https://fantasy.premierleague.com/api/fixtures/?event=${gwNum}`;
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
@@ -2089,18 +2706,215 @@
                     orderIndex: Math.max(1, Math.min(20, idx + 1)),
                     teamA: (teamIdToArabic[f.team_h] || `فريق ${f.team_h}`).slice(0, 60),
                     teamB: (teamIdToArabic[f.team_a] || `فريق ${f.team_a}`).slice(0, 60),
-                    actualA: f.finished && f.team_h_score !== null ? Math.max(0, Math.min(20, Number(f.team_h_score))) : null,
-                    actualB: f.finished && f.team_a_score !== null ? Math.max(0, Math.min(20, Number(f.team_a_score))) : null,
+                    actualA: (f.started || f.finished || f.finished_provisional) && f.team_h_score !== null ? Math.max(0, Math.min(20, Number(f.team_h_score))) : null,
+                    actualB: (f.started || f.finished || f.finished_provisional) && f.team_a_score !== null ? Math.max(0, Math.min(20, Number(f.team_a_score))) : null,
                     predictions: {}
                 }));
-
-                await upsertGameweek(gwId, gwNum, mappedFixtures);
-                showToast(`تم جلب ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
+                return { fixtures: mappedFixtures, fromApi: true };
             } catch (err) {
-                // Reliable Offline Fallback Fixture Generator
-                const fallbackFixtures = generateFallbackFixturesForGw(gwNum);
-                await upsertGameweek(gwId, gwNum, fallbackFixtures);
-                showToast(`تم إنشاء ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
+                return { fixtures: generateFallbackFixturesForGw(gwNum), fromApi: false };
+            }
+        }
+
+        function getGwNumberFromId(gwId) {
+            const gwObj = (state.gameweeks || []).find(g => g.id === gwId);
+            if (gwObj && gwObj.number) return gwObj.number;
+            const parsed = parseInt(String(gwId || '').replace(/[^0-9]/g, ''), 10);
+            return Number.isFinite(parsed) && parsed >= 1 && parsed <= 38 ? parsed : null;
+        }
+
+        function normalizeClubMatchKey(name) {
+            if (!name) return '';
+            const trimmed = String(name).trim();
+            if (TEAM_LOGO_IDS[trimmed]) return `id_${TEAM_LOGO_IDS[trimmed]}`;
+            const lower = trimmed.toLowerCase();
+            for (const [k, id] of Object.entries(TEAM_LOGO_IDS)) {
+                if (k.toLowerCase() === lower) return `id_${id}`;
+            }
+            return lower;
+        }
+
+        async function getPlTeamsLookup() {
+            if (cachedPlTeamsMap) return cachedPlTeamsMap;
+            const bootstrapUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://fantasy.premierleague.com/api/bootstrap-static/')}`;
+            const res = await fetch(bootstrapUrl);
+            if (!res.ok) throw new Error('PL bootstrap unavailable');
+            const wrapped = await res.json();
+            const data = JSON.parse(wrapped.contents);
+            const map = {};
+            (data.teams || []).forEach(t => {
+                const ar = TEAM_ARABIC_MAP[t.name] || TEAM_ARABIC_MAP[t.short_name] || t.name;
+                map[t.id] = {
+                    name: t.name,
+                    shortName: t.short_name,
+                    arabic: ar,
+                    matchKey: normalizeClubMatchKey(ar) || normalizeClubMatchKey(t.name)
+                };
+            });
+            cachedPlTeamsMap = map;
+            return map;
+        }
+
+        async function syncLiveScoresFromPlApi({ manual = false, gwId = state.activeGwId } = {}) {
+            if (matchesUiState.isSyncingScores) return;
+            const gwNum = getGwNumberFromId(gwId);
+            const localFixtures = state.fixturesByGw[gwId] || [];
+            if (!gwNum || localFixtures.length === 0) {
+                if (manual) showToast('لا توجد مباريات في هذه الجولة للمزامنة');
+                return;
+            }
+
+            matchesUiState.isSyncingScores = true;
+            matchesUiState.lastSyncByGw[gwId] = Date.now();
+            const btn = document.getElementById('btn-sync-live-scores');
+            if (btn && manual) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-pl-mint"></i><span>جاري التحديث...</span>';
+            }
+
+            try {
+                const fixturesTarget = `https://fantasy.premierleague.com/api/fixtures/?event=${gwNum}`;
+                const fixturesProxy = `https://api.allorigins.win/get?url=${encodeURIComponent(fixturesTarget)}`;
+                const [fixturesRes, teamsMap] = await Promise.all([
+                    fetch(fixturesProxy),
+                    getPlTeamsLookup()
+                ]);
+                if (!fixturesRes.ok) throw new Error('PL fixtures API unavailable');
+                const wrapped = await fixturesRes.json();
+                const rawFixtures = JSON.parse(wrapped.contents);
+                if (!Array.isArray(rawFixtures) || rawFixtures.length === 0) {
+                    throw new Error('No PL fixtures returned');
+                }
+
+                const byPair = new Map();
+                rawFixtures.forEach(f => {
+                    const home = teamsMap[f.team_h];
+                    const away = teamsMap[f.team_a];
+                    if (home && away) {
+                        byPair.set(`${home.matchKey}__${away.matchKey}`, f);
+                    }
+                });
+
+                const actorUid = getActorUid();
+                const batch = db ? writeBatch(db) : null;
+                let updatedCount = 0;
+
+                localFixtures.forEach((m, idx) => {
+                    const pairKey = `${normalizeClubMatchKey(m.teamA)}__${normalizeClubMatchKey(m.teamB)}`;
+                    const apiMatch = byPair.get(pairKey) || null;
+                    if (!apiMatch) return;
+
+                    const isStarted = Boolean(apiMatch.started);
+                    const isFinished = Boolean(apiMatch.finished || apiMatch.finished_provisional);
+                    liveMatchMeta.set(m.id, {
+                        started: isStarted,
+                        finished: isFinished,
+                        minutes: Number(apiMatch.minutes) || 0
+                    });
+
+                    if ((isStarted || isFinished) && apiMatch.team_h_score !== null && apiMatch.team_a_score !== null) {
+                        const newA = Math.max(0, Math.min(20, Number(apiMatch.team_h_score)));
+                        const newB = Math.max(0, Math.min(20, Number(apiMatch.team_a_score)));
+                        if (m.actualA !== newA || m.actualB !== newB) {
+                            m.actualA = newA;
+                            m.actualB = newB;
+                            updatedCount++;
+                            if (batch && cloudFixtures.has(m.id)) {
+                                batch.update(doc(db, 'leagues', LEAGUE_ID, 'fixtures', m.id), {
+                                    actualA: newA,
+                                    actualB: newB,
+                                    updatedByUid: actorUid,
+                                    updatedAt: serverTimestamp()
+                                });
+                            }
+                        }
+                    }
+                });
+
+                if (batch && updatedCount > 0) {
+                    try {
+                        await batch.commit();
+                    } catch (err) {
+                        handleFirestoreError(err, OperationType.WRITE, `leagues/${LEAGUE_ID}/fixtures`);
+                    }
+                }
+
+                renderAll();
+                if (manual) {
+                    showToast(
+                        updatedCount > 0
+                            ? `تم تحديث نتائج ${toArabicDigits(updatedCount)} مباريات مباشرة!`
+                            : 'تمت المزامنة — النتائج محدثة بالفعل'
+                    );
+                }
+            } catch (err) {
+                console.warn('PL live score sync skipped:', err);
+                if (manual) {
+                    showToast('تعذر الاتصال بـ Premier League API حالياً');
+                }
+            } finally {
+                matchesUiState.isSyncingScores = false;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-satellite-dish text-pl-mint"></i><span>تحديث النتائج</span>';
+                }
+            }
+        }
+
+        function maybeAutoSyncActiveGameweekScores(nowMs = Date.now()) {
+            if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+            if (!state || !state.activeGwId || matchesUiState.isSyncingScores) return;
+
+            const gwId = state.activeGwId;
+            const lastSync = matchesUiState.lastSyncByGw[gwId] || 0;
+            if (nowMs - lastSync < 60000) return;
+
+            const fixtures = state.fixturesByGw[gwId] || [];
+            const hasPendingStartedMatch = fixtures.some(m => {
+                const koMs = new Date(m.kickoffISO).getTime();
+                if (Number.isNaN(koMs) || nowMs < koMs) return false;
+                const meta = liveMatchMeta.get(m.id);
+                if (meta && meta.finished && m.actualA !== null && m.actualB !== null) return false;
+                // Poll during matchday window or if score still missing after kickoff
+                return (nowMs <= koMs + (4 * 3600000)) || (m.actualA === null || m.actualB === null);
+            });
+
+            if (hasPendingStartedMatch) {
+                syncLiveScoresFromPlApi({ manual: false, gwId });
+            }
+        }
+
+        async function autoCreateNextGameweek(gwNum) {
+            if (autoAdvancingNextGw || autoAttemptedGws.has(gwNum)) return;
+            autoAdvancingNextGw = true;
+            autoAttemptedGws.add(gwNum);
+            const gwId = `gw${gwNum}`;
+            try {
+                const { fixtures } = await buildGameweekFixtures(gwNum);
+                await upsertGameweek(gwId, gwNum, fixtures, { selectLocally: false });
+                const label = GW_ARABIC_NAMES[gwNum] || `الجولة ال${toArabicDigits(gwNum)}`;
+                showToast(`انتهت الجولة — بدأت توقعات ${label} الآن!`);
+            } catch (err) {
+                console.error('Auto-advance next gameweek error:', err);
+            } finally {
+                autoAdvancingNextGw = false;
+            }
+        }
+
+        async function fetchOrCreateGameweek() {
+            if (!(await ensureCloudReadyForWrite())) return;
+
+            const gwNum = parseInt(document.getElementById('new-gw-number-select').value, 10);
+            const gwId = `gw${gwNum}`;
+            const btn = document.getElementById('btn-fetch-gw');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري جلب المباريات...</span>`;
+
+            try {
+                const { fixtures, fromApi } = await buildGameweekFixtures(gwNum);
+                userManuallySelectedGw = true;
+                await upsertGameweek(gwId, gwNum, fixtures, { selectLocally: true });
+                showToast(fromApi ? `تم جلب ${GW_ARABIC_NAMES[gwNum]} بنجاح!` : `تم إنشاء ${GW_ARABIC_NAMES[gwNum]} بنجاح!`);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> <span>جلب مباريات الجولة الآن</span>`;
@@ -2108,8 +2922,9 @@
             }
         }
 
-        async function upsertGameweek(gwId, gwNum, fixturesList) {
+        async function upsertGameweek(gwId, gwNum, fixturesList, options = { selectLocally: true }) {
             const batch = writeBatch(db);
+            const actorUid = getActorUid();
             const gwName = (GW_ARABIC_NAMES[gwNum] || `الجولة ال${toArabicDigits(gwNum)}`).slice(0, 60);
             const gwRef = doc(db, 'leagues', LEAGUE_ID, 'gameweeks', gwId);
 
@@ -2124,7 +2939,7 @@
                     number: gwNum,
                     name: gwName,
                     isPublicLeague: true,
-                    createdByUid: currentUser.uid,
+                    createdByUid: actorUid,
                     createdAt: serverTimestamp(),
                     updatedAt: serverTimestamp()
                 });
@@ -2141,7 +2956,7 @@
                         teamB: f.teamB.slice(0, 60),
                         actualA: f.actualA ?? null,
                         actualB: f.actualB ?? null,
-                        updatedByUid: currentUser.uid,
+                        updatedByUid: actorUid,
                         updatedAt: serverTimestamp()
                     });
                 } else {
@@ -2154,7 +2969,7 @@
                         actualA: f.actualA ?? null,
                         actualB: f.actualB ?? null,
                         isPublicLeague: true,
-                        updatedByUid: currentUser.uid,
+                        updatedByUid: actorUid,
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
@@ -2166,7 +2981,9 @@
                 updatedAt: serverTimestamp()
             });
 
-            localSelectedGwId = gwId;
+            if (options?.selectLocally !== false) {
+                localSelectedGwId = gwId;
+            }
             try {
                 await batch.commit();
             } catch (err) {
@@ -2213,6 +3030,10 @@
 
         // ==================== RESET & CONFIRMATION ACTIONS ====================
         function confirmResetCurrentGwPredictions() {
+            if (!isVerifiedAdmin()) {
+                showToast('تصفير الجولة متاح للمشرف فقط');
+                return;
+            }
             const gwObj = state.gameweeks.find(g => g.id === state.activeGwId);
             const title = gwObj ? gwObj.name : 'الجولة الحالية';
             const targetGwId = state.activeGwId;
@@ -2220,7 +3041,8 @@
                 `تصفير توقعات ${title}`,
                 'سيتم مسح جميع التوقعات المسجلة في هذه الجولة فقط مع الإبقاء على جدول المباريات.',
                 async () => {
-                    if (!(await ensureSignedInForWrite())) return;
+                    if (!(await ensureCloudReadyForWrite())) return;
+                    const actorUid = getActorUid();
                     const batch = writeBatch(db);
                     cloudPredictions.forEach((pData, predId) => {
                         if (pData.gwId === targetGwId) {
@@ -2232,7 +3054,7 @@
                             batch.update(doc(db, 'leagues', LEAGUE_ID, 'fixtures', fId), {
                                 actualA: null,
                                 actualB: null,
-                                updatedByUid: currentUser.uid,
+                                updatedByUid: actorUid,
                                 updatedAt: serverTimestamp()
                             });
                         }
@@ -2252,7 +3074,8 @@
                 'إعادة ضبط البيانات الافتراضية',
                 'سيتم استعادة جميع الجولات الافتراضية (الجولة ٩، ١٠، ١١، ١٢) وتوقعات الجولة ٩ الأساسية.',
                 async () => {
-                    if (!(await ensureSignedInForWrite())) return;
+                    if (!(await ensureCloudReadyForWrite())) return;
+                    const actorUid = getActorUid();
                     const batch = writeBatch(db);
 
                     batch.update(doc(db, 'leagues', LEAGUE_ID), {
@@ -2293,7 +3116,7 @@
                                 number: gw.number,
                                 name: gw.name,
                                 isPublicLeague: true,
-                                createdByUid: currentUser.uid,
+                                createdByUid: actorUid,
                                 createdAt: serverTimestamp(),
                                 updatedAt: serverTimestamp()
                             });
@@ -2310,7 +3133,7 @@
                                     teamB: f.teamB,
                                     actualA: f.actualA ?? null,
                                     actualB: f.actualB ?? null,
-                                    updatedByUid: currentUser.uid,
+                                    updatedByUid: actorUid,
                                     updatedAt: serverTimestamp()
                                 });
                             } else {
@@ -2323,7 +3146,7 @@
                                     actualA: f.actualA ?? null,
                                     actualB: f.actualB ?? null,
                                     isPublicLeague: true,
-                                    updatedByUid: currentUser.uid,
+                                    updatedByUid: actorUid,
                                     createdAt: serverTimestamp(),
                                     updatedAt: serverTimestamp()
                                 });
@@ -2340,7 +3163,7 @@
                                         scoreB: p.scoreB,
                                         winnerLabel: p.winnerLabel,
                                         note: p.note || '',
-                                        authorUid: currentUser.uid,
+                                        authorUid: actorUid,
                                         updatedAt: serverTimestamp()
                                     });
                                 } else {
@@ -2353,7 +3176,7 @@
                                         winnerLabel: p.winnerLabel,
                                         note: p.note || '',
                                         isPublicLeague: true,
-                                        authorUid: currentUser.uid,
+                                        authorUid: actorUid,
                                         createdAt: serverTimestamp(),
                                         updatedAt: serverTimestamp()
                                     });
@@ -2425,6 +3248,779 @@
             }, 2400);
         }
 
+        // ==================== FPL STATS TAB (2026/27 + LIVE REFRESH + QUICK EDIT) ====================
+        const DEFAULT_FPL_STATS = {
+            sourceLabel: 'بيانات موسم ٢٦/٢٧ · محدثة محلياً',
+            players: [
+                { id: 'haaland', name: 'Erling Haaland', arabicName: 'إيرلينغ هالاند', club: 'MCI', clubArabic: 'مانشستر سيتي', position: 'FWD', price: 15.8, points: 70, goals: 9, assists: 1, xG: 7.06, xA: 0.65, cleanSheets: 4, xGC: 8.9 },
+                { id: 'isak', name: 'Alexander Isak', arabicName: 'ألكسندر إيزاك', club: 'LIV', clubArabic: 'ليفربول', position: 'FWD', price: 9.3, points: 61, goals: 7, assists: 2, xG: 4.88, xA: 1.15, cleanSheets: 5, xGC: 8.6 },
+                { id: 'barry', name: 'Thierno Barry', arabicName: 'ثيرنو باري', club: 'EVE', clubArabic: 'إيفرتون', position: 'FWD', price: 5.7, points: 55, goals: 6, assists: 1, xG: 7.29, xA: 0.85, cleanSheets: 3, xGC: 10.4 },
+                { id: 'jackson', name: 'Nicolas Jackson', arabicName: 'نيكولاس جاكسون', club: 'AVL', clubArabic: 'أستون فيلا', position: 'FWD', price: 7.1, points: 54, goals: 6, assists: 2, xG: 3.46, xA: 1.24, cleanSheets: 3, xGC: 9.8 },
+                { id: 'cherki', name: 'Rayan Cherki', arabicName: 'ريان شرقي', club: 'MCI', clubArabic: 'مانشستر سيتي', position: 'MID', price: 6.9, points: 52, goals: 5, assists: 3, xG: 1.92, xA: 2.18, cleanSheets: 4, xGC: 8.9 },
+                { id: 'evanilson', name: 'Evanilson', arabicName: 'إيفانيلسون', club: 'BOU', clubArabic: 'بورنموث', position: 'FWD', price: 6.2, points: 48, goals: 5, assists: 1, xG: 4.45, xA: 0.92, cleanSheets: 2, xGC: 11.2 },
+                { id: 'mbeumo', name: 'Bryan Mbeumo', arabicName: 'بريان مبيمو', club: 'MUN', clubArabic: 'مانشستر يونايتد', position: 'MID', price: 7.9, points: 46, goals: 4, assists: 2, xG: 4.63, xA: 1.75, cleanSheets: 2, xGC: 11.5 },
+                { id: 'gross', name: 'Pascal Groß', arabicName: 'باسكال غروس', club: 'BHA', clubArabic: 'برايتون', position: 'MID', price: 6.3, points: 70, goals: 2, assists: 6, xG: 1.35, xA: 2.22, cleanSheets: 7, xGC: 7.4 },
+                { id: 'fernandes', name: 'Bruno Fernandes', arabicName: 'برونو فيرنانديز', club: 'MUN', clubArabic: 'مانشستر يونايتد', position: 'MID', price: 11.6, points: 45, goals: 2, assists: 2, xG: 2.41, xA: 2.17, cleanSheets: 2, xGC: 11.5 },
+                { id: 'iwobi', name: 'Alex Iwobi', arabicName: 'أليكس إيوبي', club: 'FUL', clubArabic: 'فولهام', position: 'MID', price: 5.4, points: 40, goals: 1, assists: 1, xG: 1.48, xA: 2.94, cleanSheets: 3, xGC: 10.1 },
+                { id: 'mgw', name: 'Morgan Gibbs-White', arabicName: 'مورغان غيبس وايت', club: 'NFO', clubArabic: 'نوتنغهام فورست', position: 'MID', price: 7.8, points: 39, goals: 1, assists: 3, xG: 1.54, xA: 2.36, cleanSheets: 3, xGC: 10.6 },
+                { id: 'raya', name: 'David Raya', arabicName: 'ديفيد رايا', club: 'ARS', clubArabic: 'آرسنال', position: 'GKP', price: 6.2, points: 47, goals: 0, assists: 0, xG: 0.0, xA: 0.05, cleanSheets: 4, xGC: 6.8 },
+                { id: 'verbruggen', name: 'Bart Verbruggen', arabicName: 'بارت فيربروغن', club: 'BHA', clubArabic: 'برايتون', position: 'GKP', price: 4.6, points: 44, goals: 0, assists: 0, xG: 0.0, xA: 0.02, cleanSheets: 4, xGC: 7.4 },
+                { id: 'trafford', name: 'James Trafford', arabicName: 'جيمس ترافورد', club: 'LEE', clubArabic: 'ليدز يونايتد', position: 'GKP', price: 5.0, points: 39, goals: 0, assists: 0, xG: 0.0, xA: 0.01, cleanSheets: 3, xGC: 9.2 },
+                { id: 'gabriel', name: 'Gabriel Magalhães', arabicName: 'غابرييل ماغالهايس', club: 'ARS', clubArabic: 'آرسنال', position: 'DEF', price: 6.3, points: 53, goals: 2, assists: 0, xG: 1.62, xA: 0.25, cleanSheets: 4, xGC: 6.8 },
+                { id: 'vanhecke', name: 'Jan Paul van Hecke', arabicName: 'يان بول فان هيكي', club: 'BHA', clubArabic: 'برايتون', position: 'DEF', price: 4.8, points: 46, goals: 1, assists: 1, xG: 0.78, xA: 0.42, cleanSheets: 4, xGC: 7.4 },
+                { id: 'vandijk', name: 'Virgil van Dijk', arabicName: 'فيرجيل فان دايك', club: 'LIV', clubArabic: 'ليفربول', position: 'DEF', price: 6.4, points: 45, goals: 1, assists: 1, xG: 0.94, xA: 0.31, cleanSheets: 3, xGC: 8.6 },
+                { id: 'gvardiol', name: 'Joško Gvardiol', arabicName: 'يوشكو غفارديول', club: 'MCI', clubArabic: 'مانشستر سيتي', position: 'DEF', price: 6.1, points: 44, goals: 1, assists: 1, xG: 1.15, xA: 0.72, cleanSheets: 3, xGC: 8.9 }
+            ],
+            teams: [
+                { id: 'mci', name: 'Manchester City', arabicName: 'مانشستر سيتي', shortName: 'MCI', goalsFor: 21, xG: 18.3, cleanSheets: 4, xGC: 8.9, fdr: 2 },
+                { id: 'bha', name: 'Brighton', arabicName: 'برايتون', shortName: 'BHA', goalsFor: 17, xG: 16.8, cleanSheets: 7, xGC: 7.4, fdr: 2 },
+                { id: 'liv', name: 'Liverpool', arabicName: 'ليفربول', shortName: 'LIV', goalsFor: 18, xG: 15.5, cleanSheets: 5, xGC: 8.6, fdr: 3 },
+                { id: 'ars', name: 'Arsenal', arabicName: 'آرسنال', shortName: 'ARS', goalsFor: 16, xG: 14.2, cleanSheets: 7, xGC: 6.8, fdr: 2 },
+                { id: 'che', name: 'Chelsea', arabicName: 'تشيلسي', shortName: 'CHE', goalsFor: 16, xG: 13.9, cleanSheets: 4, xGC: 9.5, fdr: 3 },
+                { id: 'avl', name: 'Aston Villa', arabicName: 'أستون فيلا', shortName: 'AVL', goalsFor: 15, xG: 13.1, cleanSheets: 3, xGC: 9.8, fdr: 2 },
+                { id: 'mun', name: 'Manchester United', arabicName: 'مانشستر يونايتد', shortName: 'MUN', goalsFor: 13, xG: 13.4, cleanSheets: 2, xGC: 11.5, fdr: 3 },
+                { id: 'bou', name: 'Bournemouth', arabicName: 'بورنموث', shortName: 'BOU', goalsFor: 13, xG: 12.6, cleanSheets: 2, xGC: 11.2, fdr: 3 },
+                { id: 'eve', name: 'Everton', arabicName: 'إيفرتون', shortName: 'EVE', goalsFor: 12, xG: 12.8, cleanSheets: 3, xGC: 10.4, fdr: 2 },
+                { id: 'ful', name: 'Fulham', arabicName: 'فولهام', shortName: 'FUL', goalsFor: 11, xG: 11.7, cleanSheets: 3, xGC: 10.1, fdr: 3 }
+            ]
+        };
+
+        let fplStatsState = JSON.parse(JSON.stringify(DEFAULT_FPL_STATS));
+        const statsUiState = {
+            subTab: 'expected', // Default: Expected Stats (xG/xA)
+            search: '',
+            position: 'ALL',  // ALL | FWD | MID | DEF | GKP
+            teamMode: 'attack', // attack | defense
+            sortBy: 'xGI',
+            sortDir: 'desc'
+        };
+
+        const POSITION_LABELS_AR = {
+            ALL: 'كل المراكز',
+            FWD: 'الهجوم',
+            MID: 'الوسط',
+            DEF: 'الدفاع',
+            GKP: 'الحراس'
+        };
+
+        const CLUB_SHORT_TO_AR = {
+            MCI: 'مانشستر سيتي', ARS: 'آرسنال', BHA: 'برايتون', LIV: 'ليفربول',
+            EVE: 'إيفرتون', AVL: 'أستون فيلا', MUN: 'مانشستر يونايتد', BOU: 'بورنموث',
+            NFO: 'نوتنغهام فورست', FUL: 'فولهام', LEE: 'ليدز يونايتد', CHE: 'تشيلسي',
+            NEW: 'نيوكاسل', TOT: 'توتنهام', BRE: 'برينتفورد', CRY: 'كريستال بالاس',
+            SUN: 'سندرلاند', IPS: 'إيبسويتش تاون', HUL: 'هال سيتي', COV: 'كوفنتري سيتي'
+        };
+
+        const SORT_OPTIONS_BY_SUBTAB = {
+            expected: [
+                { value: 'xGI', label: 'الترتيب: المساهمة (xGI)' },
+                { value: 'delta', label: 'الترتيب: الفارق (فعلي - متوقع)' },
+                { value: 'xG', label: 'الترتيب: الأهداف المتوقعة (xG)' },
+                { value: 'xA', label: 'الترتيب: الصناعة المتوقعة (xA)' },
+                { value: 'points', label: 'الترتيب: النقاط' },
+                { value: 'price', label: 'الترتيب: السعر' }
+            ],
+            players: [
+                { value: 'goals', label: 'الترتيب: الأهداف / المساهمة' },
+                { value: 'points', label: 'الترتيب: النقاط' },
+                { value: 'xG', label: 'الترتيب: الأهداف المتوقعة (xG)' },
+                { value: 'xA', label: 'الترتيب: الصناعة المتوقعة (xA)' },
+                { value: 'price', label: 'الترتيب: السعر' }
+            ],
+            teams: [
+                { value: 'xG', label: 'الترتيب: الأقوى هجومياً (xG)' },
+                { value: 'goalsFor', label: 'الترتيب: إجمالي الأهداف' },
+                { value: 'cleanSheets', label: 'الترتيب: الكلين شيت (CS)' },
+                { value: 'xGC', label: 'الترتيب: الأقل استقبالاً (xGC)' }
+            ],
+            cleansheets: [
+                { value: 'cleanSheets', label: 'الترتيب: الكلين شيت (CS)' },
+                { value: 'xGC', label: 'الترتيب: الأقل xGC' },
+                { value: 'points', label: 'الترتيب: النقاط' },
+                { value: 'price', label: 'الترتيب: السعر' }
+            ]
+        };
+
+        function setStatsSubTab(subTab) {
+            statsUiState.subTab = subTab;
+            if (subTab === 'expected') {
+                statsUiState.sortBy = 'xGI';
+                statsUiState.sortDir = 'desc';
+            } else if (subTab === 'players') {
+                statsUiState.sortBy = 'goals';
+                statsUiState.sortDir = 'desc';
+            } else if (subTab === 'teams') {
+                statsUiState.sortBy = statsUiState.teamMode === 'defense' ? 'cleanSheets' : 'xG';
+                statsUiState.sortDir = 'desc';
+            } else if (subTab === 'cleansheets') {
+                statsUiState.sortBy = 'cleanSheets';
+                statsUiState.sortDir = 'desc';
+                if (statsUiState.position === 'FWD' || statsUiState.position === 'MID') {
+                    statsUiState.position = 'ALL';
+                }
+            }
+            renderStatsTab();
+        }
+
+        function setStatsPosition(pos) {
+            statsUiState.position = pos;
+            renderStatsFilterControls();
+            renderStatsContent();
+        }
+
+        function setStatsTeamMode(mode) {
+            statsUiState.teamMode = mode;
+            statsUiState.sortBy = mode === 'defense' ? 'cleanSheets' : 'xG';
+            statsUiState.sortDir = 'desc';
+            renderStatsSortOptions();
+            renderStatsFilterControls();
+            renderStatsContent();
+        }
+
+        function onStatsSearchInput(val) {
+            statsUiState.search = val;
+            const clearBtn = document.getElementById('stats-search-clear');
+            if (clearBtn) {
+                clearBtn.classList.toggle('hidden', !val.trim());
+            }
+            renderStatsContent();
+        }
+
+        function clearStatsSearch() {
+            const input = document.getElementById('stats-search-input');
+            if (input) input.value = '';
+            onStatsSearchInput('');
+        }
+
+        function setStatsSort(sortBy) {
+            statsUiState.sortBy = sortBy;
+            statsUiState.sortDir = sortBy === 'xGC' ? 'asc' : 'desc';
+            updateStatsSortDirIcon();
+            renderStatsContent();
+        }
+
+        function toggleStatsSortDirection() {
+            statsUiState.sortDir = statsUiState.sortDir === 'desc' ? 'asc' : 'desc';
+            updateStatsSortDirIcon();
+            renderStatsContent();
+        }
+
+        function updateStatsSortDirIcon() {
+            const btn = document.getElementById('stats-sort-dir-btn');
+            if (!btn) return;
+            btn.innerHTML = statsUiState.sortDir === 'desc'
+                ? '<i class="fa-solid fa-arrow-down-wide-short text-sm"></i>'
+                : '<i class="fa-solid fa-arrow-up-short-wide text-sm"></i>';
+        }
+
+        function renderStatsSubTabButtons() {
+            const keys = ['expected', 'players', 'teams', 'cleansheets'];
+            keys.forEach(k => {
+                const btn = document.getElementById(`stats-subbtn-${k}`);
+                if (!btn) return;
+                if (k === statsUiState.subTab) {
+                    btn.className = 'min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-pl-purple text-white border border-pl-magenta/40';
+                } else {
+                    btn.className = 'min-h-[44px] px-2.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-ios-subtle hover:text-white';
+                }
+            });
+        }
+
+        function renderStatsSortOptions() {
+            const select = document.getElementById('stats-sort-select');
+            if (!select) return;
+            const opts = SORT_OPTIONS_BY_SUBTAB[statsUiState.subTab] || SORT_OPTIONS_BY_SUBTAB.expected;
+            select.innerHTML = opts.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+            if (opts.some(o => o.value === statsUiState.sortBy)) {
+                select.value = statsUiState.sortBy;
+            } else {
+                statsUiState.sortBy = opts[0].value;
+                select.value = opts[0].value;
+            }
+            updateStatsSortDirIcon();
+        }
+
+        function renderStatsFilterControls() {
+            const container = document.getElementById('stats-position-filters');
+            if (!container) return;
+
+            if (statsUiState.subTab === 'teams') {
+                const modes = [
+                    { id: 'attack', label: 'الأقوى هجومياً' },
+                    { id: 'defense', label: 'الأقوى دفاعياً' }
+                ];
+                container.innerHTML = modes.map(m => `
+                    <button type="button" onclick="setStatsTeamMode('${m.id}')" class="min-h-[44px] shrink-0 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                        statsUiState.teamMode === m.id
+                            ? 'bg-pl-mint text-ios-bg'
+                            : 'bg-ios-bg text-gray-300 border border-ios-border hover:text-white'
+                    }">${m.label}</button>
+                `).join('');
+                return;
+            }
+
+            const positions = statsUiState.subTab === 'cleansheets'
+                ? ['ALL', 'GKP', 'DEF']
+                : ['ALL', 'FWD', 'MID', 'DEF', 'GKP'];
+
+            container.innerHTML = positions.map(pos => `
+                <button type="button" onclick="setStatsPosition('${pos}')" class="min-h-[44px] shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                    statsUiState.position === pos
+                        ? 'bg-pl-mint text-ios-bg'
+                        : 'bg-ios-bg text-gray-300 border border-ios-border hover:text-white'
+                }">${POSITION_LABELS_AR[pos]}</button>
+            `).join('');
+        }
+
+        function renderStatsTab() {
+            const caption = document.getElementById('stats-source-caption');
+            if (caption) caption.textContent = fplStatsState.sourceLabel;
+            renderStatsSubTabButtons();
+            renderStatsSortOptions();
+            renderStatsFilterControls();
+            renderStatsContent();
+        }
+
+        function filterPlayersForStats(basePlayers) {
+            const q = statsUiState.search.trim().toLowerCase();
+            return basePlayers.filter(p => {
+                if (statsUiState.position !== 'ALL' && p.position !== statsUiState.position) return false;
+                if (!q) return true;
+                return (
+                    p.name.toLowerCase().includes(q) ||
+                    p.arabicName.toLowerCase().includes(q) ||
+                    p.club.toLowerCase().includes(q) ||
+                    p.clubArabic.toLowerCase().includes(q)
+                );
+            });
+        }
+
+        function sortPlayersList(list, sortBy = statsUiState.sortBy, sortDir = statsUiState.sortDir) {
+            const dir = sortDir === 'asc' ? 1 : -1;
+            return [...list].sort((a, b) => {
+                let va = 0;
+                let vb = 0;
+                if (sortBy === 'xGI') {
+                    va = a.xG + a.xA;
+                    vb = b.xG + b.xA;
+                } else if (sortBy === 'delta') {
+                    va = (a.goals + a.assists) - (a.xG + a.xA);
+                    vb = (b.goals + b.assists) - (b.xG + b.xA);
+                } else {
+                    va = Number(a[sortBy]) || 0;
+                    vb = Number(b[sortBy]) || 0;
+                }
+                if (va !== vb) return (va - vb) * dir;
+                return (b.points - a.points);
+            });
+        }
+
+        function renderComparisonBar(actual, expected, maxRef, barColorClass) {
+            const safeMax = Math.max(maxRef, actual, expected, 1);
+            const actualPct = Math.min(100, Math.max(3, (actual / safeMax) * 100));
+            const expPct = Math.min(100, Math.max(3, (expected / safeMax) * 100));
+            return `
+                <div class="space-y-1">
+                    <div class="h-1.5 w-full rounded-full bg-ios-bg overflow-hidden">
+                        <div class="h-full rounded-full ${barColorClass}" style="width: ${actualPct.toFixed(1)}%"></div>
+                    </div>
+                    <div class="h-1 w-full rounded-full bg-ios-bg overflow-hidden">
+                        <div class="h-full rounded-full bg-slate-500/70" style="width: ${expPct.toFixed(1)}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStatsEmptyState() {
+            return `
+                <div class="rounded-2xl bg-ios-card border border-ios-border p-8 text-center space-y-3">
+                    <i class="fa-solid fa-magnifying-glass text-2xl text-ios-subtle"></i>
+                    <p class="text-xs text-ios-subtle">لا توجد إحصائيات مطابقة للبحث أو الفلتر المحدد.</p>
+                    <button type="button" onclick="clearStatsFilters()" class="min-h-[44px] px-4 py-2 rounded-xl bg-ios-bg border border-ios-border text-xs font-semibold text-pl-mint hover:bg-ios-cardHover transition">
+                        إظهار الكل
+                    </button>
+                </div>
+            `;
+        }
+
+        function clearStatsFilters() {
+            statsUiState.position = 'ALL';
+            clearStatsSearch();
+            renderStatsFilterControls();
+            renderStatsContent();
+        }
+
+        function renderExpectedView() {
+            const filtered = sortPlayersList(filterPlayersForStats(fplStatsState.players));
+            if (filtered.length === 0) return renderStatsEmptyState();
+            const maxXgi = Math.max(...filtered.map(p => Math.max(p.xG + p.xA, p.goals + p.assists)), 1);
+
+            return filtered.map((p, idx) => {
+                const xgi = p.xG + p.xA;
+                const goalDelta = p.goals - p.xG;
+                const mainDelta = p.xG >= p.xA ? goalDelta : (p.assists - p.xA);
+                const isOver = mainDelta >= 0;
+                const deltaStr = `${isOver ? '+' : ''}${mainDelta.toFixed(2)}`;
+                const deltaLabel = isOver ? `${deltaStr} فوق المتوقع` : `${deltaStr} مستحق للعودة`;
+                const deltaClass = isOver
+                    ? 'bg-pl-mint/15 text-pl-mint border border-pl-mint/30'
+                    : 'bg-pl-magenta/15 text-pl-magenta border border-pl-magenta/30';
+                const deltaIcon = isOver ? 'fa-arrow-trend-up' : 'fa-bullseye';
+
+                return `
+                    <article class="rounded-2xl bg-ios-card border border-ios-border p-3.5 space-y-2.5">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-ios-subtle tabular-nums">${toArabicDigits(idx + 1)}.</span>
+                                    <h3 class="text-sm font-bold text-white truncate">${escapeHtml(p.arabicName)}</h3>
+                                    <span class="text-[11px] text-ios-subtle truncate hidden sm:inline">${escapeHtml(p.name)}</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-1.5 text-[11px] text-ios-subtle mt-1 tabular-nums">
+                                    <span class="text-pl-cyan font-semibold">${escapeHtml(p.club)}</span>
+                                    <span aria-hidden="true">·</span>
+                                    <span>${POSITION_LABELS_AR[p.position]}</span>
+                                    <span aria-hidden="true">·</span>
+                                    <span>£${p.price.toFixed(1)}m</span>
+                                    <span aria-hidden="true">·</span>
+                                    <span class="text-white font-semibold">${toArabicDigits(p.points)} نقطة</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <span class="px-2 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 whitespace-nowrap tabular-nums ${deltaClass}">
+                                    <i class="fa-solid ${deltaIcon} text-[9px]"></i>
+                                    <span>${deltaLabel}</span>
+                                </span>
+                                <button type="button" onclick="openEditStatModal('player', '${escapeHtml(p.id)}')" title="تعديل الأرقام" class="min-h-[44px] min-w-[44px] -my-1.5 rounded-xl text-ios-subtle hover:text-pl-mint flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[11px] tabular-nums text-gray-300">
+                            <span>المساهمة المتوقعة <strong class="text-white">xGI ${xgi.toFixed(2)}</strong></span>
+                            <span>xG ${p.xG.toFixed(2)} | <strong class="text-pl-mint">${toArabicDigits(p.goals)} أهداف</strong> · xA ${p.xA.toFixed(2)} | <strong class="text-pl-cyan">${toArabicDigits(p.assists)} صناعة</strong></span>
+                        </div>
+                        ${renderComparisonBar(p.goals + p.assists, xgi, maxXgi, isOver ? 'bg-pl-mint' : 'bg-pl-magenta')}
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderPlayersView() {
+            const filtered = filterPlayersForStats(fplStatsState.players);
+            if (filtered.length === 0) return renderStatsEmptyState();
+
+            const scorers = sortPlayersList(
+                filtered.filter(p => p.position !== 'GKP'),
+                statsUiState.sortBy === 'xA' ? 'goals' : statsUiState.sortBy
+            ).slice(0, 8);
+
+            const playmakers = sortPlayersList(
+                filtered.filter(p => p.position !== 'GKP'),
+                ['assists', 'xA', 'points', 'price'].includes(statsUiState.sortBy) ? statsUiState.sortBy : 'assists'
+            ).slice(0, 8);
+
+            const maxGoals = Math.max(...scorers.map(p => Math.max(p.goals, p.xG)), 1);
+            const maxAssists = Math.max(...playmakers.map(p => Math.max(p.assists, p.xA)), 1);
+
+            const scorersHtml = scorers.map((p, idx) => `
+                <div class="py-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-ios-subtle tabular-nums">${toArabicDigits(idx + 1)}.</span>
+                                <span class="text-sm font-bold text-white truncate">${escapeHtml(p.arabicName)}</span>
+                            </div>
+                            <div class="text-[11px] text-ios-subtle mt-0.5 tabular-nums">
+                                <span class="text-pl-cyan font-semibold">${escapeHtml(p.club)}</span>
+                                <span aria-hidden="true"> · </span>
+                                <span>£${p.price.toFixed(1)}m</span>
+                                <span aria-hidden="true"> · </span>
+                                <span class="text-white font-semibold">${toArabicDigits(p.points)} نقطة</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <div class="text-left tabular-nums">
+                                <div class="text-xs font-bold text-pl-mint">${toArabicDigits(p.goals)} أهداف</div>
+                                <div class="text-[10px] text-ios-subtle">xG ${p.xG.toFixed(2)}</div>
+                            </div>
+                            <button type="button" onclick="openEditStatModal('player', '${escapeHtml(p.id)}')" title="تعديل" class="min-h-[44px] min-w-[44px] rounded-xl text-ios-subtle hover:text-pl-mint flex items-center justify-center transition">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    ${renderComparisonBar(p.goals, p.xG, maxGoals, 'bg-pl-mint')}
+                </div>
+            `).join('');
+
+            const playmakersHtml = playmakers.map((p, idx) => `
+                <div class="py-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-ios-subtle tabular-nums">${toArabicDigits(idx + 1)}.</span>
+                                <span class="text-sm font-bold text-white truncate">${escapeHtml(p.arabicName)}</span>
+                            </div>
+                            <div class="text-[11px] text-ios-subtle mt-0.5 tabular-nums">
+                                <span class="text-pl-cyan font-semibold">${escapeHtml(p.club)}</span>
+                                <span aria-hidden="true"> · </span>
+                                <span>£${p.price.toFixed(1)}m</span>
+                                <span aria-hidden="true"> · </span>
+                                <span class="text-white font-semibold">${toArabicDigits(p.points)} نقطة</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <div class="text-left tabular-nums">
+                                <div class="text-xs font-bold text-pl-cyan">${toArabicDigits(p.assists)} صناعة</div>
+                                <div class="text-[10px] text-ios-subtle">xA ${p.xA.toFixed(2)}</div>
+                            </div>
+                            <button type="button" onclick="openEditStatModal('player', '${escapeHtml(p.id)}')" title="تعديل" class="min-h-[44px] min-w-[44px] rounded-xl text-ios-subtle hover:text-pl-mint flex items-center justify-center transition">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    ${renderComparisonBar(p.assists, p.xA, maxAssists, 'bg-pl-cyan')}
+                </div>
+            `).join('');
+
+            return `
+                <div class="rounded-2xl bg-ios-card border border-ios-border p-4 space-y-1">
+                    <div class="flex items-center justify-between border-b border-ios-border pb-2.5">
+                        <h3 class="text-sm font-bold text-white">الهدافون (Top Scorers)</h3>
+                        <span class="text-[11px] text-ios-subtle">الأهداف مقابل xG</span>
+                    </div>
+                    <div class="divide-y divide-ios-border/80">${scorersHtml}</div>
+                </div>
+                <div class="rounded-2xl bg-ios-card border border-ios-border p-4 space-y-1">
+                    <div class="flex items-center justify-between border-b border-ios-border pb-2.5">
+                        <h3 class="text-sm font-bold text-white">صناع اللعب (Top Playmakers)</h3>
+                        <span class="text-[11px] text-ios-subtle">الصناعة مقابل xA</span>
+                    </div>
+                    <div class="divide-y divide-ios-border/80">${playmakersHtml}</div>
+                </div>
+            `;
+        }
+
+        function renderTeamsView() {
+            const q = statsUiState.search.trim().toLowerCase();
+            const filtered = fplStatsState.teams.filter(t => {
+                if (!q) return true;
+                return (
+                    t.name.toLowerCase().includes(q) ||
+                    t.arabicName.toLowerCase().includes(q) ||
+                    t.shortName.toLowerCase().includes(q)
+                );
+            });
+            if (filtered.length === 0) return renderStatsEmptyState();
+
+            const dir = statsUiState.sortDir === 'asc' ? 1 : -1;
+            const sorted = [...filtered].sort((a, b) => {
+                const key = statsUiState.sortBy;
+                const va = Number(a[key]) || 0;
+                const vb = Number(b[key]) || 0;
+                if (va !== vb) return (va - vb) * dir;
+                return statsUiState.teamMode === 'defense' ? (a.xGC - b.xGC) : (b.xG - a.xG);
+            });
+
+            const maxAttack = Math.max(...sorted.map(t => Math.max(t.goalsFor, t.xG)), 1);
+            const maxXgc = Math.max(...sorted.map(t => t.xGC), 1);
+
+            return sorted.map((t, idx) => {
+                const isDef = statsUiState.teamMode === 'defense';
+                return `
+                    <article class="rounded-2xl bg-ios-card border border-ios-border p-3.5 space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <span class="text-xs font-bold text-ios-subtle tabular-nums">${toArabicDigits(idx + 1)}.</span>
+                                ${renderTeamLogo(t.arabicName)}
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-white truncate">${escapeHtml(t.arabicName)}</div>
+                                    <div class="text-[11px] text-ios-subtle tabular-nums">
+                                        <span>${escapeHtml(t.shortName)}</span>
+                                        <span aria-hidden="true"> · </span>
+                                        <span>FDR ${toArabicDigits(t.fdr)}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <div class="text-left tabular-nums">
+                                    ${isDef
+                                        ? `<div class="text-xs font-bold text-pl-cyan">${toArabicDigits(t.cleanSheets)} كلين شيت</div><div class="text-[10px] text-ios-subtle">xGC ${t.xGC.toFixed(1)}</div>`
+                                        : `<div class="text-xs font-bold text-pl-mint">${t.xG.toFixed(1)} xG</div><div class="text-[10px] text-ios-subtle">${toArabicDigits(t.goalsFor)} هدف</div>`
+                                    }
+                                </div>
+                                <button type="button" onclick="openEditStatModal('team', '${escapeHtml(t.id)}')" title="تعديل أرقام النادي" class="min-h-[44px] min-w-[44px] rounded-xl text-ios-subtle hover:text-pl-mint flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[11px] text-gray-300 tabular-nums">
+                            <span>الأهداف: <strong class="text-white">${toArabicDigits(t.goalsFor)}</strong> · xG <strong class="text-pl-mint">${t.xG.toFixed(1)}</strong></span>
+                            <span>الكلين شيت: <strong class="text-pl-cyan">${toArabicDigits(t.cleanSheets)}</strong> · xGC <strong>${t.xGC.toFixed(1)}</strong></span>
+                        </div>
+                        ${isDef
+                            ? renderComparisonBar(t.cleanSheets * 2, t.xGC, Math.max(maxXgc, 14), 'bg-pl-cyan')
+                            : renderComparisonBar(t.goalsFor, t.xG, maxAttack, 'bg-pl-mint')
+                        }
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderCleanSheetsView() {
+            const gkAndDef = fplStatsState.players.filter(p => p.position === 'GKP' || p.position === 'DEF');
+            const filtered = sortPlayersList(filterPlayersForStats(gkAndDef));
+            if (filtered.length === 0) return renderStatsEmptyState();
+
+            const maxCs = Math.max(...filtered.map(p => p.cleanSheets), 1);
+
+            return filtered.map((p, idx) => `
+                <article class="rounded-2xl bg-ios-card border border-ios-border p-3.5 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-ios-subtle tabular-nums">${toArabicDigits(idx + 1)}.</span>
+                                <h3 class="text-sm font-bold text-white truncate">${escapeHtml(p.arabicName)}</h3>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-1.5 text-[11px] text-ios-subtle mt-1 tabular-nums">
+                                <span class="text-pl-cyan font-semibold">${escapeHtml(p.club)}</span>
+                                <span aria-hidden="true">·</span>
+                                <span>${POSITION_LABELS_AR[p.position]}</span>
+                                <span aria-hidden="true">·</span>
+                                <span>£${p.price.toFixed(1)}m</span>
+                                <span aria-hidden="true">·</span>
+                                <span class="text-white font-semibold">${toArabicDigits(p.points)} نقطة</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <div class="text-left tabular-nums">
+                                <div class="text-sm font-extrabold text-pl-mint">${toArabicDigits(p.cleanSheets)} CS</div>
+                                <div class="text-[10px] text-ios-subtle">xGC ${p.xGC.toFixed(1)}</div>
+                            </div>
+                            <button type="button" onclick="openEditStatModal('player', '${escapeHtml(p.id)}')" title="تعديل" class="min-h-[44px] min-w-[44px] rounded-xl text-ios-subtle hover:text-pl-mint flex items-center justify-center transition">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[11px] text-gray-300 tabular-nums">
+                        <span>الشباك النظيفة: <strong class="text-pl-mint">${toArabicDigits(p.cleanSheets)} مباريات</strong></span>
+                        <span>الأهداف المستقبلة المتوقعة: <strong class="text-white">${p.xGC.toFixed(1)} xGC</strong></span>
+                    </div>
+                    <div class="h-1.5 w-full rounded-full bg-ios-bg overflow-hidden">
+                        <div class="h-full rounded-full bg-pl-mint" style="width: ${Math.min(100, Math.max(8, (p.cleanSheets / maxCs) * 100)).toFixed(1)}%"></div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function renderStatsContent() {
+            const container = document.getElementById('stats-content');
+            if (!container) return;
+
+            if (statsUiState.subTab === 'expected') {
+                container.innerHTML = renderExpectedView();
+            } else if (statsUiState.subTab === 'players') {
+                container.innerHTML = renderPlayersView();
+            } else if (statsUiState.subTab === 'teams') {
+                container.innerHTML = renderTeamsView();
+            } else {
+                container.innerHTML = renderCleanSheetsView();
+            }
+        }
+
+        function openFplGlossaryModal() {
+            openModal('modal-fpl-glossary');
+        }
+
+        function openEditStatModal(type, id) {
+            document.getElementById('edit-stat-type').value = type;
+            document.getElementById('edit-stat-id').value = id;
+
+            const playerFields = document.getElementById('edit-stat-fields-player');
+            const teamFields = document.getElementById('edit-stat-fields-team');
+
+            if (type === 'player') {
+                const p = fplStatsState.players.find(item => item.id === id);
+                if (!p) return;
+                document.getElementById('edit-stat-title').textContent = `تعديل: ${p.arabicName}`;
+                document.getElementById('edit-stat-subtitle').textContent = `${p.club} · ${POSITION_LABELS_AR[p.position]}`;
+                playerFields.classList.remove('hidden');
+                teamFields.classList.add('hidden');
+                document.getElementById('edit-p-price').value = p.price;
+                document.getElementById('edit-p-points').value = p.points;
+                document.getElementById('edit-p-goals').value = p.goals;
+                document.getElementById('edit-p-xg').value = p.xG;
+                document.getElementById('edit-p-assists').value = p.assists;
+                document.getElementById('edit-p-xa').value = p.xA;
+                document.getElementById('edit-p-cs').value = p.cleanSheets;
+                document.getElementById('edit-p-xgc').value = p.xGC;
+            } else {
+                const t = fplStatsState.teams.find(item => item.id === id);
+                if (!t) return;
+                document.getElementById('edit-stat-title').textContent = `تعديل: ${t.arabicName}`;
+                document.getElementById('edit-stat-subtitle').textContent = t.shortName;
+                playerFields.classList.add('hidden');
+                teamFields.classList.remove('hidden');
+                document.getElementById('edit-t-goals').value = t.goalsFor;
+                document.getElementById('edit-t-xg').value = t.xG;
+                document.getElementById('edit-t-cs').value = t.cleanSheets;
+                document.getElementById('edit-t-xgc').value = t.xGC;
+                document.getElementById('edit-t-fdr').value = t.fdr;
+            }
+
+            openModal('modal-edit-stat');
+        }
+
+        function saveStatEditForm(e) {
+            e.preventDefault();
+            const type = document.getElementById('edit-stat-type').value;
+            const id = document.getElementById('edit-stat-id').value;
+
+            if (type === 'player') {
+                const p = fplStatsState.players.find(item => item.id === id);
+                if (!p) return;
+                p.price = Math.max(3.5, Math.min(20, parseFloat(document.getElementById('edit-p-price').value) || p.price));
+                p.points = Math.max(0, Math.min(500, parseInt(document.getElementById('edit-p-points').value, 10) || 0));
+                p.goals = Math.max(0, Math.min(100, parseInt(document.getElementById('edit-p-goals').value, 10) || 0));
+                p.xG = Math.max(0, Math.min(100, parseFloat(document.getElementById('edit-p-xg').value) || 0));
+                p.assists = Math.max(0, Math.min(100, parseInt(document.getElementById('edit-p-assists').value, 10) || 0));
+                p.xA = Math.max(0, Math.min(100, parseFloat(document.getElementById('edit-p-xa').value) || 0));
+                p.cleanSheets = Math.max(0, Math.min(38, parseInt(document.getElementById('edit-p-cs').value, 10) || 0));
+                p.xGC = Math.max(0, Math.min(150, parseFloat(document.getElementById('edit-p-xgc').value) || 0));
+                fplStatsState.sourceLabel = 'بيانات معدلة يدوياً';
+                showToast(`تم تحديث إحصائيات ${p.arabicName}`);
+            } else {
+                const t = fplStatsState.teams.find(item => item.id === id);
+                if (!t) return;
+                t.goalsFor = Math.max(0, Math.min(150, parseInt(document.getElementById('edit-t-goals').value, 10) || 0));
+                t.xG = Math.max(0, Math.min(150, parseFloat(document.getElementById('edit-t-xg').value) || 0));
+                t.cleanSheets = Math.max(0, Math.min(38, parseInt(document.getElementById('edit-t-cs').value, 10) || 0));
+                t.xGC = Math.max(0, Math.min(150, parseFloat(document.getElementById('edit-t-xgc').value) || 0));
+                t.fdr = Math.max(1, Math.min(5, parseInt(document.getElementById('edit-t-fdr').value, 10) || 3));
+                fplStatsState.sourceLabel = 'بيانات معدلة يدوياً';
+                showToast(`تم تحديث إحصائيات ${t.arabicName}`);
+            }
+
+            closeModal('modal-edit-stat');
+            renderStatsTab();
+        }
+
+        function resetDefaultFplStats() {
+            fplStatsState = JSON.parse(JSON.stringify(DEFAULT_FPL_STATS));
+            renderStatsTab();
+            showToast('تمت استعادة أرقام ٢٦/٢٧ الافتراضية');
+        }
+
+        async function refreshFplStatsFromApi() {
+            const btn = document.getElementById('btn-refresh-fpl');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-pl-mint"></i><span>جاري التحديث...</span>';
+            }
+
+            try {
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://fantasy.premierleague.com/api/bootstrap-static/')}`;
+                const res = await fetch(proxyUrl);
+                if (!res.ok) throw new Error('FPL API unreachable');
+                const wrapped = await res.json();
+                const data = JSON.parse(wrapped.contents);
+                if (!data || !Array.isArray(data.elements) || !Array.isArray(data.teams)) {
+                    throw new Error('Invalid FPL payload');
+                }
+
+                const teamById = {};
+                data.teams.forEach(t => {
+                    teamById[t.id] = {
+                        short: t.short_name,
+                        name: t.name,
+                        arabic: TEAM_ARABIC_MAP[t.name] || CLUB_SHORT_TO_AR[t.short_name] || t.name,
+                        strength: Math.max(1, Math.min(5, Number(t.strength) || 3))
+                    };
+                });
+
+                const posMap = { 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' };
+                const livePlayers = data.elements
+                    .filter(el => Number(el.minutes) > 0)
+                    .sort((a, b) => Number(b.total_points) - Number(a.total_points))
+                    .slice(0, 60)
+                    .map(el => {
+                        const tInfo = teamById[el.team] || { short: 'PL', arabic: 'فريق' };
+                        const fullName = `${el.first_name} ${el.second_name}`.trim();
+                        const existing = DEFAULT_FPL_STATS.players.find(dp =>
+                            dp.name.toLowerCase() === fullName.toLowerCase() ||
+                            dp.name.toLowerCase().includes(el.web_name.toLowerCase())
+                        );
+                        return {
+                            id: `fpl_${el.id}`,
+                            name: fullName || el.web_name,
+                            arabicName: existing ? existing.arabicName : el.web_name,
+                            club: tInfo.short,
+                            clubArabic: tInfo.arabic,
+                            position: posMap[el.element_type] || 'MID',
+                            price: Number(el.now_cost) / 10,
+                            points: Number(el.total_points) || 0,
+                            goals: Number(el.goals_scored) || 0,
+                            assists: Number(el.assists) || 0,
+                            xG: parseFloat(el.expected_goals) || 0,
+                            xA: parseFloat(el.expected_assists) || 0,
+                            cleanSheets: Number(el.clean_sheets) || 0,
+                            xGC: parseFloat(el.expected_goals_conceded) || 0
+                        };
+                    });
+
+                const teamAgg = {};
+                data.elements.forEach(el => {
+                    const tInfo = teamById[el.team];
+                    if (!tInfo) return;
+                    if (!teamAgg[el.team]) {
+                        teamAgg[el.team] = {
+                            id: `team_${el.team}`,
+                            name: tInfo.name,
+                            arabicName: tInfo.arabic,
+                            shortName: tInfo.short,
+                            goalsFor: 0,
+                            xG: 0,
+                            cleanSheets: 0,
+                            xGC: 0,
+                            fdr: tInfo.strength
+                        };
+                    }
+                    teamAgg[el.team].goalsFor += Number(el.goals_scored) || 0;
+                    teamAgg[el.team].xG += parseFloat(el.expected_goals) || 0;
+                    if (el.element_type === 1 && Number(el.minutes) > 0) {
+                        teamAgg[el.team].cleanSheets = Math.max(teamAgg[el.team].cleanSheets, Number(el.clean_sheets) || 0);
+                        teamAgg[el.team].xGC = Math.max(teamAgg[el.team].xGC, parseFloat(el.expected_goals_conceded) || 0);
+                    }
+                });
+
+                const liveTeams = Object.values(teamAgg).map(t => ({
+                    ...t,
+                    xG: Number(t.xG.toFixed(1)),
+                    xGC: Number(t.xGC.toFixed(1))
+                }));
+
+                if (livePlayers.length > 0) fplStatsState.players = livePlayers;
+                if (liveTeams.length > 0) fplStatsState.teams = liveTeams;
+                fplStatsState.sourceLabel = 'تحديث مباشر من FPL API';
+                renderStatsTab();
+                showToast('تم تحديث إحصائيات FPL المباشرة بنجاح');
+            } catch (err) {
+                console.warn('Live FPL fetch fallback to built-in 2026/27 stats:', err);
+                showToast('تعذر الاتصال بـ FPL — يتم عرض بيانات ٢٦/٢٧ المدمجة');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-arrows-rotate text-pl-mint"></i><span>تحديث</span>';
+                }
+            }
+        }
+
         // Expose handlers globally for inline HTML attributes
         Object.assign(window, {
             handleAuthClick,
@@ -2437,6 +4033,7 @@
             toggleWhatsappDates,
             copyWhatsappOutput,
             switchTab,
+            showTab,
             closeModal,
             savePredictionForm,
             onPredictionMatchChange,
@@ -2450,8 +4047,25 @@
             removePredictor,
             selectGameweek,
             setPredictorFilter,
+            setMatchStatusFilter,
+            toggleCompactMatchesView,
+            clearMatchFilters,
+            syncLiveScoresFromPlApi,
             openPredictionModal,
-            openResultModal
+            openResultModal,
+            setStatsSubTab,
+            setStatsPosition,
+            setStatsTeamMode,
+            onStatsSearchInput,
+            clearStatsSearch,
+            clearStatsFilters,
+            setStatsSort,
+            toggleStatsSortDirection,
+            openFplGlossaryModal,
+            openEditStatModal,
+            saveStatEditForm,
+            resetDefaultFplStats,
+            refreshFplStatsFromApi
         });
     </script>
 </body>

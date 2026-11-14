@@ -16,12 +16,30 @@ const mimeTypes = {
 };
 
 http.createServer((req, res) => {
-  const cleanUrl = req.url.split('?')[0];
-  const filePath = path.join(__dirname, cleanUrl === '/' ? 'index.html' : cleanUrl);
-  const ext = path.extname(filePath).toLowerCase();
+  const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
+  const safeRel = path.normalize(cleanUrl === '/' ? 'index.html' : cleanUrl).replace(/^(\.\.[/\\])+/, '');
+  const primaryPath = path.join(__dirname, safeRel);
+  const publicPath = path.join(__dirname, 'public', safeRel);
+  const ext = path.extname(safeRel).toLowerCase();
 
-  fs.readFile(filePath, (err, content) => {
-    if (err) {
+  const serveFile = (targetPath, onMissing) => {
+    fs.readFile(targetPath, (err, content) => {
+      if (err) {
+        onMissing();
+      } else {
+        res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
+        res.end(content);
+      }
+    });
+  };
+
+  serveFile(primaryPath, () => {
+    serveFile(publicPath, () => {
+      if (ext && ext !== '.html') {
+        res.writeHead(404);
+        res.end('Not Found');
+        return;
+      }
       fs.readFile(path.join(__dirname, 'index.html'), (err2, indexContent) => {
         if (err2) {
           res.writeHead(500);
@@ -31,10 +49,7 @@ http.createServer((req, res) => {
           res.end(indexContent);
         }
       });
-    } else {
-      res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
-      res.end(content);
-    }
+    });
   });
 }).listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);

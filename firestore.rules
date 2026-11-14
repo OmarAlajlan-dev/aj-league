@@ -41,8 +41,16 @@ service cloud.firestore {
     }
 
     function isLeagueOwner(leagueId) {
-      return exists(/databases/$(database)/documents/leagues/$(leagueId)) &&
+      return isVerifiedUser() &&
+        exists(/databases/$(database)/documents/leagues/$(leagueId)) &&
         get(/databases/$(database)/documents/leagues/$(leagueId)).data.ownerUid == request.auth.uid;
+    }
+
+    function isValidActorUid(uidVal) {
+      return uidVal is string && uidVal.size() >= 1 && uidVal.size() <= 128 && (
+        (isSignedIn() && uidVal == request.auth.uid) ||
+        (!isSignedIn() && uidVal.matches('^guest_[a-zA-Z0-9_\\-]+$'))
+      );
     }
 
     function isValidGwId(gwId) {
@@ -132,7 +140,7 @@ service cloud.firestore {
         data.winnerLabel is string && data.winnerLabel.size() >= 1 && data.winnerLabel.size() <= 60 &&
         data.note is string && data.note.size() <= 500 &&
         data.isPublicLeague is bool &&
-        data.authorUid is string && data.authorUid == request.auth.uid &&
+        isValidActorUid(data.authorUid) &&
         data.createdAt is timestamp &&
         data.updatedAt is timestamp;
     }
@@ -152,23 +160,21 @@ service cloud.firestore {
       allow get: if isValidId(leagueId) && (resource == null || existing().isPublicLeague == true || (isVerifiedUser() && existing().ownerUid == request.auth.uid) || isAdmin());
       allow list: if existing().isPublicLeague == true;
 
-      allow create: if isVerifiedUser() &&
-        isValidId(leagueId) &&
+      allow create: if isValidId(leagueId) &&
         isValidLeague(incoming()) &&
-        incoming().ownerUid == request.auth.uid &&
+        isValidActorUid(incoming().ownerUid) &&
         incoming().isPublicLeague == true &&
         incoming().createdAt == request.time &&
         incoming().updatedAt == request.time;
 
-      allow update: if isVerifiedUser() &&
-        isValidId(leagueId) &&
+      allow update: if isValidId(leagueId) &&
         isValidLeague(incoming()) &&
         incoming().ownerUid == existing().ownerUid &&
         incoming().createdAt == existing().createdAt &&
         incoming().updatedAt == request.time &&
         incoming().isPublicLeague == existing().isPublicLeague && (
           isAdmin() ||
-          (existing().ownerUid == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly([
+          (isVerifiedUser() && existing().ownerUid == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly([
             'name', 'season', 'activeGwId', 'predictors', 'whatsappUseArabicDigits', 'whatsappIncludeDates', 'updatedAt'
           ])) ||
           (existing().isPublicLeague == true && incoming().diff(existing()).affectedKeys().hasOnly([
@@ -183,18 +189,16 @@ service cloud.firestore {
         allow get: if isValidId(leagueId) && isValidId(gwId) && (resource == null || existing().isPublicLeague == true);
         allow list: if existing().isPublicLeague == true;
 
-        allow create: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow create: if isValidId(leagueId) &&
           isValidGwId(gwId) &&
           isValidGameweek(incoming()) &&
-          incoming().createdByUid == request.auth.uid &&
+          isValidActorUid(incoming().createdByUid) &&
           incoming().isPublicLeague == true &&
           incoming().createdAt == request.time &&
           incoming().updatedAt == request.time &&
           isLeaguePublic(leagueId);
 
-        allow update: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow update: if isValidId(leagueId) &&
           isValidGwId(gwId) &&
           isValidGameweek(incoming()) &&
           incoming().createdByUid == existing().createdByUid &&
@@ -216,26 +220,24 @@ service cloud.firestore {
         allow get: if isValidId(leagueId) && isValidId(fixtureId) && (resource == null || existing().isPublicLeague == true);
         allow list: if existing().isPublicLeague == true;
 
-        allow create: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow create: if isValidId(leagueId) &&
           isValidId(fixtureId) &&
           isValidFixture(incoming()) &&
-          incoming().updatedByUid == request.auth.uid &&
+          isValidActorUid(incoming().updatedByUid) &&
           incoming().isPublicLeague == true &&
           incoming().createdAt == request.time &&
           incoming().updatedAt == request.time &&
           isLeaguePublic(leagueId) &&
           existsAfter(/databases/$(database)/documents/leagues/$(leagueId)/gameweeks/$(incoming().gwId));
 
-        allow update: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow update: if isValidId(leagueId) &&
           isValidId(fixtureId) &&
           isValidFixture(incoming()) &&
           incoming().gwId == existing().gwId &&
           incoming().createdAt == existing().createdAt &&
           incoming().updatedAt == request.time &&
           incoming().isPublicLeague == existing().isPublicLeague &&
-          incoming().updatedByUid == request.auth.uid &&
+          isValidActorUid(incoming().updatedByUid) &&
           isLeaguePublic(leagueId) && (
             isAdmin() ||
             incoming().diff(existing()).affectedKeys().hasOnly(['actualA', 'actualB', 'updatedByUid', 'updatedAt']) ||
@@ -252,8 +254,7 @@ service cloud.firestore {
         allow get: if isValidId(leagueId) && isValidId(predictionId) && (resource == null || existing().isPublicLeague == true);
         allow list: if existing().isPublicLeague == true;
 
-        allow create: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow create: if isValidId(leagueId) &&
           isValidId(predictionId) &&
           isValidPrediction(incoming()) &&
           incoming().isPublicLeague == true &&
@@ -262,8 +263,7 @@ service cloud.firestore {
           isLeaguePublic(leagueId) &&
           existsAfter(/databases/$(database)/documents/leagues/$(leagueId)/fixtures/$(incoming().fixtureId));
 
-        allow update: if isVerifiedUser() &&
-          isValidId(leagueId) &&
+        allow update: if isValidId(leagueId) &&
           isValidId(predictionId) &&
           isValidPrediction(incoming()) &&
           incoming().gwId == existing().gwId &&
@@ -277,8 +277,8 @@ service cloud.firestore {
             incoming().diff(existing()).affectedKeys().hasOnly(['scoreA', 'scoreB', 'winnerLabel', 'note', 'authorUid', 'updatedAt'])
           );
 
-        allow delete: if isVerifiedUser() && isValidId(leagueId) && isValidId(predictionId) && (
-          isAdmin() || isLeagueOwner(leagueId) || existing().authorUid == request.auth.uid || existing().isPublicLeague == true
+        allow delete: if isValidId(leagueId) && isValidId(predictionId) && (
+          isAdmin() || isLeagueOwner(leagueId) || existing().isPublicLeague == true
         );
       }
     }

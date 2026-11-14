@@ -3,7 +3,7 @@
 
 export const DIRTY_DOZEN_CASES = [
   {
-    name: '1. Unauthenticated prediction write is denied',
+    name: '1. Malformed unauthenticated authorUid (missing guest_ prefix) is denied',
     path: 'leagues/aj_league_26_27/predictions/gw11_m1__test',
     auth: null,
     payload: {
@@ -20,20 +20,11 @@ export const DIRTY_DOZEN_CASES = [
     expected: 'PERMISSION_DENIED'
   },
   {
-    name: '2. Unverified email user write is denied',
-    path: 'leagues/aj_league_26_27/predictions/gw11_m1__test',
+    name: '2. Unverified/unauthenticated fixture deletion is denied',
+    path: 'leagues/aj_league_26_27/fixtures/gw11_m1',
     auth: { uid: 'u1', token: { email: 'user@example.com', email_verified: false } },
-    payload: {
-      gwId: 'gw11',
-      fixtureId: 'gw11_m1',
-      predictorName: 'عيلان',
-      scoreA: 2,
-      scoreB: 1,
-      winnerLabel: 'مانشستر سيتي',
-      note: '',
-      isPublicLeague: true,
-      authorUid: 'u1'
-    },
+    operation: 'delete',
+    payload: null,
     expected: 'PERMISSION_DENIED'
   },
   {
